@@ -97,5 +97,10 @@ public class TaskService implements ITaskService {
     @Override
     public void update2(Task task) {}
 
+    @Override
+    public Task save(Task task){
+       return  taskRepository.save(task);
+    }
+
 
 }

@@ -13,4 +13,5 @@ public interface ITaskService {
     public Task pull(Task task) ;
     public void update2(Task task);
     public List<Task> assignedTasks(long owner_id);
+    public Task save(Task task);
 }
