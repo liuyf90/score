@@ -89,10 +89,10 @@
                         任务审核</a>
                 </li>
                 <!--<li>-->
-                    <!--<a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 任务测试</a>-->
+                <!--<a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 任务测试</a>-->
                 <!--</li>-->
                 <!--<li>-->
-                    <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
+                <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
                 <!--</li>-->
 
 
@@ -120,7 +120,6 @@
         </div>
 
 
-
         <div id="page-inner">
             <div class="col-md-12">
                 <!--    Bordered Table  -->
@@ -130,28 +129,29 @@
                     </div>
                     <div class="panel-body">
                         <form action="/check/query">
-                            <div  class="form-group col-xs-6">
+                            <div class="form-group col-xs-6">
                                 <label for="bbdate">领取时间（起）</label>
                                 <input type="text" class="jeinput" id="bbdate" name="bbdate"
                                        placeholder="YYYY年MM月DD日">
                             </div>
 
-                            <div  class="form-group col-xs-6">
+                            <div class="form-group col-xs-6">
                                 <label for="bedate">领取时间（止）</label>
                                 <input type="text" class="jeinput" id="bedate" name="bedate"
                                        placeholder="YYYY年MM月DD日">
                             </div>
 
-                            <div  class="form-group col-xs-6">
+                            <div class="form-group col-xs-6">
                                 <label for="status">任务状态</label>
-                                <select class="selectbox"  id="status" name="status" class="form-control">
-                                        <option value="-1">-全选-</option>
-                                        <option  th:each="st: ${taskModel.taskstatus}" th:value="${st.key}"  th:text="${st.value}"></option>
+                                <select class="selectbox" id="status" name="status" class="form-control">
+                                    <option value="-1">-全选-</option>
+                                    <option th:each="st: ${taskModel.taskstatus}" th:value="${st.key}"
+                                            th:text="${st.value}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-10 col-sm-2">
-                                    <button class="form-control btn btn-primary">查询</button>
+                                    <button class="form-control btn btn-default query">查询</button>
                                 </div>
                             </div>
                         </form>
@@ -159,7 +159,6 @@
                     </div>
                 </div>
             </div>
-
 
 
             <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
@@ -170,7 +169,13 @@
                     <div class="panel-heading">
                         审核列表
                     </div>
-
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-offset-9 col-sm-2">
+                                <button class="form-control btn btn-default add">新增</button>
+                            </div>
+                        </div>
+                    </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive table-bordered">
@@ -311,10 +316,10 @@
         $("#bedate").jeDate({
             format: "YYYY-MM-DD"
         });
-        $(".sure2").click(function(){
-            var userid=$('input:radio[name="radio1"]:checked').attr("data");
+        $(".sure2").click(function () {
+            var userid = $('input:radio[name="radio1"]:checked').attr("data");
             alert($(this).attr("data"));
-            $.get("/check/assigned", {user_id: userid,task_id: $(this).attr("data")}, function (d) {
+            $.get("/check/assigned", {user_id: userid, task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/check/"
             });
         });
@@ -324,16 +329,21 @@
             $(".sure2").attr("data", $(this).attr("data"));
         })
         $(".sure").click(function () {
-           // alert($(this).attr("data"));
+            // alert($(this).attr("data"));
             $.get("/check/done", {task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/check/"
             });
         });
 
-        $("button").click(function(){
+        $(".query").click(function () {
             $("form").submit();
-         //   $.get("/check/query", $("form").serialize());
+            //   $.get("/check/query", $("form").serialize());
         });
+
+        $(".add").click(function () {
+                window.location.href = "/assigning/"
+            }
+        )
     })
 </script>
 <!-- Metis Menu Js -->
