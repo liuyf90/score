@@ -16,6 +16,7 @@ public class Project {
     @JoinColumn(name="owner_id",referencedColumnName="id")
     private User user;
 
+
     public User getUser() {
         return user;
     }
