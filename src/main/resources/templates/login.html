@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<head>
+    <meta charset="UTF-8">
+    <title>智慧城管平台</title>
+    <link href="../static/css/login.css" rel="stylesheet" th:href="@{/assets/css/login.css}"/>
+    <link href="../static/css/pushy-buttons.css"  th:href="@{/css/pushy-buttons.css}" rel="stylesheet"/>
+</head>
+<body style="height:100%;">
+
+<!--top-->
+<div class="htc">
+    <div class="wide">
+        <div class="logo"><a href="#"><img src="../static/images/logo.png" th:src="@{/images/logo.png}" width="300" height="45" /></a></div>
+    </div>
+    <div class="htc1">
+        <div class="htc2"></div>
+        <div class="theme-popover">
+            <div class="theme-poptit">
+                <div class="theme-tx">
+                    <img src="../static/images/cgzf.png" th:src="@{/images/cgzf.png}" width="94" height="94" />
+                </div>
+                <h3 style="margin-top:45px;">欢迎登录</h3>
+            </div>
+            <div class="theme-popbod dform">
+                <!--错误提示-->
+                <!--<div class="theme-txt">用户名或密码错误</div>-->
+                <!--错误提示-->
+
+                <!--<h1>Login page</h1>-->
+                <!--<p>User角色用户: forezp / 123456</p>-->
+                <!--<p>Admin角色用户: admin / 123456</p>-->
+                <!--<p th:if="${loginError}" class="error">用户名或密码错误</p>-->
+                <p th:if="${loginError}" class="error">用户名或密码错误</p>
+                <form class="theme-signin" th:action="@{/login}" method="post">
+                    <ol>
+                        <li><input class="ipt theme-yhm" type="text" id="username" name="username" value="liuyf" required placeholder="用户名" size="20" /></li>
+                        <li><input class="ipt theme-mm" type="password"  id="password" name="password" required placeholder="密码" size="20" /></li>
+                        <li style="margin-top:25px;">
+                            <button type="submit" class="btn btn-primary btn-login btn--lg btn--blue" >登 录</button>
+                        </li>
+                    </ol>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="bottom1"403项目组版权所有</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+
+<div   th:fragment="detail" class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="card-title">
+                    <div class="title">详情</div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div  class="form-group col-xs-6">
+                        <label for="begin">创建时间</label>
+                        <input type="text" readonly class="form-control" id="begin"  th:value="${#dates.format(taskModel.task.cDate,'yyyy-MM-dd HH:mm')}">
+                    </div>
+                    <div  class="form-group col-xs-6">
+                        <label for="taskName">任务名称</label>
+                        <input type="text" readonly class="form-control" id="taskName"  th:value="${taskModel.task.taskName}">
+                    </div>
+                    <div  class="form-group col-xs-6">
+                        <label for="remark">任务描述</label>
+                        <textarea type="text" readonly class="form-control" id="remark"  rows="3"  th:text="${taskModel.task.remark}"></textarea>
+                    </div>
+                    <div  class="form-group col-xs-6">
+                        <label for="order">组长</label>
+                        <input type="text" readonly class="form-control" id="order"  th:value="${taskModel.task.user.username}">
+                    </div>
+                    <!--<div class="form-group">-->
+                        <!--<label for="taskName">任务名</label>-->
+                        <!--<input type="text" readonly class="form-control" id="taskName"   th:value="${taskModel.task.taskName}">-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="remark">任务描述</label>-->
+                        <!--<input type="text" readonly class="form-control" id="remark"   th:value="${taskModel.task.remark}">-->
+                    <!--</div>-->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
