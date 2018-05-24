@@ -24,13 +24,13 @@ public class RecordThePointsApplication {
 
     @RequestMapping("/login")
     public String login() {
-        return "login";
+        return "index";
     }
 
     @RequestMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
-        return "login";
+        return "index";
     }
 
     @GetMapping("/401")
