@@ -113,10 +113,13 @@
 
         </div>
         <div id="page-inner">
-            <form action="/assigning/save">
+
+            <form action="/assigning/save" th:object="${taskInfo}">
                 <div  class="form-group col-xs-6">
                     <label for="taskName">任务名称</label>
-                    <input type="text"  class="form-control" id="taskName"  name="taskName" th:value="${taskModel.task!=null}?${taskModel.task.taskName}:''">
+                    <input type="text"  class="form-control" id="taskName" th:field="*{taskName}"   name="taskName">
+                    <span th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}"></span>
+
                 </div>
 
                 <div  class="form-group col-xs-6">
@@ -127,7 +130,7 @@
                 </div>
                 <div  class="form-group col-xs-12">
                     <label for="remark">任务描述</label>
-                    <textarea type="text"  class="form-control" id="remark"  name="remark" rows="5"  th:text="${taskModel.task!=null}?${taskModel.task.remark}:''"></textarea>
+                    <textarea type="text"  class="form-control" id="remark"  name="remark" rows="5"  th:text="*{remark}"></textarea>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-10 col-sm-2">

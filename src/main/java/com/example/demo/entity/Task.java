@@ -18,6 +18,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
+    @NotBlank(message = "任务名不能为空")
     @Column
     private String taskName;//(columnDefinition = "COMMENT '任务名'")
     @Column

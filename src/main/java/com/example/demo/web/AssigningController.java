@@ -8,12 +8,13 @@ import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.xml.ws.BindingType;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,9 +35,10 @@ public class AssigningController {
     private ProjectService projectService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public ModelAndView init(Task task, Model model, Principal principal) {
+    public ModelAndView init(@ModelAttribute("taskInfo")  Task task, Model model, Principal principal) {
         User user= userservice.getUser(principal.getName());
         List<Project> projectList=projectService.findByUser(user);
+        model.addAttribute("errors",null);
         model.addAttribute("projects",projectList);
         model.addAttribute("task", task.getTaskId() != null ? taskservice.getOne(task.getTaskId()) : null);
         return new ModelAndView("owner/assigning", "taskModel", model);
@@ -44,12 +46,20 @@ public class AssigningController {
     }
 
     @RequestMapping(value = {"/save"}, method = RequestMethod.GET)
-    public ModelAndView save(Task task, Model model, Principal principal) {
+    public ModelAndView save(@ModelAttribute("taskInfo") @Validated Task task, BindingResult result, Model model, Principal principal ) {
+        if(result.hasErrors()){
+            List<ObjectError> allErrors=result.getAllErrors();
+            for(ObjectError ob:allErrors){
+                System.out.println(ob.getDefaultMessage());
+            }
+            model.addAttribute("errors",allErrors);
+            return init(task,model,principal);
+        }
+        model.addAttribute("task",null);
+        model.addAttribute("errors",null);
         task.setcDate(new Date());
         task.setUser(userservice.getUser(principal.getName()));
         taskservice.save(task);
-
-
         User user=new User();
         user.setSts(1);
         user.setUsername(principal.getName());
@@ -62,9 +72,9 @@ public class AssigningController {
         status.put(3,"已审核");
         status.put(4,"待测试");
         model.addAttribute("taskstatus",status);
-        model.addAttribute("task", null);
         model.addAttribute("users",userservice.findAll());
         model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
+
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
 
