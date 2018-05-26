@@ -215,7 +215,7 @@
         $(".pull").click(function () {
             $(".sure").attr("data",$(this).attr("data"));
         })
-        $(".pull").click(function () {
+        $(".sure").click(function () {
 
             $.get("/pool/pull", {task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
                 window.location.href = "/pool/"

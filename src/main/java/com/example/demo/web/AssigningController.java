@@ -38,7 +38,6 @@ public class AssigningController {
     public ModelAndView init(@ModelAttribute("taskInfo")  Task task, Model model, Principal principal) {
         User user= userservice.getUser(principal.getName());
         List<Project> projectList=projectService.findByUser(user);
-        model.addAttribute("errors",null);
         model.addAttribute("projects",projectList);
         model.addAttribute("task", task.getTaskId() != null ? taskservice.getOne(task.getTaskId()) : null);
         return new ModelAndView("owner/assigning", "taskModel", model);
@@ -56,7 +55,6 @@ public class AssigningController {
             return init(task,model,principal);
         }
         model.addAttribute("task",null);
-        model.addAttribute("errors",null);
         task.setcDate(new Date());
         task.setUser(userservice.getUser(principal.getName()));
         taskservice.save(task);

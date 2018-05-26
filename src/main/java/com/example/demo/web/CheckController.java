@@ -23,12 +23,9 @@ public class CheckController {
     private UserService userservice;
     @Autowired
     private TaskService taskservice;
-    @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
-    public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model, Principal principal){
-        User user=new User();
-        user.setSts(1);
-        user.setUsername(principal.getName());
-        User user1 =userservice.findSearch(user).get(0);
+
+    @ModelAttribute
+    public void myModel(Model model){
         Map<Integer,String> status=new HashMap<>();
         //WAITED("未领取",0),DONE("处理中",1),FINISH("提交待审核",2),CHECK("已审核",3),TEST("待测试",4);
         status.put(0,"未领取");
@@ -37,6 +34,14 @@ public class CheckController {
         status.put(3,"已审核");
         status.put(4,"待测试");
         model.addAttribute("taskstatus",status);
+    }
+
+    @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
+    public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model, Principal principal){
+        User user=new User();
+        user.setSts(1);
+        user.setUsername(principal.getName());
+        User user1 =userservice.findSearch(user).get(0);
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("users",userservice.findAll());
         model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
@@ -67,14 +72,6 @@ public class CheckController {
     public ModelAndView query(Task task, Model model, Principal principal){
         model.addAttribute("taskList",  taskservice.findSearch(task));
         model.addAttribute("task",  null);
-        Map<Integer,String> status=new HashMap<>();
-        //WAITED("未领取",0),DONE("处理中",1),FINISH("提交待审核",2),CHECK("已审核",3),TEST("待测试",4);
-        status.put(0,"未领取");
-        status.put(1,"处理中");
-        status.put(2,"提交待审核");
-        status.put(3,"已审核");
-        status.put(4,"待测试");
-        model.addAttribute("taskstatus",status);
         model.addAttribute("users",userservice.findAll());
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }

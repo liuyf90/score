@@ -117,8 +117,8 @@
             <form action="/assigning/save" th:object="${taskInfo}">
                 <div  class="form-group col-xs-6">
                     <label for="taskName">任务名称</label>
-                    <input type="text"  class="form-control" id="taskName" th:field="*{taskName}"   name="taskName">
-                    <span th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}"></span>
+                    <span  style="color:red;">*</span> <input type="text"  class="form-control" id="taskName" th:field="*{taskName}"   name="taskName">
+                    <span  style="color:red;" th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}"></span>
 
                 </div>
 
