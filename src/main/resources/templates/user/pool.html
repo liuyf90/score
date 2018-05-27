@@ -62,13 +62,16 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li>
+                    <!--<li>-->
 
-                        <div>
-                            <form action="#" th:action="@{/logout}" method="post">
-                                <input type="submit" value="登出"/>
-                            </form>
-                        </div>
+                        <!--<div>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <li class="divider"></li>
+                    <li>
+                        <form action="#" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </form>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->
@@ -212,6 +215,9 @@
 <script src="../../static/assets/js/jquery.jedate.js" th:src="@{/assets/js/jquery.jedate.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
+        $("#logout").click(function(){
+            $("form").submit();
+        })
         $(".pull").click(function () {
             $(".sure").attr("data",$(this).attr("data"));
         })
