@@ -25,4 +25,9 @@ public class ProjectService implements IProjectService {
     public List<Project> findByUser(User user) {
         return projectRepository.findByUser(user);
     }
+
+    @Override
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
 }

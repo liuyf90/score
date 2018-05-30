@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dao.UserRepository;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.service.IUserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by liuyf90 on 2018/5/6.
@@ -60,5 +63,11 @@ public class UserService implements UserDetailsService, IUserServer {
             }
         });
         return result;
+    }
+
+
+    @Override
+    public List<Role> searchRoles(String username) {
+        return (List<Role>) userRepository.findByUsername(username).getAuthorities();
     }
 }

@@ -57,22 +57,8 @@
 
         <ul class="nav navbar-top-links navbar-right">
 
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li>
+            <input type="text" readonly class="form-control" id="begin"  th:value="${#dates.format(taskModel.task.cDate,'yyyy-MM-dd HH:mm')}">
 
-                        <div>
-                            <form action="#" th:action="@{/logout}" method="post">
-                                <input type="submit" value="登出"/>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
             <!-- /.dropdown -->
         </ul>
     </nav>

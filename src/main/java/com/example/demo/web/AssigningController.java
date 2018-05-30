@@ -1,6 +1,7 @@
 package com.example.demo.web;
 
 import com.example.demo.entity.Project;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.service.impl.ProjectService;
@@ -16,10 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.xml.ws.BindingType;
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by liuyf90 on 2018/5/24.
@@ -37,7 +35,17 @@ public class AssigningController {
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView init(@ModelAttribute("taskInfo")  Task task, Model model, Principal principal) {
         User user= userservice.getUser(principal.getName());
-        List<Project> projectList=projectService.findByUser(user);
+        List<Role> roles=userservice.searchRoles(user.getUsername());
+        List<Project> projectList=null;
+        Iterator<Role> iterator=roles.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+                 projectList=projectService.findAll();
+            }
+        }
+        if(projectList==null){
+            projectList=projectService.findByUser(user);
+        }
         model.addAttribute("projects",projectList);
         model.addAttribute("task", task.getTaskId() != null ? taskservice.getOne(task.getTaskId()) : null);
         return new ModelAndView("owner/assigning", "taskModel", model);

@@ -57,13 +57,11 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
+                    <li class="divider"></li>
                     <li>
-
-                        <div>
-                            <form action="#" th:action="@{/logout}" method="post">
-                                <input type="submit" value="登出"/>
-                            </form>
-                        </div>
+                        <form action="#" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </form>
                     </li>
                 </ul>
                 <!-- /.dropdown-user -->

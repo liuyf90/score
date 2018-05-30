@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface IProjectService {
     public List<Project> findByUser(User user);
+    public List<Project> findAll();
 }
