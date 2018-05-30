@@ -59,7 +59,7 @@
                 <ul class="dropdown-menu dropdown-user">
                     <li class="divider"></li>
                     <li>
-                        <form action="#" th:action="@{/logout}" method="post">
+                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
                             <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </form>
                     </li>
@@ -205,7 +205,9 @@
 <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-
+        $("#logout").click(function(){
+            $("#outfrom").submit();
+        });
         $(".done").click(function () {
             $(".sure").attr("data",$(this).attr("data"));
         })

@@ -57,8 +57,21 @@
 
         <ul class="nav navbar-top-links navbar-right">
 
-            <input type="text" readonly class="form-control" id="begin"  th:value="${#dates.format(taskModel.task.cDate,'yyyy-MM-dd HH:mm')}">
-
+            <!--<input type="text" readonly class="form-control" id="begin"  th:value="${#dates.format(taskModel.task.cDate,'yyyy-MM-dd HH:mm')}">-->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li class="divider"></li>
+                    <li>
+                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </form>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
             <!-- /.dropdown -->
         </ul>
     </nav>
@@ -303,6 +316,9 @@
 <script src="assets/js/dataTables/dataTables.bootstrap.js" th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
+        $("#logout").click(function(){
+            $("#outfrom").submit();
+        });
         $('#dataTables-example').dataTable();
         //自定义格式选择
         $("#bbdate").jeDate({
