@@ -31,17 +31,21 @@ public class TaskService implements ITaskService {
     @Autowired
     private TaskRepository taskRepository;
 
+
+
+
     @Override
     public List<Task> findAll() {
-        List<Task> result = taskRepository.findAll(new Specification<Task>() {
-            @Override
-            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                ListJoin<Task, User> userJoin = root.join(root.getModel().getList("users", User.class), JoinType.LEFT);
-                Predicate p1 = cb.isNull(userJoin.get("id"));
-                return p1;
-            }
-        });
-        return result;
+        return taskRepository.findAll();
+//        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+//            @Override
+//            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+//                ListJoin<Task, User> userJoin = root.join(root.getModel().getList("users", User.class), JoinType.LEFT);
+//                Predicate p1 = cb.isNull(userJoin.get("id"));
+//                return p1;
+//            }
+//        });
+//        return result;
     }
 
     public List<Task> findSearch(Task model) {
@@ -69,6 +73,36 @@ public class TaskService implements ITaskService {
         return result;
     }
 
+
+    @Override
+    public List<Task> findSearchForOwnerId(long owner_id,Task model) {
+        Assert.notNull(model);
+        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+            @Override
+            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Join<Task, Project> projectJoin = root.join("project", JoinType.LEFT);
+                Join<Project, User> userJoin = projectJoin.join("user", JoinType.LEFT);
+
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(cb.equal(userJoin.get("id"), owner_id));
+                if (!StringUtils.isEmpty(model.getBbdate())) {
+                    //大于或等于传入时间
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("bDate").as(Date.class), model.getBbdate()));
+                }
+                if (!StringUtils.isEmpty(model.getBedate())) {
+                    //小于或等于传入时间
+                    predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
+                }
+                if (!StringUtils.isEmpty(model.getStatus())&&model.getStatus()!=-1) {
+                    //狀態
+                    predicates.add(cb.equal(root.get("finish").as(Integer.class),model.getStatus()));
+                }
+                Predicate[] p = new Predicate[predicates.size()];
+                return cb.and(predicates.toArray(p));
+            }
+        });
+        return result;
+    }
     @Override
     public List<Task> assignedTasks(long owner_id) {
         List<Task> result = taskRepository.findAll(new Specification<Task>() {

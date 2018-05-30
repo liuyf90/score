@@ -14,4 +14,5 @@ public interface ITaskService {
     public void update2(Task task);
     public List<Task> assignedTasks(long owner_id);
     public Task save(Task task);
+    public List<Task> findSearchForOwnerId(long owner_id,Task model);
 }

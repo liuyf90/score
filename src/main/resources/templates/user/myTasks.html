@@ -50,7 +50,7 @@
         </div>
 
 
-        <ul class="nav navbar-top-links navbar-right">
+        <ul th:fragment="navbar" class="nav navbar-top-links navbar-right">
 
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
@@ -58,6 +58,11 @@
                 </a>
                 <ul class="dropdown-menu dropdown-user">
                     <li class="divider"></li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#passwordModal"><i
+                                class="fa fa-sign-out fa-fw"></i> 修改密码</a>
+
+                    </li>
                     <li>
                         <form action="#" id="outfrom" th:action="@{/logout}" method="post">
                             <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
@@ -85,7 +90,7 @@
                     <a href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-sitemap"></i> 任务审核</a>
                 </li>
                 <!--<li>-->
-                    <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
+                <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
                 <!--</li>-->
 
             </ul>
@@ -110,6 +115,31 @@
             </ol>
 
         </div>
+        <div class="modal fade" th:fragment="editPasswd" id="passwordModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text"  class="form-control" id="passwd">
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-primary surePasswd"
+                        >确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="page-inner">
             <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
 
@@ -117,7 +147,7 @@
                 <!--    Bordered Table  -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                       任务列表
+                        任务列表
                     </div>
 
                     <!-- /.panel-heading -->
@@ -148,8 +178,10 @@
                                     <td th:text="${task.receivers[0].username}"></td>
                                     <td th:text="${task.user.username}"></td>
                                     <td>
-                                        <a href="#" th:href="@{'/mytasks/'+${task.taskId}}" class="btn btn-primary detail">详情</a>
-                                        <a href="#" data-toggle="modal" data-target="#myModal" class="btn btn-primary done" th:data="${task.taskId}">办结</a>
+                                        <a href="#" th:href="@{'/mytasks/'+${task.taskId}}"
+                                           class="btn btn-primary detail">详情</a>
+                                        <a th:if="${task.finish==1}" href="#" data-toggle="modal" data-target="#myModal"
+                                           class="btn btn-primary done" th:data="${task.taskId}">办结</a>
                                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
                                              aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -168,7 +200,7 @@
                                                                 data-dismiss="modal">Close
                                                         </button>
                                                         <button type="button" class="btn btn-primary sure"
-                                                                >确认
+                                                        >确认
                                                         </button>
                                                     </div>
                                                 </div>
@@ -205,16 +237,22 @@
 <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-        $("#logout").click(function(){
+        $("#logout").click(function () {
             $("#outfrom").submit();
         });
         $(".done").click(function () {
-            $(".sure").attr("data",$(this).attr("data"));
+            $(".sure").attr("data", $(this).attr("data"));
         })
         $(".sure").click(function () {
             $.get("/mytasks/done", {task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/mytasks/"
             });
+        });
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
         });
     })
 </script>

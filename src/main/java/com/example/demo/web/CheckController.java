@@ -1,8 +1,7 @@
 package com.example.demo.web;
 
-import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskStatus;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
+import com.example.demo.service.impl.ProjectService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,11 @@ public class CheckController {
     private UserService userservice;
     @Autowired
     private TaskService taskservice;
+    @Autowired
+    private ProjectService projectService;
 
     @ModelAttribute
-    public void myModel(Model model){
+    public void myModel(Model model,Principal principal){
         Map<Integer,String> status=new HashMap<>();
         //WAITED("未领取",0),DONE("处理中",1),FINISH("提交待审核",2),CHECK("已审核",3),TEST("待测试",4);
         status.put(0,"未领取");
@@ -44,7 +45,20 @@ public class CheckController {
         User user1 =userservice.findSearch(user).get(0);
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("users",userservice.findAll());
-        model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
+        User u= userservice.getUser(principal.getName());
+        List<Role> roles=userservice.searchRoles(u.getUsername());
+        List<Task> taskList=null;
+        Iterator<Role> iterator=roles.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+                taskList=taskservice.findAll();
+            }
+        }
+        if(taskList==null||taskList.size()==0){
+            taskList=taskservice.assignedTasks(u.getId());
+        }
+        model.addAttribute("taskList", taskList);
+
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
     @RequestMapping(value = "/done", method = RequestMethod.GET)
@@ -70,8 +84,21 @@ public class CheckController {
     }
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public ModelAndView query(Task task, Model model, Principal principal){
-        model.addAttribute("taskList",  taskservice.findSearch(task));
+        User user=userservice.getUser(principal.getName());
         model.addAttribute("task",  null);
+        User u= userservice.getUser(principal.getName());
+        List<Role> roles=userservice.searchRoles(u.getUsername());
+        List<Task> taskList=null;
+        Iterator<Role> iterator=roles.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+                taskList=taskservice.findSearch(task);
+            }
+        }
+        if(taskList==null||taskList.size()==0){
+            taskList=taskservice.findSearchForOwnerId(user.getId(),task);
+        }
+        model.addAttribute("taskList", taskList );
         model.addAttribute("users",userservice.findAll());
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }

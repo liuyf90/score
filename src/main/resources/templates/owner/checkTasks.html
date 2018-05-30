@@ -55,25 +55,7 @@
         </div>
 
 
-        <ul class="nav navbar-top-links navbar-right">
-
-            <!--<input type="text" readonly class="form-control" id="begin"  th:value="${#dates.format(taskModel.task.cDate,'yyyy-MM-dd HH:mm')}">-->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li class="divider"></li>
-                    <li>
-                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
-                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </form>
-                    </li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
-            <!-- /.dropdown -->
-        </ul>
+        <ul th:replace="user/myTasks::navbar"></ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -120,7 +102,7 @@
             </ol>
 
         </div>
-
+        <div th:replace="user/myTasks::editPasswd"></div>
 
         <div id="page-inner">
             <div class="col-md-12">
@@ -354,7 +336,13 @@
         $(".add").click(function () {
                 window.location.href = "/assigning/"
             }
-        )
+        );
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
     })
 </script>
 

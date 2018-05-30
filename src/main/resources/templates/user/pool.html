@@ -55,24 +55,7 @@
         </div>
 
 
-        <ul class="nav navbar-top-links navbar-right">
-
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li class="divider"></li>
-                    <li>
-                        <form action="#" th:action="@{/logout}" method="post">
-                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </form>
-                    </li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
-            <!-- /.dropdown -->
-        </ul>
+        <ul th:replace="user/myTasks::navbar"></ul>
     </nav>
     <!--/. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
@@ -117,6 +100,7 @@
             </ol>
 
         </div>
+          <div th:replace="user/myTasks::editPasswd"></div>
         <div id="page-inner">
             <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
             <div class="col-md-12">
@@ -211,13 +195,16 @@
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         $("#logout").click(function(){
-            $("form").submit();
+            $("#outfrom").submit();
         })
         $(".pull").click(function () {
             $(".sure").attr("data",$(this).attr("data"));
         })
         $(".sure").click(function () {
-
+            if($("#enddate").val()==''){
+                alert("请填写结束日期！");
+                return;
+            }
             $.get("/pool/pull", {task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
                 window.location.href = "/pool/"
             });
@@ -228,11 +215,12 @@
         });
 
 
-//        $(".detail").click(function () {
-//  //          $("#detail").load("/pool/detail",{task_id:$(this).attr("data")});
-////            $.get("/pool/detail/" + $(this).attr("data"));
-////
-//        });
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
     })
 </script>
 <!-- Metis Menu Js -->
