@@ -130,7 +130,7 @@
                                     <td th:text="${task.taskName}"></td>
                                     <td th:text="${task.cDate!=null}?${#dates.format(task.cDate,'yyyy-MM-dd HH:mm')}:''"></td>
                                     <td th:text="${task.project.projectName}"></td>
-                                    <td th:text="${task.project.user.username}"></td>
+                                    <td th:text="${task.project.user.cname}"></td>
 
                                     <td>
                                         <a href="#" data-toggle="modal" data-target="#myModal"

@@ -20,6 +20,8 @@ public class User implements UserDetails, Serializable {
 	@Column(nullable = false,  unique = true)
 	private String username;
 	@Column
+	private String cname;
+	@Column
 	private String password;
 	@Column
 	private int sts;
@@ -92,7 +94,11 @@ public class User implements UserDetails, Serializable {
 		return true;
 	}
 
+	public String getCname() {
+		return cname;
+	}
 
-
-
+	public void setCname(String cname) {
+		this.cname = cname;
+	}
 }

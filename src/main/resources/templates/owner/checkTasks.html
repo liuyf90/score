@@ -196,10 +196,10 @@
                                         <h5 th:text="${task.fDate!=null}?${#dates.format(task.fDate,'yyyy-MM-dd HH:mm')}:''"></h5>
                                     </td>
                                     <td>
-                                        <h5 th:each="t,iterStat : ${task.receivers}" th:text=" ${t.username}"></h5>
+                                        <h5 th:each="t,iterStat : ${task.receivers}" th:text=" ${t.cname}"></h5>
                                     </td>
 
-                                    <td th:text="${task.project.user.username}"></td>
+                                    <td th:text="${task.project.user.cname}"></td>
                                     <td th:text="${task.finishName}"></td>
                                     <td>
                                         <a href="#" th:href="@{'/check/'+${task.taskId}}"
@@ -247,7 +247,7 @@
                                                         <div class="radio3" th:each="user : ${taskModel.users}">
                                                             <input type="radio" id="radio2" name="radio1"
                                                                    value="option2" th:data="${user.id}">
-                                                            <label for="radio2" th:text="${user.username}">
+                                                            <label for="radio2" th:text="${user.cname}">
                                                             </label>
                                                         </div>
                                                     </div>
