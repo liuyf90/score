@@ -11,11 +11,11 @@ spring:
     content-type: text/html
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://60.219.169.118:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
-#    url: jdbc:mysql://localhost:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
+
+    url: jdbc:mysql://localhost:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
     username: root
-    password: root,123456
-#    password: root
+#    password: root,123456
+    password: root
   jpa:
     hibernate:
       ddl-auto: update
