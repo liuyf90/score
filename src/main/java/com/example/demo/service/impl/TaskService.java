@@ -36,17 +36,22 @@ public class TaskService implements ITaskService {
 
     @Override
     public List<Task> findAll() {
-        return taskRepository.findAll();
-//        List<Task> result = taskRepository.findAll(new Specification<Task>() {
-//            @Override
-//            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-//                ListJoin<Task, User> userJoin = root.join(root.getModel().getList("users", User.class), JoinType.LEFT);
-//                Predicate p1 = cb.isNull(userJoin.get("id"));
-//                return p1;
-//            }
-//        });
-//        return result;
+       // return taskRepository.findAll();
+        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+            @Override
+            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                ListJoin<Task, User> userJoin = root.join(root.getModel().getList("users", User.class), JoinType.LEFT);
+                Predicate p1 = cb.isNull(userJoin.get("id"));
+                return p1;
+            }
+        });
+        return result;
     }
+    @Override
+    public List<Task> findAllByAdmin() {
+         return taskRepository.findAll();
+    }
+
 
     public List<Task> findSearch(Task model) {
         Assert.notNull(model);

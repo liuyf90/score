@@ -51,7 +51,7 @@ public class CheckController {
         Iterator<Role> iterator=roles.iterator();
         while(iterator.hasNext()){
             if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
-                taskList=taskservice.findAll();
+                taskList=taskservice.findAllByAdmin();
             }
         }
         if(taskList==null||taskList.size()==0){

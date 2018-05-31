@@ -15,4 +15,5 @@ public interface ITaskService {
     public List<Task> assignedTasks(long owner_id);
     public Task save(Task task);
     public List<Task> findSearchForOwnerId(long owner_id,Task model);
+    public List<Task> findAllByAdmin();
 }
