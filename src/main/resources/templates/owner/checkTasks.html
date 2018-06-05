@@ -180,8 +180,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="task,iterStat: ${taskModel.taskList}">
-                                    <td th:text="${iterStat.index}+1">0</td>
+
+                                <tr  th:each="task,iterStat: ${taskModel.taskList}" th:class="${task.istimeOut}?'warning'">
+
+                                    <td  th:text="${iterStat.index}+1">0</td>
                                     <td th:text="${task.project.projectName}+1">0</td>
                                     <td th:text="${task.taskName}"></td>
                                     <td th:text="${task.remark}"></td>
@@ -263,7 +265,7 @@
                                         </div>
 
                                     </td>
-
+                                </tr>
                                 </tr>
                                 </tbody>
                             </table>

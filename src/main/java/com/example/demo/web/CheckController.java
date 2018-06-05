@@ -57,7 +57,7 @@ public class CheckController {
         if(taskList==null||taskList.size()==0){
             taskList=taskservice.assignedTasks(u.getId());
         }
-        model.addAttribute("taskList", taskList);
+        model.addAttribute("taskList", setTimeOut(taskList));
 
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
@@ -98,9 +98,23 @@ public class CheckController {
         if(taskList==null||taskList.size()==0){
             taskList=taskservice.findSearchForOwnerId(user.getId(),task);
         }
-        model.addAttribute("taskList", taskList );
+        model.addAttribute("taskList", setTimeOut(taskList) );
         model.addAttribute("users",userservice.findAll());
         return new ModelAndView("owner/checkTasks", "taskModel", model);
+    }
+
+
+    private List<Task> setTimeOut(List<Task> taskList){
+        for(Task task:taskList){
+            Date eDate=task.geteDate();
+            if(eDate!=null) {
+                boolean bl = eDate.before(new Date());
+                if(task.getFinish()<TaskStatus.CHECK.getIndex()) {
+                    task.setIstimeOut(bl);
+                }
+            }
+        }
+        return taskList;
     }
 
 

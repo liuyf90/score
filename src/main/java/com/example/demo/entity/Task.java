@@ -51,7 +51,8 @@ public class Task {
     private int finish;
     @Transient
     private int status;
-
+    @Transient
+    private Boolean istimeOut=false;//是否超时
 
     @Transient
     private String  finishName;
@@ -207,5 +208,13 @@ public class Task {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Boolean getIstimeOut() {
+        return istimeOut;
+    }
+
+    public void setIstimeOut(Boolean istimeOut) {
+        this.istimeOut = istimeOut;
     }
 }
