@@ -4,6 +4,8 @@ import com.example.demo.entity.*;
 import com.example.demo.service.impl.ProjectService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -82,23 +84,24 @@ public class CheckController {
         taskservice.update2(task);
         return "success";
     }
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @RequestMapping(value = "/query", method = RequestMethod.POST)
     public ModelAndView query(Task task, Model model, Principal principal){
+      //  PageInfo page1=page;
         User user=userservice.getUser(principal.getName());
         model.addAttribute("task",  null);
         User u= userservice.getUser(principal.getName());
         List<Role> roles=userservice.searchRoles(u.getUsername());
-        List<Task> taskList=null;
+        org.springframework.data.domain.Page<Task> taskList=null;
         Iterator<Role> iterator=roles.iterator();
         while(iterator.hasNext()){
             if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
                 taskList=taskservice.findSearch(task);
             }
         }
-        if(taskList==null||taskList.size()==0){
-            taskList=taskservice.findSearchForOwnerId(user.getId(),task);
+        if(taskList==null||taskList.getSize()==0){
+//            taskList=taskservice.findSearchForOwnerId(user.getId(),task);
         }
-        model.addAttribute("taskList", setTimeOut(taskList) );
+        model.addAttribute("taskList", setTimeOut(taskList.getContent()) );
         model.addAttribute("users",userservice.findAll());
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }

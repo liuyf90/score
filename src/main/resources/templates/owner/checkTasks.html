@@ -112,7 +112,7 @@
                         查询条件
                     </div>
                     <div class="panel-body">
-                        <form action="/check/query">
+                        <form th:action="@{/check/query/}" method="post">
                             <div class="form-group col-xs-6">
                                 <label for="bbdate">领取时间（起）</label>
                                 <input type="text" class="jeinput" id="bbdate" name="bbdate"
@@ -135,7 +135,8 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-10 col-sm-2">
-                                    <button class="form-control btn btn-default query">查询</button>
+                                    <!--<button class="form-control btn btn-default query">查询-->
+                                    <input type="submit" class="form-control btn btn-default query" value="查询"/>
                                 </div>
                             </div>
                         </form>
@@ -181,9 +182,10 @@
                                 </thead>
                                 <tbody>
 
-                                <tr  th:each="task,iterStat: ${taskModel.taskList}" th:class="${task.istimeOut}?'warning'">
+                                <tr th:each="task,iterStat: ${taskModel.taskList}"
+                                    th:class="${task.istimeOut}?'warning'">
 
-                                    <td  th:text="${iterStat.index}+1">0</td>
+                                    <td th:text="${iterStat.index}+1">0</td>
                                     <td th:text="${task.project.projectName}+1">0</td>
                                     <td th:text="${task.taskName}"></td>
                                     <td th:text="${task.remark}"></td>
@@ -266,7 +268,7 @@
 
                                     </td>
                                 </tr>
-                                </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -297,13 +299,31 @@
 <script src="assets/js/jquery.metisMenu.js" th:src="@{/assets/js/jquery.metisMenu.js}"></script>
 <!-- DATA TABLE SCRIPTS -->
 <script src="assets/js/dataTables/jquery.dataTables.js" th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
-<script src="assets/js/dataTables/dataTables.bootstrap.js" th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
+<script src="assets/js/dataTables/dataTables.bootstrap.js"
+        th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
-        $("#logout").click(function(){
+        $("#logout").click(function () {
             $("#outfrom").submit();
         });
-        $('#dataTables-example').dataTable();
+        $('#dataTables-example').dataTable(
+            {
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "/check/query",
+                    "type": "POST"
+                },
+                "columns": [
+//                    { "data": "first_name" },
+//                    { "data": "last_name" },
+//                    { "data": "position" },
+//                    { "data": "office" },
+//                    { "data": "start_date" },
+//                    { "data": "salary" }
+                ]
+            }
+        );
         //自定义格式选择
         $("#bbdate").jeDate({
             format: "YYYY-MM-DD"
@@ -330,10 +350,10 @@
             });
         });
 
-        $(".query").click(function () {
-            $("form").submit();
-            //   $.get("/check/query", $("form").serialize());
-        });
+//        $(".query").click(function () {
+//            $("form").submit();
+//            ;
+//        });
 
         $(".add").click(function () {
                 window.location.href = "/assigning/"
@@ -353,7 +373,8 @@
 <script src="assets/js/morris/morris.js" th:src="@{/assets/js/morris/morris.js}"></script>
 <script src="assets/js/easypiechart.js" th:src="@{/assets/js/easypiechart.js}"></script>
 <script src="assets/js/easypiechart-data.js" th:src="@{/assets/js/easypiechart-data.js}"></script>
-<script src="assets/js/Lightweight-Chart/jquery.chart.js" th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+<script src="assets/js/Lightweight-Chart/jquery.chart.js"
+        th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
 
 <!-- Custom Js -->
 <script src="assets/js/custom-scripts.js" th:src="@{/assets/js/custom-scripts.js}"></script>

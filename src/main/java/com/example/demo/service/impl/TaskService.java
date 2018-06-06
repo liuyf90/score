@@ -8,7 +8,12 @@ import com.example.demo.entity.TaskStatus;
 import com.example.demo.entity.User;
 import com.example.demo.service.ITaskService;
 
+
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -32,11 +37,9 @@ public class TaskService implements ITaskService {
     private TaskRepository taskRepository;
 
 
-
-
     @Override
     public List<Task> findAll() {
-       // return taskRepository.findAll();
+        // return taskRepository.findAll();
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -47,15 +50,16 @@ public class TaskService implements ITaskService {
         });
         return result;
     }
+
     @Override
     public List<Task> findAllByAdmin() {
-         return taskRepository.findAll();
+        return taskRepository.findAll();
     }
 
-
-    public List<Task> findSearch(Task model) {
+    @Override
+    public Page<Task> findSearch(Task model) {
         Assert.notNull(model);
-        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+        return taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
@@ -67,20 +71,19 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-                if (!StringUtils.isEmpty(model.getStatus())&&model.getStatus()!=-1) {
+                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
                     //狀態
-                    predicates.add(cb.equal(root.get("finish").as(Integer.class),model.getStatus()));
+                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
                 }
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
-        });
-        return result;
+        }, new PageRequest(0, 10));
     }
 
 
     @Override
-    public List<Task> findSearchForOwnerId(long owner_id,Task model) {
+    public List<Task> findSearchForOwnerId(long owner_id, Task model) {
         Assert.notNull(model);
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
@@ -98,9 +101,9 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-                if (!StringUtils.isEmpty(model.getStatus())&&model.getStatus()!=-1) {
+                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
                     //狀態
-                    predicates.add(cb.equal(root.get("finish").as(Integer.class),model.getStatus()));
+                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
                 }
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
@@ -108,6 +111,7 @@ public class TaskService implements ITaskService {
         });
         return result;
     }
+
     @Override
     public List<Task> assignedTasks(long owner_id) {
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
@@ -134,11 +138,12 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public void update2(Task task) {}
+    public void update2(Task task) {
+    }
 
     @Override
-    public Task save(Task task){
-       return  taskRepository.save(task);
+    public Task save(Task task) {
+        return taskRepository.save(task);
     }
 
 
