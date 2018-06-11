@@ -72,7 +72,6 @@ public class UserService implements UserDetailsService, IUserServer {
         return result;
     }
 
-
     @Override
     public List<Role> searchRoles(String username) {
         return (List<Role>) userRepository.findByUsername(username).getAuthorities();

@@ -9,7 +9,7 @@ import java.util.List;
  * Created by liuyf90 on 2018/6/11.
  */
 public  interface  IService<E> {
-    public Page<E> findSearch(E model);
-    public List<E> findAll();
-    public List<E> findAll(E model);
+     Page<E> findSearch(E model);
+     List<E> findAll();
+     List<E> findAll(E model);
 }

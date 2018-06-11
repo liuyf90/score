@@ -15,11 +15,10 @@ import java.util.List;
  * Created by liuyf on 2018/5/6.
  */
 public interface ITaskService extends IService<Task> {
-
-    public Task pull(Task task) ;
-    public void update2(Task task);
-    public List<Task> assignedTasks(long owner_id);
-    public Task save(Task task);
-    public List<Task> findSearchForOwnerId(long owner_id,Task model);
-    public List<Task> findAllByAdmin();
+     Task pull(Task task) ;
+     void update2(Task task);
+     List<Task> assignedTasks(long owner_id);
+     Task save(Task task);
+     List<Task> findSearchForOwnerId(long owner_id,Task model);
+     List<Task> findAllByAdmin();
 }

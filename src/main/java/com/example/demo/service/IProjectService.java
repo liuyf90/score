@@ -9,5 +9,5 @@ import java.util.List;
  * Created by liuyf90 on 2018/5/24.
  */
 public interface IProjectService extends IService<Project> {
-    public List<Project> findByUser(User user);
+     List<Project> findByUser(User user);
 }
