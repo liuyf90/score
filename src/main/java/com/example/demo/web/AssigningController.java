@@ -69,7 +69,7 @@ public class AssigningController {
         User user=new User();
         user.setSts(1);
         user.setUsername(principal.getName());
-        User user1 =userservice.findSearch(user).get(0);
+        User user1 =userservice.findAll(user).get(0);
         Map<Integer,String> status=new HashMap<>();
         //WAITED("未领取",0),DONE("处理中",1),FINISH("提交待审核",2),CHECK("已审核",3),TEST("待测试",4);
         status.put(0,"未领取");
@@ -78,7 +78,7 @@ public class AssigningController {
         status.put(3,"已审核");
         status.put(4,"待测试");
         model.addAttribute("taskstatus",status);
-        model.addAttribute("users",userservice.findAll());
+        model.addAttribute("users",userservice.findSearch(null));
         model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
 
         return new ModelAndView("owner/checkTasks", "taskModel", model);

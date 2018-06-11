@@ -44,9 +44,9 @@ public class CheckController {
         User user=new User();
         user.setSts(1);
         user.setUsername(principal.getName());
-        User user1 =userservice.findSearch(user).get(0);
+        User user1 =userservice.findAll(user).get(0);
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
-        model.addAttribute("users",userservice.findAll());
+        model.addAttribute("users",userservice.findSearch(null));
         User u= userservice.getUser(principal.getName());
         List<Role> roles=userservice.searchRoles(u.getUsername());
         List<Task> taskList=null;

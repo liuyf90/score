@@ -5,6 +5,7 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.service.IUserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,20 +43,26 @@ public class UserService implements UserDetailsService, IUserServer {
         return userRepository.getOne(id);
     }
 
-    public List<User> findAll(){
-        return userRepository.findAll();
+    @Override
+    public Page<User> findSearch(User model){
+        return null;
     }
 
-    public List<User> findSearch(User model) {
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+    @Override
+    public List<User> findAll(User model) {
         Assert.notNull(model);
         List<User> result = userRepository.findAll(new Specification<User>() {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> list = new ArrayList<Predicate>();
-                if (model.getSts() != 0) {
+                if (model!=null&&model.getSts() != 0) {
                     list.add(cb.equal(root.get("sts").as(Integer.class), model.getSts()));
                 }
-                if (model.getUsername() != null && model.getUsername() != "") {
+                if (model!=null&&model.getUsername() != null && model.getUsername() != "") {
                     list.add(cb.equal(root.get("username").as(String.class), model.getUsername()));
                 }
                 Predicate[] p = new Predicate[list.size()];

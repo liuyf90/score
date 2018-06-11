@@ -14,14 +14,12 @@ import java.util.List;
 /**
  * Created by liuyf on 2018/5/6.
  */
-public interface ITaskService {
-    public List<Task> findAll();
-//    public Page<Task> search(final Task task, PageInfo page);
+public interface ITaskService extends IService<Task> {
+
     public Task pull(Task task) ;
     public void update2(Task task);
     public List<Task> assignedTasks(long owner_id);
     public Task save(Task task);
     public List<Task> findSearchForOwnerId(long owner_id,Task model);
     public List<Task> findAllByAdmin();
-    public Page<Task> findSearch(Task model);
 }

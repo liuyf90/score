@@ -28,7 +28,7 @@ public class MyTasksController {
         User user=new User();
         user.setSts(1);
         user.setUsername(principal.getName());
-        User user1 =userservice.findSearch(user).get(0);
+        User user1 =userservice.findAll(user).get(0);
         List<Task> tasks=user1.getTasks();
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("taskList", tasks);
