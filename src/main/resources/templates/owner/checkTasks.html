@@ -219,7 +219,8 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;</button>
+                                                                aria-hidden="true">&times;
+                                                        </button>
                                                         <h4 class="modal-title" id="myModalLabel">请确认</h4>
                                                     </div>
                                                     <div class="modal-body">
@@ -243,7 +244,8 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">&times;</button>
+                                                                aria-hidden="true">&times;
+                                                        </button>
                                                         <h4 class="modal-title" id="myModalLabel">请确认</h4>
                                                     </div>
                                                     <div class="modal-body">
@@ -308,20 +310,10 @@
         });
         $('#dataTables-example').dataTable(
             {
-                "processing": true,
-                "serverSide": true,
-                "ajax": {
-                    "url": "/check/query",
-                    "type": "POST"
-                },
-                "columns": [
-//                    { "data": "first_name" },
-//                    { "data": "last_name" },
-//                    { "data": "position" },
-//                    { "data": "office" },
-//                    { "data": "start_date" },
-//                    { "data": "salary" }
-                ]
+                language:{
+                   url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                }
+
             }
         );
         //自定义格式选择
@@ -350,10 +342,10 @@
             });
         });
 
-//        $(".query").click(function () {
-//            $("form").submit();
-//            ;
-//        });
+        //        $(".query").click(function () {
+        //            $("form").submit();
+        //            ;
+        //        });
 
         $(".add").click(function () {
                 window.location.href = "/assigning/"
