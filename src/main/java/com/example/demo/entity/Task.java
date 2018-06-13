@@ -15,7 +15,7 @@ import java.util.Set;
  * Created by liuyf on 2018/5/3.
  */
 @Entity
-public class Task extends PageInfo<Task>{
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;

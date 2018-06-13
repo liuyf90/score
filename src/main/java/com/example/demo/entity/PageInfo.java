@@ -10,6 +10,7 @@ public class PageInfo<E> {
     int limit ;
     int start;
     List<E> data;
+    E e;
 
     public int getPage() {
         return page;
@@ -35,11 +36,19 @@ public class PageInfo<E> {
         this.start = start;
     }
 
-    public List<E> getDatas() {
+    public List<E> getData() {
         return data;
     }
 
-    public void setDatas(List<E> data) {
+    public void setData(List<E> data) {
         this.data = data;
+    }
+
+    public E getE() {
+        return e;
+    }
+
+    public void setE(E e) {
+        this.e = e;
     }
 }

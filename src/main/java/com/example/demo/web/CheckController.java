@@ -85,7 +85,7 @@ public class CheckController {
         return "success";
     }
     @RequestMapping(value = "/query", method = RequestMethod.GET)
-    public ModelAndView query(Task task, Model model, Principal principal){
+    public ModelAndView query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo){
 
         User user=userservice.getUser(principal.getName());
         model.addAttribute("task",  null);

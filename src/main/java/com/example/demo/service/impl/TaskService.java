@@ -57,7 +57,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Page<Task> findSearch(Task model) {
+    public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {
         Assert.notNull(model);
         return taskRepository.findAll(new Specification<Task>() {
             @Override
@@ -78,7 +78,7 @@ public class TaskService implements ITaskService {
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
-        }, new PageRequest(0, 10));
+        }, new PageRequest(pageInfo.getPage(), pageInfo.getLimit()));
     }
 
     @Override
