@@ -1,16 +1,23 @@
 package com.example.demo.entity;
 
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by liuyf90 on 2018/6/13.
  */
-public class PageInfo<E> {
+public class PageInfo<E> implements Page<E>
+{
     int page ;
     int limit ;
     int start;
-    List<E> data;
-    E e;
+
+
 
     public int getPage() {
         return page;
@@ -36,19 +43,85 @@ public class PageInfo<E> {
         this.start = start;
     }
 
-    public List<E> getData() {
-        return data;
+
+
+    @Override
+    public int getTotalPages() {
+        return 0;
     }
 
-    public void setData(List<E> data) {
-        this.data = data;
+    @Override
+    public long getTotalElements() {
+        return 0;
     }
 
-    public E getE() {
-        return e;
+    @Override
+    public Page map(Converter converter) {
+        return null;
     }
 
-    public void setE(E e) {
-        this.e = e;
+    @Override
+    public int getNumber() {
+        return 0;
+    }
+
+    @Override
+    public int getSize() {
+        return 0;
+    }
+
+    @Override
+    public int getNumberOfElements() {
+        return 0;
+    }
+
+    @Override
+    public List getContent() {
+        return null;
+    }
+
+    @Override
+    public boolean hasContent() {
+        return false;
+    }
+
+    @Override
+    public Sort getSort() {
+        return null;
+    }
+
+    @Override
+    public boolean isFirst() {
+        return false;
+    }
+
+    @Override
+    public boolean isLast() {
+        return false;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return false;
+    }
+
+    @Override
+    public boolean hasPrevious() {
+        return false;
+    }
+
+    @Override
+    public Pageable nextPageable() {
+        return null;
+    }
+
+    @Override
+    public Pageable previousPageable() {
+        return null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return null;
     }
 }

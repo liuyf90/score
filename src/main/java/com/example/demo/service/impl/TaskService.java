@@ -56,10 +56,16 @@ public class TaskService implements ITaskService {
         return taskRepository.findAll();
     }
 
+//    public Page<Task> test(com.example.demo.entity.PageInfo<Task> pageInfo){
+//        Page<Task> sourceCodes= this.taskRepository.findAll(new PageRequest(pageInfo.getPage(), pageInfo.getLimit(), null));
+//        return sourceCodes;
+//    }
+
+
     @Override
     public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {
         Assert.notNull(model);
-        return taskRepository.findAll(new Specification<Task>() {
+        Specification<Task> specification=new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
@@ -78,7 +84,8 @@ public class TaskService implements ITaskService {
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
-        }, new PageRequest(pageInfo.getPage(), pageInfo.getLimit()));
+        };
+        return taskRepository.findAll( specification,new PageRequest(pageInfo.getPage()-1, pageInfo.getLimit(),null));
     }
 
     @Override

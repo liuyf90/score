@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dao.UserRepository;
+import com.example.demo.entity.PageInfo;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.service.IUserServer;
@@ -44,7 +45,7 @@ public class UserService implements UserDetailsService, IUserServer {
     }
 
     @Override
-    public Page<User> findSearch(User model){
+    public Page<User> findSearch(User model, PageInfo pageInfo){
         return null;
     }
 

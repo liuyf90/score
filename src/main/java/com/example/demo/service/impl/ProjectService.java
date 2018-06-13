@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dao.ProjectRepository;
+import com.example.demo.entity.PageInfo;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
@@ -39,7 +40,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Page<Project> findSearch(Project model) {
+    public Page<Project> findSearch(Project model, PageInfo pageInfo) {
         return null;
     }
 }
