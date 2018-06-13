@@ -59,7 +59,7 @@ public class CheckController {
         if(taskList==null||taskList.size()==0){
             taskList=taskservice.assignedTasks(u.getId());
         }
-        model.addAttribute("taskList", setTimeOut(taskList));
+//        model.addAttribute("taskList", setTimeOut(taskList));
 
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
@@ -84,9 +84,9 @@ public class CheckController {
         taskservice.update2(task);
         return "success";
     }
-    @RequestMapping(value = "/query", method = RequestMethod.POST)
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     public ModelAndView query(Task task, Model model, Principal principal){
-      //  PageInfo page1=page;
+
         User user=userservice.getUser(principal.getName());
         model.addAttribute("task",  null);
         User u= userservice.getUser(principal.getName());
