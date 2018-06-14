@@ -112,7 +112,7 @@
                         查询条件
                     </div>
                     <div class="panel-body">
-                        <form th:action="@{/check/query/}" method="post">
+                        <form th:action="@{/check/query/}" method="get">
                             <div class="form-group col-xs-6">
                                 <label for="bbdate">领取时间（起）</label>
                                 <input type="text" class="jeinput" id="bbdate" name="bbdate"
@@ -183,92 +183,92 @@
                                 <!--<tbody>-->
 
                                 <!--<tr th:each="task,iterStat: ${taskModel.taskList}"-->
-                                    <!--th:class="${task.istimeOut}?'warning'">-->
+                                <!--th:class="${task.istimeOut}?'warning'">-->
 
-                                    <!--<td th:text="${iterStat.index}+1">0</td>-->
-                                    <!--<td th:text="${task.project.projectName}+1">0</td>-->
-                                    <!--<td th:text="${task.taskName}"></td>-->
-                                    <!--<td th:text="${task.remark}"></td>-->
-                                    <!--<td>-->
-                                        <!--<h5 th:text="${task.bDate!=null}?${#dates.format(task.bDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
+                                <!--<td th:text="${iterStat.index}+1">0</td>-->
+                                <!--<td th:text="${task.project.projectName}+1">0</td>-->
+                                <!--<td th:text="${task.taskName}"></td>-->
+                                <!--<td th:text="${task.remark}"></td>-->
+                                <!--<td>-->
+                                <!--<h5 th:text="${task.bDate!=null}?${#dates.format(task.bDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
 
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <!--<h5 th:text="${task.eDate!=null}?${#dates.format(task.eDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <!--<h5 th:text="${task.fDate!=null}?${#dates.format(task.fDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <!--<h5 th:each="t,iterStat : ${task.receivers}" th:text=" ${t.cname}"></h5>-->
-                                    <!--</td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--<h5 th:text="${task.eDate!=null}?${#dates.format(task.eDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--<h5 th:text="${task.fDate!=null}?${#dates.format(task.fDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--<h5 th:each="t,iterStat : ${task.receivers}" th:text=" ${t.cname}"></h5>-->
+                                <!--</td>-->
 
-                                    <!--<td th:text="${task.project.user.cname}"></td>-->
-                                    <!--<td th:text="${task.finishName}"></td>-->
-                                    <!--<td>-->
-                                        <!--<a href="#" th:href="@{'/check/'+${task.taskId}}"-->
-                                           <!--class="btn btn-primary detail">详情</a>-->
-                                        <!--<a th:if="${task.finish==2}" href="#" data-toggle="modal" data-target="#myCheck"-->
-                                           <!--class="btn btn-primary check" th:data="${task.taskId}">审核</a>-->
-                                        <!--<a th:if="${task.finish==0}" href="#" data-toggle="modal"-->
-                                           <!--data-target="#myAssigned" class="btn btn-primary check"-->
-                                           <!--th:data="${task.taskId}">强派</a>-->
-                                        <!--<div class="modal fade" id="myCheck" tabindex="-1" role="dialog"-->
-                                             <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
-                                            <!--<div class="modal-dialog">-->
-                                                <!--<div class="modal-content">-->
-                                                    <!--<div class="modal-header">-->
-                                                        <!--<button type="button" class="close" data-dismiss="modal"-->
-                                                                <!--aria-hidden="true">&times;-->
-                                                        <!--</button>-->
-                                                        <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="modal-body">-->
-                                                        <!--<h3>请仔细检查是否完成</h3>-->
+                                <!--<td th:text="${task.project.user.cname}"></td>-->
+                                <!--<td th:text="${task.finishName}"></td>-->
+                                <!--<td>-->
+                                <!--<a href="#" th:href="@{'/check/'+${task.taskId}}"-->
+                                <!--class="btn btn-primary detail">详情</a>-->
+                                <!--<a th:if="${task.finish==2}" href="#" data-toggle="modal" data-target="#myCheck"-->
+                                <!--class="btn btn-primary check" th:data="${task.taskId}">审核</a>-->
+                                <!--<a th:if="${task.finish==0}" href="#" data-toggle="modal"-->
+                                <!--data-target="#myAssigned" class="btn btn-primary check"-->
+                                <!--th:data="${task.taskId}">强派</a>-->
+                                <!--<div class="modal fade" id="myCheck" tabindex="-1" role="dialog"-->
+                                <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
+                                <!--<div class="modal-dialog">-->
+                                <!--<div class="modal-content">-->
+                                <!--<div class="modal-header">-->
+                                <!--<button type="button" class="close" data-dismiss="modal"-->
+                                <!--aria-hidden="true">&times;-->
+                                <!--</button>-->
+                                <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
+                                <!--</div>-->
+                                <!--<div class="modal-body">-->
+                                <!--<h3>请仔细检查是否完成</h3>-->
 
-                                                    <!--</div>-->
-                                                    <!--<div class="modal-footer">-->
-                                                        <!--<button type="button" class="btn btn-default"-->
-                                                                <!--data-dismiss="modal">Close-->
-                                                        <!--</button>-->
-                                                        <!--<button type="button" class="btn btn-primary sure">确认-->
-                                                        <!--</button>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="modal-footer">-->
+                                <!--<button type="button" class="btn btn-default"-->
+                                <!--data-dismiss="modal">Close-->
+                                <!--</button>-->
+                                <!--<button type="button" class="btn btn-primary sure">确认-->
+                                <!--</button>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
 
-                                        <!--<div class="modal fade" id="myAssigned" tabindex="-1" role="dialog"-->
-                                             <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
-                                            <!--<div class="modal-dialog">-->
-                                                <!--<div class="modal-content">-->
-                                                    <!--<div class="modal-header">-->
-                                                        <!--<button type="button" class="close" data-dismiss="modal"-->
-                                                                <!--aria-hidden="true">&times;-->
-                                                        <!--</button>-->
-                                                        <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="modal-body">-->
-                                                        <!--<h3>请选择任务责任人</h3>-->
-                                                        <!--<div class="radio3" th:each="user : ${taskModel.users}">-->
-                                                            <!--<input type="radio" id="radio2" name="radio1"-->
-                                                                   <!--value="option2" th:data="${user.id}">-->
-                                                            <!--<label for="radio2" th:text="${user.cname}">-->
-                                                            <!--</label>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="modal-footer">-->
-                                                        <!--<button type="button" class="btn btn-default"-->
-                                                                <!--data-dismiss="modal">Close-->
-                                                        <!--</button>-->
-                                                        <!--<button type="button" class="btn btn-primary sure2">确认-->
-                                                        <!--</button>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
+                                <!--<div class="modal fade" id="myAssigned" tabindex="-1" role="dialog"-->
+                                <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
+                                <!--<div class="modal-dialog">-->
+                                <!--<div class="modal-content">-->
+                                <!--<div class="modal-header">-->
+                                <!--<button type="button" class="close" data-dismiss="modal"-->
+                                <!--aria-hidden="true">&times;-->
+                                <!--</button>-->
+                                <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
+                                <!--</div>-->
+                                <!--<div class="modal-body">-->
+                                <!--<h3>请选择任务责任人</h3>-->
+                                <!--<div class="radio3" th:each="user : ${taskModel.users}">-->
+                                <!--<input type="radio" id="radio2" name="radio1"-->
+                                <!--value="option2" th:data="${user.id}">-->
+                                <!--<label for="radio2" th:text="${user.cname}">-->
+                                <!--</label>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="modal-footer">-->
+                                <!--<button type="button" class="btn btn-default"-->
+                                <!--data-dismiss="modal">Close-->
+                                <!--</button>-->
+                                <!--<button type="button" class="btn btn-primary sure2">确认-->
+                                <!--</button>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
 
-                                    <!--</td>-->
+                                <!--</td>-->
                                 <!--</tr>-->
 
                                 <!--</tbody>-->
@@ -310,7 +310,9 @@
         });
         $('#dataTables-example').dataTable(
             {
-            //    language:'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json',
+                language:{
+                   url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                },
                 autoWidth: false,  //禁用自动调整列宽
                 stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
                 processing: true,  //隐藏加载提示,自行处理
@@ -329,7 +331,7 @@
                     var param = {};
                     param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                     param.start = data.start;//开始的记录序号
-                    param.page = (data.start / data.length)+1;//当前页码
+                    param.page = (data.start / data.length) + 1;//当前页码
                     //console.log(param);
                     //ajax请求数据
                     $.ajax({
@@ -339,15 +341,15 @@
                         data: param,  //传入组装的参数
                         dataType: "json",
                         success: function (result) {
-                            //console.log(result);
+                            console.log("result" + result);
                             //setTimeout仅为测试延迟效果
                             setTimeout(function () {
                                 //封装返回数据
                                 var returnData = {};
                                 returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                                returnData.recordsTotal = result.total;//返回数据全部记录
-                                returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
-                                returnData.data = result.data;//返回的数据列表
+                                returnData.recordsTotal = result.totalElements;//返回数据全部记录
+                                returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                                returnData.data = result.content;//返回的数据列表
                                 console.log(returnData);
                                 //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                                 //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
@@ -358,8 +360,12 @@
                 },
                 //列表表头字段
                 columns: [
-                    { "data": "taskName" }
+//                    {"data": row},
+                    {"data": "taskName"},
+                    {"data": "project.projectName"},
+                    {"data": "remark"}
                 ]
+
             }).api();
 
         //自定义格式选择

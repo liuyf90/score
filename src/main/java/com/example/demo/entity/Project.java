@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 /**
  * Created by liuyf on 2018/5/3.
@@ -11,7 +13,7 @@ public class Project {
     private Long projectId;
     @Column
     private String projectName;
-
+    @JsonIgnore
     @ManyToOne(cascade =  CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinColumn(name="owner_id",referencedColumnName="id")
     private User user;

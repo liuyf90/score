@@ -77,10 +77,10 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
-                    //狀態
-                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
-                }
+//                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
+//                    //狀態
+//                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
+//                }
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
