@@ -19,6 +19,6 @@ public interface ITaskService extends IService<Task> {
      void update2(Task task);
      List<Task> assignedTasks(long owner_id);
      Task save(Task task);
-     List<Task> findSearchForOwnerId(long owner_id,Task model);
      List<Task> findAllByAdmin();
-}
+     Page<Task> findSearchForOwnerId(long owner_id, Task model, com.example.demo.entity.PageInfo pageInfo) ;
+     }

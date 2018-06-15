@@ -87,27 +87,26 @@ public class CheckController {
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo){
-        Page<Task> taskList=taskservice.findSearch(task,pageInfo);
+        User user=userservice.getUser(principal.getName());
+        model.addAttribute("task",  null);
+        User u= userservice.getUser(principal.getName());
+        List<Role> roles=userservice.searchRoles(u.getUsername());
+        Page<Task> taskList=null;
+        Iterator<Role> iterator=roles.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+                taskList=taskservice.findSearch(task,pageInfo);
+            }
+        }
+        if(taskList==null||taskList.getSize()==0){
+            taskList=taskservice.findSearchForOwnerId(user.getId(),task,pageInfo);
+        }
         return taskList;
     }
 //    @RequestMapping(value = "/query", method = RequestMethod.GET)
 //    public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo){
 //
-//        User user=userservice.getUser(principal.getName());
-//        model.addAttribute("task",  null);
-//        User u= userservice.getUser(principal.getName());
-//        List<Role> roles=userservice.searchRoles(u.getUsername());
-//        Page<Task> taskList=null;
-//        Iterator<Role> iterator=roles.iterator();
-//        while(iterator.hasNext()){
-//            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
-//                taskList=taskservice.findSearch(task,pageInfo);
-//          //      taskList=taskservice.test(pageInfo);
-//            }
-//        }
-//        if(taskList==null||taskList.getSize()==0){
-////            taskList=taskservice.findSearchForOwnerId(user.getId(),task);
-//        }
+
 ////        model.addAttribute("taskList", setTimeOut(taskList.getContent()) );
 //        model.addAttribute("taskList", taskList );
 //        model.addAttribute("users",userservice.findAll());

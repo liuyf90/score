@@ -2,14 +2,10 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dao.TaskRepository;
 import com.example.demo.dao.UserRepository;
-import com.example.demo.entity.Project;
-import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskStatus;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.service.ITaskService;
 
 
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -118,9 +114,9 @@ public class TaskService implements ITaskService {
 
 
     @Override
-    public List<Task> findSearchForOwnerId(long owner_id, Task model) {
+    public Page<Task> findSearchForOwnerId(long owner_id, Task model,PageInfo pageInfo) {
         Assert.notNull(model);
-        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+        Page<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Join<Task, Project> projectJoin = root.join("project", JoinType.LEFT);
@@ -136,14 +132,14 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
-                    //狀態
-                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
-                }
+//                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
+//                    //狀態
+//                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
+//                }
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
-        });
+        },new PageRequest(pageInfo.getPage()-1, pageInfo.getLimit(),null));
         return result;
     }
 
