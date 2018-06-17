@@ -13,8 +13,8 @@ public class Project {
     private Long projectId;
     @Column
     private String projectName;
-    @JsonIgnore
-    @ManyToOne(cascade =  CascadeType.ALL ,fetch = FetchType.LAZY)
+
+    @ManyToOne(cascade =  CascadeType.ALL ,fetch = FetchType.EAGER)
     @JoinColumn(name="owner_id",referencedColumnName="id")
     private User user;
 
