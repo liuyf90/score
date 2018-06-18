@@ -136,7 +136,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-10 col-sm-2">
                                     <!--<button class="form-control btn btn-default query">查询-->
-                                    <input type="submit" class="form-control btn btn-default query" value="查询"/>
+                                    <input type="button" class="form-control btn btn-default query" value="查询"/>
                                 </div>
                             </div>
                         </form>
@@ -346,7 +346,9 @@
                     var param = {};
                     param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                     param.start = data.start;//开始的记录序号
-                    param.page = (data.start / data.length) + 1;//当前页码
+                    param.page = (data.start / data.length) + 1;//当前页码;
+                    param.bbdate = $("#bbdate").val();
+                    param.bedate = $("#bedate").val();
                     //ajax请求数据
                     $.ajax({
                         type: "GET",
@@ -430,7 +432,7 @@
             }).api();
         t.on('order.dt search.dt draw.dt',
             function () {
-                alert(t.page.len());
+                //  alert(t.page.len());
                 t.column(0, {
                     search: 'applied',
                     order: 'applied'
@@ -491,6 +493,9 @@
                 alert("修改成功");
             });
 
+        });
+        $(".query").click(function () {
+            t.draw();
         });
     })
 </script>
