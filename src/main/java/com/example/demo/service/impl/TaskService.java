@@ -52,12 +52,6 @@ public class TaskService implements ITaskService {
         return taskRepository.findAll();
     }
 
-//    public Page<Task> test(com.example.demo.entity.PageInfo<Task> pageInfo){
-//        Page<Task> sourceCodes= this.taskRepository.findAll(new PageRequest(pageInfo.getPage(), pageInfo.getLimit(), null));
-//        return sourceCodes;
-//    }
-
-
     @Override
     public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {
         Assert.notNull(model);
@@ -73,10 +67,13 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-//                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
-//                    //狀態
-//                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
-//                }
+                if( model.getStatus() == -1){
+                    predicates.add(cb.notEqual(root.get("finish").as(Integer.class), TaskStatus.CHECK.getIndex()));
+                }
+                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
+                    //狀態
+                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
+                }
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }

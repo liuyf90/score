@@ -55,7 +55,6 @@ public class UserService implements UserDetailsService, IUserServer {
     }
     @Override
     public List<User> findAll(User model) {
-        Assert.notNull(model);
         List<User> result = userRepository.findAll(new Specification<User>() {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

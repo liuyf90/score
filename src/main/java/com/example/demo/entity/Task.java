@@ -52,7 +52,7 @@ public class Task {
     @Column(name = "finish", columnDefinition = "INT default 0 COMMENT '完成状态'", nullable = false)
     private int finish;
     @Transient
-    private int status;
+    private int status=-1;
     @Transient
     private Boolean istimeOut=false;//是否超时
 

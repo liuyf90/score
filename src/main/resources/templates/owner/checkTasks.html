@@ -182,39 +182,6 @@
                                     <th width="9%">操作</th>
                                 </tr>
                                 </thead>
-                                <!--<tbody>-->
-
-                                <!--<tr th:each="task,iterStat: ${taskModel.taskList}"-->
-                                <!--th:class="${task.istimeOut}?'warning'">-->
-
-                                <!--<td th:text="${iterStat.index}+1">0</td>-->
-                                <!--<td th:text="${task.project.projectName}+1">0</td>-->
-                                <!--<td th:text="${task.taskName}"></td>-->
-                                <!--<td th:text="${task.remark}"></td>-->
-                                <!--<td>-->
-                                <!--<h5 th:text="${task.bDate!=null}?${#dates.format(task.bDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
-
-                                <!--</td>-->
-                                <!--<td>-->
-                                <!--<h5 th:text="${task.eDate!=null}?${#dates.format(task.eDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
-                                <!--</td>-->
-                                <!--<td>-->
-                                <!--<h5 th:text="${task.fDate!=null}?${#dates.format(task.fDate,'yyyy-MM-dd HH:mm')}:''"></h5>-->
-                                <!--</td>-->
-                                <!--<td>-->
-                                <!--<h5 th:each="t,iterStat : ${task.receivers}" th:text=" ${t.cname}"></h5>-->
-                                <!--</td>-->
-
-                                <!--<td th:text="${task.project.user.cname}"></td>-->
-                                <!--<td th:text="${task.finishName}"></td>-->
-                                <!--<td>-->
-                                <!--<a href="#" th:href="@{'/check/'+${task.taskId}}"-->
-                                <!--class="btn btn-primary detail">详情</a>-->
-                                <!--<a th:if="${task.finish==2}" href="#" data-toggle="modal" data-target="#myCheck"-->
-                                <!--class="btn btn-primary check" th:data="${task.taskId}">审核</a>-->
-                                <!--<a th:if="${task.finish==0}" href="#" data-toggle="modal"-->
-                                <!--data-target="#myAssigned" class="btn btn-primary check"-->
-                                <!--th:data="${task.taskId}">强派</a>-->
                                 <div class="modal fade" id="myCheck" tabindex="-1" role="dialog"
                                      aria-labelledby="myModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -270,10 +237,7 @@
                                     </div>
                                 </div>
 
-                                <!--</td>-->
-                                <!--</tr>-->
 
-                                <!--</tbody>-->
                             </table>
                         </div>
                     </div>
@@ -337,11 +301,11 @@
                             var id = '"' + row.id + '"';
                             var html = "";
                             if (data.finish == 0) {
-                                html+= "<a href='javascript:void(0);' data-toggle='modal' data-target='#myAssigned'  class='delete btn btn-default btn-xs'  ><i class='fa fa-times'></i> 强派</a>"
-                           }
-                           if (data.finish == 2) {
-                               html += "<a href='javascript:void(0);' data-toggle='modal' data-target='#myCheck' class='up btn btn-default btn-xs'><i class='fa fa-arrow-up'></i> 审核</a>"
-                           }
+                                html += "<a href='javascript:void(0);'  onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myAssigned'  class='btn btn-primary check'  ><i class='fa fa-times'></i> 强派</a>"
+                            }
+                            if (data.finish == 2) {
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")' data-taskId='" + data.taskId + "' data-toggle='modal' data-target='#myCheck' class='class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 审核</a>"
+                            }
                             return html;
                         }
                     }],
@@ -354,6 +318,7 @@
                     param.page = (data.start / data.length) + 1;//当前页码;
                     param.bbdate = $("#bbdate").val();
                     param.bedate = $("#bedate").val();
+                    param.status= $("#status").val();
                     //ajax请求数据
                     $.ajax({
                         type: "GET",
@@ -437,7 +402,6 @@
             }).api();
         t.on('order.dt search.dt draw.dt',
             function () {
-                //  alert(t.page.len());
                 t.column(0, {
                     search: 'applied',
                     order: 'applied'
@@ -479,7 +443,6 @@
 
 
         $(".sure").click(function () {
-            // alert($(this).attr("data"));
             $.get("/check/done", {task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/check/"
             });
@@ -500,7 +463,10 @@
             t.draw();
         });
     })
-
+    function cpTaskId(taskId) {
+        $(".sure").attr("data", taskId);
+        $(".sure2").attr("data", taskId);
+    }
 
 </script>
 
