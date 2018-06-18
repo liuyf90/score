@@ -43,7 +43,7 @@ public class Task {
     @Column
     private String remark;//(columnDefinition = "COMMENT '任务描述'")
 
-    @JsonIgnore
+
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))

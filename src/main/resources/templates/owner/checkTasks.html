@@ -164,10 +164,12 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example"  cellspacing="0" width="100%">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example"
+                                   cellspacing="0" width="100%">
+                                <!--<table class="display" id="dataTables-example"  cellspacing="0" width="100%">-->
                                 <thead>
                                 <tr>
-                                    <th width="2%">#</th>
+                                    <th width="1%">#</th>
                                     <th width="10%">项目名称</th>
                                     <th width="10%">任务名称</th>
                                     <th width="20%">描述</th>
@@ -177,7 +179,7 @@
                                     <th width="8%">领取人</th>
                                     <th width="8%">组长</th>
                                     <th width="8%">状态</th>
-                                    <th width="10%">操作</th>
+                                    <th width="9%">操作</th>
                                 </tr>
                                 </thead>
                                 <!--<tbody>-->
@@ -326,14 +328,25 @@
                     "targets": 'nosort',  //列的样式名
                     "orderable": false,  //包含上样式名‘nosort’的禁止排序
                     "searchable": false
-                }],
+                },
+                    {
+                        "targets": 10,//作按钮目标列
+                        "data": null,
+                        "render": function (data, type, row) {
+                            var id = '"' + row.id + '"';
+                            var html = "<a href='javascript:void(0);'  class='delete btn btn-default btn-xs'  ><i class='fa fa-times'></i> 查看</a>"
+                            html += "<a href='javascript:void(0);' class='up btn btn-default btn-xs'><i class='fa fa-arrow-up'></i> 编辑</a>"
+                            html += "<a href='javascript:void(0);'   class='down btn btn-default btn-xs'><i class='fa fa-arrow-down'></i> 删除</a>"
+                            return html;
+                        }
+                    }],
+
                 ajax: function (data, callback, settings) {
                     //封装请求参数
                     var param = {};
                     param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
                     param.start = data.start;//开始的记录序号
                     param.page = (data.start / data.length) + 1;//当前页码
-                    //console.log(param);
                     //ajax请求数据
                     $.ajax({
                         type: "GET",
@@ -369,16 +382,10 @@
                         "data": "bDate",
                         "defaultContent": "",
                         render: function (data, type, row) {
-                            // If display or filter data is requested, format the date
-//                            alert(data);
                             if (data != null && type === 'display' || type === 'filter') {
                                 var d = new Date(data);
                                 return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                             }
-
-                            // Otherwise the data type requested (`type`) is type detection or
-                            // sorting data, for which we want to use the integer, so just return
-                            // that, unaltered
                             return data;
                         }
                     },
@@ -386,16 +393,10 @@
                         "data": "eDate",
                         "defaultContent": "",
                         render: function (data, type, row) {
-                            // If display or filter data is requested, format the date
-//                            alert(data);
                             if (data != null && type === 'display' || type === 'filter') {
                                 var d = new Date(data);
                                 return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                             }
-
-                            // Otherwise the data type requested (`type`) is type detection or
-                            // sorting data, for which we want to use the integer, so just return
-                            // that, unaltered
                             return data;
                         }
                     },
@@ -403,48 +404,62 @@
                         "data": "fDate",
                         "defaultContent": "",
                         render: function (data, type, row) {
-                            // If display or filter data is requested, format the date
-//                            alert(data);
                             if (data != null && type === 'display' || type === 'filter') {
                                 var d = new Date(data);
                                 return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                             }
-
-                            // Otherwise the data type requested (`type`) is type detection or
-                            // sorting data, for which we want to use the integer, so just return
-                            // that, unaltered
                             return data;
                         }
                     },
-                    {"data": "receivers", "defaultContent": "",
+                    {
+                        "data": "receivers", "defaultContent": "",
                         render: function (data, type, row) {
-                            // If display or filter data is requested, format the date
-//                            alert(data);
-                           console.log(data);
-                            return data;
-                        }},
+                            debugger;
+                            console.log("data" + data);
+                            if (data.length > 0 && type === 'display' || type === 'filter') {
+                                return data[0].cname;
+                            }
+                            return '';
+                        }
+                    },
                     {"data": "project.user.cname", "defaultContent": ""},
-                    {"data": "finishName", "defaultContent": ""}
+                    {"data": "finishName", "defaultContent": ""},
 
                 ]
 
             }).api();
-        t.on('order.dt search.dt',
+        t.on('order.dt search.dt draw.dt',
             function () {
+                alert(t.page.len());
                 t.column(0, {
                     search: 'applied',
                     order: 'applied'
                 }).nodes().each(function (cell, i) {
                     //     alert( t.page());
 //                    alert(t.param.draw);
-                    cell.innerHTML = t.page() * 10 + i + 1;
+                    cell.innerHTML = t.page() * t.page.len() + i + 1;
                 });
             }).draw();
+
+        //给行绑定选中事件
+        t.on('click', 'tr', function () {
+
+            if ($(this).hasClass('info')) {
+
+                $(this).removeClass('info');
+            }
+            else {
+                t.$('tr.info').removeClass('info');
+                $(this).addClass('info');
+            }
+        });
+
+
         //自定义格式选择t
         $("#bbdate").jeDate({
             format: "YYYY-MM-DD"
         });
-        t
+
         $("#bedate").jeDate({
             format: "YYYY-MM-DD"
         });
@@ -466,10 +481,6 @@
             });
         });
 
-        //        $(".query").click(function () {
-        //            $("form").submit();
-        //            ;
-        //        });
 
         $(".add").click(function () {
                 window.location.href = "/assigning/"
