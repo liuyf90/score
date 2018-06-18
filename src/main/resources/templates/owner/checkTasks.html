@@ -215,60 +215,60 @@
                                 <!--<a th:if="${task.finish==0}" href="#" data-toggle="modal"-->
                                 <!--data-target="#myAssigned" class="btn btn-primary check"-->
                                 <!--th:data="${task.taskId}">强派</a>-->
-                                <!--<div class="modal fade" id="myCheck" tabindex="-1" role="dialog"-->
-                                <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
-                                <!--<div class="modal-dialog">-->
-                                <!--<div class="modal-content">-->
-                                <!--<div class="modal-header">-->
-                                <!--<button type="button" class="close" data-dismiss="modal"-->
-                                <!--aria-hidden="true">&times;-->
-                                <!--</button>-->
-                                <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
-                                <!--</div>-->
-                                <!--<div class="modal-body">-->
-                                <!--<h3>请仔细检查是否完成</h3>-->
+                                <div class="modal fade" id="myCheck" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">请确认</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3>请仔细检查是否完成</h3>
 
-                                <!--</div>-->
-                                <!--<div class="modal-footer">-->
-                                <!--<button type="button" class="btn btn-default"-->
-                                <!--data-dismiss="modal">Close-->
-                                <!--</button>-->
-                                <!--<button type="button" class="btn btn-primary sure">确认-->
-                                <!--</button>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary sure">确认
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                <!--<div class="modal fade" id="myAssigned" tabindex="-1" role="dialog"-->
-                                <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
-                                <!--<div class="modal-dialog">-->
-                                <!--<div class="modal-content">-->
-                                <!--<div class="modal-header">-->
-                                <!--<button type="button" class="close" data-dismiss="modal"-->
-                                <!--aria-hidden="true">&times;-->
-                                <!--</button>-->
-                                <!--<h4 class="modal-title" id="myModalLabel">请确认</h4>-->
-                                <!--</div>-->
-                                <!--<div class="modal-body">-->
-                                <!--<h3>请选择任务责任人</h3>-->
-                                <!--<div class="radio3" th:each="user : ${taskModel.users}">-->
-                                <!--<input type="radio" id="radio2" name="radio1"-->
-                                <!--value="option2" th:data="${user.id}">-->
-                                <!--<label for="radio2" th:text="${user.cname}">-->
-                                <!--</label>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="modal-footer">-->
-                                <!--<button type="button" class="btn btn-default"-->
-                                <!--data-dismiss="modal">Close-->
-                                <!--</button>-->
-                                <!--<button type="button" class="btn btn-primary sure2">确认-->
-                                <!--</button>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
-                                <!--</div>-->
+                                <div class="modal fade" id="myAssigned" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">请确认</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h3>请选择任务责任人</h3>
+                                                <div class="radio3" th:each="user : ${taskModel.users}">
+                                                    <input type="radio" id="radio2" name="radio1"
+                                                           value="option2" th:data="${user.id}">
+                                                    <label for="radio2" th:text="${user.cname}">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary sure2">确认
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!--</td>-->
                                 <!--</tr>-->
@@ -330,13 +330,18 @@
                     "searchable": false
                 },
                     {
-                        "targets": 10,//作按钮目标列
+                        "targets": 10,//按钮目标列
                         "data": null,
                         "render": function (data, type, row) {
+                            debugger;
                             var id = '"' + row.id + '"';
-                            var html = "<a href='javascript:void(0);'  class='delete btn btn-default btn-xs'  ><i class='fa fa-times'></i> 查看</a>"
-                            html += "<a href='javascript:void(0);' class='up btn btn-default btn-xs'><i class='fa fa-arrow-up'></i> 编辑</a>"
-                            html += "<a href='javascript:void(0);'   class='down btn btn-default btn-xs'><i class='fa fa-arrow-down'></i> 删除</a>"
+                            var html = "";
+                            if (data.finish == 0) {
+                                html+= "<a href='javascript:void(0);' data-toggle='modal' data-target='#myAssigned'  class='delete btn btn-default btn-xs'  ><i class='fa fa-times'></i> 强派</a>"
+                           }
+                           if (data.finish == 2) {
+                               html += "<a href='javascript:void(0);' data-toggle='modal' data-target='#myCheck' class='up btn btn-default btn-xs'><i class='fa fa-arrow-up'></i> 审核</a>"
+                           }
                             return html;
                         }
                     }],
@@ -472,10 +477,7 @@
             });
         });
 
-        $(".check").click(function () {
-            $(".sure").attr("data", $(this).attr("data"));
-            $(".sure2").attr("data", $(this).attr("data"));
-        })
+
         $(".sure").click(function () {
             // alert($(this).attr("data"));
             $.get("/check/done", {task_id: $(this).attr("data")}, function (d) {
@@ -498,6 +500,8 @@
             t.draw();
         });
     })
+
+
 </script>
 
 <!-- Morris Chart Js -->

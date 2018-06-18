@@ -78,8 +78,8 @@ public class AssigningController {
         status.put(3,"已审核");
         status.put(4,"待测试");
         model.addAttribute("taskstatus",status);
-        model.addAttribute("users",userservice.findAll(null));
-        model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
+//        model.addAttribute("users",userservice.findAll(null));
+//        model.addAttribute("taskList", taskservice.assignedTasks(user1.getId()));
 
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
