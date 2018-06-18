@@ -288,11 +288,17 @@
                 order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
                 renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
                 pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+                createdRow: function ( row, data, index ) {
+                    if ( data.istimeOut) {
+                        $(row).addClass('warning');
+                    }
+                },
                 columnDefs: [{
                     "targets": 'nosort',  //列的样式名
                     "orderable": false,  //包含上样式名‘nosort’的禁止排序
                     "searchable": false
                 },
+
                     {
                         "targets": 10,//按钮目标列
                         "data": null,
@@ -304,7 +310,7 @@
                                 html += "<a href='javascript:void(0);'  onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myAssigned'  class='btn btn-primary check'  ><i class='fa fa-times'></i> 强派</a>"
                             }
                             if (data.finish == 2) {
-                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")' data-taskId='" + data.taskId + "' data-toggle='modal' data-target='#myCheck' class='class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 审核</a>"
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myCheck' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 审核</a>"
                             }
                             return html;
                         }
@@ -318,7 +324,7 @@
                     param.page = (data.start / data.length) + 1;//当前页码;
                     param.bbdate = $("#bbdate").val();
                     param.bedate = $("#bedate").val();
-                    param.status= $("#status").val();
+                    param.status = $("#status").val();
                     //ajax请求数据
                     $.ajax({
                         type: "GET",

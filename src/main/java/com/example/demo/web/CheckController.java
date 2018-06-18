@@ -101,7 +101,7 @@ public class CheckController {
         if(taskList==null||taskList.getSize()==0){
             taskList=taskservice.findSearchForOwnerId(user.getId(),task,pageInfo);
         }
-        return taskList;
+        return setTimeOut(taskList);
     }
 //    @RequestMapping(value = "/query", method = RequestMethod.GET)
 //    public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo){
@@ -114,8 +114,8 @@ public class CheckController {
 //    }
 
 
-    private List<Task> setTimeOut(List<Task> taskList){
-        for(Task task:taskList){
+    private Page<Task> setTimeOut(Page<Task> taskList){
+        for(Task task:taskList.getContent()){
             Date eDate=task.geteDate();
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());
