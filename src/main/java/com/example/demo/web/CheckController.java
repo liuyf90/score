@@ -49,17 +49,16 @@ public class CheckController {
         model.addAttribute("users",userservice.findAll());
         User u= userservice.getUser(principal.getName());
         List<Role> roles=userservice.searchRoles(u.getUsername());
-        List<Task> taskList=null;
-        Iterator<Role> iterator=roles.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
-                taskList=taskservice.findAllByAdmin();
-            }
-        }
-        if(taskList==null||taskList.size()==0){
-            taskList=taskservice.assignedTasks(u.getId());
-        }
-//        model.addAttribute("taskList", setTimeOut(taskList));
+//        List<Task> taskList=null;
+//        Iterator<Role> iterator=roles.iterator();
+//        while(iterator.hasNext()){
+//            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+//                taskList=taskservice.findAllByAdmin();
+//            }
+//        }
+//        if(taskList==null||taskList.size()==0){
+//            taskList=taskservice.assignedTasks(u.getId());
+//        }
 
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
@@ -103,16 +102,6 @@ public class CheckController {
         }
         return setTimeOut(taskList);
     }
-//    @RequestMapping(value = "/query", method = RequestMethod.GET)
-//    public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo){
-//
-
-////        model.addAttribute("taskList", setTimeOut(taskList.getContent()) );
-//        model.addAttribute("taskList", taskList );
-//        model.addAttribute("users",userservice.findAll());
-//        return taskList;
-//    }
-
 
     private Page<Task> setTimeOut(Page<Task> taskList){
         for(Task task:taskList.getContent()){
