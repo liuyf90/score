@@ -14,11 +14,13 @@ import java.util.List;
 /**
  * Created by liuyf on 2018/5/6.
  */
-public interface ITaskService extends IService<Task> {
+public interface ITaskService extends IService<Task>,ICalculate {
      Task pull(Task task) ;
      void update2(Task task);
      List<Task> assignedTasks(long owner_id);
      Task save(Task task);
      List<Task> findAllByAdmin();
      Page<Task> findSearchForOwnerId(long owner_id, Task model, com.example.demo.entity.PageInfo pageInfo) ;
-     }
+     @Override
+     long score(User model);
+}

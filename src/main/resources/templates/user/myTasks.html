@@ -25,6 +25,9 @@
     <!--<link href="http://fonts.useso.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>-->
     <link rel="stylesheet" href="assets/js/Lightweight-Chart/cssCharts.css"
           th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}"/>
+    <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css"
+          th:href="@{/assets/js/dataTables/dataTables.bootstrap.css}" rel="stylesheet"/>
 </head>
 <body>
 
@@ -125,7 +128,7 @@
                         <h4 class="modal-title" id="myModalLabel">修改密码</h4>
                     </div>
                     <div class="modal-body">
-                        <input type="text"  class="form-control" id="passwd">
+                        <input type="text" class="form-control" id="passwd">
 
 
                     </div>
@@ -149,14 +152,21 @@
                     <div class="panel-heading">
                         任务列表
                     </div>
-
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-offset-7 col-sm-5">
+                                <h2 th:text="'任务总数（不算工时）：'+${taskModel.myTaskcount}+'分'"></h2>
+                            </div>
+                        </div>
+                    </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <div class="table-responsive table-bordered">
-                            <table class="table">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example"
+                                   cellspacing="0" width="100%">
                                 <thead>
                                 <tr>
-                                    <th width="9%" >#</th>
+                                    <th width="9%">#</th>
                                     <th width="11%">项目名称</th>
                                     <th width="11%">任务名称</th>
                                     <th width="11%">描述</th>
@@ -175,8 +185,8 @@
                                     <td th:text="${task.remark}"></td>
                                     <td th:text="${task.bDate!=null}?${#dates.format(task.bDate,'yyyy-MM-dd HH:mm')}:''"></td>
                                     <td th:text="${task.eDate!=null}?${#dates.format(task.eDate,'yyyy-MM-dd HH:mm')}:''"></td>
-                                    <td th:text="${task.receivers[0].username}"></td>
-                                    <td th:text="${task.user.username}"></td>
+                                    <td th:text="${task.receivers[0].cname}"></td>
+                                    <td th:text="${task.project.user.cname}"></td>
                                     <td>
                                         <a href="#" th:href="@{'/mytasks/'+${task.taskId}}"
                                            class="btn btn-primary detail">详情</a>
@@ -235,6 +245,10 @@
 <script src="assets/js/jquery-1.10.2.js" th:src="@{/assets/js/jquery-1.10.2.js}"></script>
 <!-- Bootstrap Js -->
 <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+<!-- DATA TABLE SCRIPTS -->
+<script src="assets/js/dataTables/jquery.dataTables.js" th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
+<script src="assets/js/dataTables/dataTables.bootstrap.js"
+        th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         $("#logout").click(function () {
@@ -254,6 +268,21 @@
             });
 
         });
+        var t = $('#dataTables-example').dataTable(
+            {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                },
+                autoWidth: false,  //禁用自动调整列宽
+                stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+                processing: true,  //隐藏加载提示,自行处理
+                searching: false,  //禁用原生搜索
+                orderMulti: false,  //启用多列排序
+                order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+                renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+                pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+            }
+        ).api();
     })
 </script>
 <!-- Metis Menu Js -->

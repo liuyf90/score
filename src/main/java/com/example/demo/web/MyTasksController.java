@@ -32,6 +32,9 @@ public class MyTasksController {
         List<Task> tasks=user1.getTasks();
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("taskList", tasks);
+
+        Long count=this.taskservice.score(user1);
+        model.addAttribute("myTaskcount", count);
         return new ModelAndView("user/myTasks", "taskModel", model);
 
     }
@@ -43,4 +46,7 @@ public class MyTasksController {
         taskservice.update2(task);
         return "success";
     }
+
+
+
 }

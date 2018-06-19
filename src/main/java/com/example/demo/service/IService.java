@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.PageInfo;
 import com.example.demo.entity.Task;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public  interface  IService<E> {
      Page<E> findSearch(E model,PageInfo pageInfo);
      List<E> findAll();
      List<E> findAll(E model);
+
 }

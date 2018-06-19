@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.dao.TaskRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.*;
+import com.example.demo.service.ICalculate;
 import com.example.demo.service.ITaskService;
 
 
@@ -174,5 +175,16 @@ public class TaskService implements ITaskService {
         return taskRepository.save(task);
     }
 
+    @Override
+    public long score(User model) {
+       return taskRepository.count(new Specification<Task>() {
+           @Override
+           public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+               Join<Task, User> userJoin = root.join("user", JoinType.LEFT);
+               Predicate p = cb.equal(userJoin.get("id"), model.getId());
+               return cb.and(p);
+           }
+       });
 
+    }
 }
