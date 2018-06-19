@@ -180,7 +180,7 @@ public class TaskService implements ITaskService {
        return taskRepository.count(new Specification<Task>() {
            @Override
            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-               Join<Task, User> userJoin = root.join("user", JoinType.LEFT);
+               Join<Task, User> userJoin = root.join("receivers", JoinType.LEFT);
                Predicate p = cb.equal(userJoin.get("id"), model.getId());
                return cb.and(p);
            }
