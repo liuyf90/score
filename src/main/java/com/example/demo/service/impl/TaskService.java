@@ -1,9 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dao.TaskRepository;
-import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.*;
-import com.example.demo.service.ICalculate;
 import com.example.demo.service.ITaskService;
 
 
@@ -47,11 +45,6 @@ public class TaskService implements ITaskService {
         });
         return result;
     }
-
-//    @Override
-//    public List<Task> findAllByAdmin() {
-//        return taskRepository.findAll();
-//    }
 
     @Override
     public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {
@@ -167,7 +160,17 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public void update2(Task task) {
+    public void done(Task task,TaskStatus taskStatus) {
+        if(TaskStatus.FINISH==taskStatus) {
+            task.setfDate(new Date());
+        }
+        if(TaskStatus.CHECK==taskStatus) {
+            task.setCheckDate(new Date());
+        }
+        if(TaskStatus.DONE==taskStatus) {
+            task.setbDate(new Date());
+        }
+        task.setFinish(taskStatus);
     }
 
     @Override

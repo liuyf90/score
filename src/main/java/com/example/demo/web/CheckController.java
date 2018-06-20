@@ -49,38 +49,23 @@ public class CheckController {
         model.addAttribute("users",userservice.findAll());
         User u= userservice.getUser(principal.getName());
         List<Role> roles=userservice.searchRoles(u.getUsername());
-//        List<Task> taskList=null;
-//        Iterator<Role> iterator=roles.iterator();
-//        while(iterator.hasNext()){
-//            if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
-//                taskList=taskservice.findAllByAdmin();
-//            }
-//        }
-//        if(taskList==null||taskList.size()==0){
-//            taskList=taskservice.assignedTasks(u.getId());
-//        }
-
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
     @RequestMapping(value = "/done", method = RequestMethod.GET)
     public String  done(@RequestParam(value = "task_id") Long task_id){
         Task task=taskservice.getOne(task_id);
-        task.setCheckDate(new Date());
-        task.setFinish(TaskStatus.CHECK);
-        taskservice.update2(task);
+        taskservice.done(task,TaskStatus.CHECK);
         return "success";
     }
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
     public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id){
         Task task=taskservice.getOne(task_id);
-        task.setbDate(new Date());
-        task.setFinish(TaskStatus.DONE);
         User user=new User();
         user.setId(user_id);
         Set<User> users=new HashSet<>();
         users.add(user);
         task.setReceivers(users);
-        taskservice.update2(task);
+        taskservice.done(task,TaskStatus.DONE);
         return "success";
     }
 

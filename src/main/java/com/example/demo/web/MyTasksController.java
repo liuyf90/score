@@ -41,9 +41,7 @@ public class MyTasksController {
     @RequestMapping(value = "/done", method = RequestMethod.GET)
     public String  done(@RequestParam(value = "task_id") Long task_id){
         Task task=taskservice.getOne(task_id);
-        task.setfDate(new Date());
-        task.setFinish(TaskStatus.FINISH);
-        taskservice.update2(task);
+        taskservice.done(task,TaskStatus.FINISH);
         return "success";
     }
 
