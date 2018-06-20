@@ -48,10 +48,10 @@ public class TaskService implements ITaskService {
         return result;
     }
 
-    @Override
-    public List<Task> findAllByAdmin() {
-        return taskRepository.findAll();
-    }
+//    @Override
+//    public List<Task> findAllByAdmin() {
+//        return taskRepository.findAll();
+//    }
 
     @Override
     public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {

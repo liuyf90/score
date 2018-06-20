@@ -67,7 +67,7 @@ public class CheckController {
         Task task=taskservice.getOne(task_id);
         task.setCheckDate(new Date());
         task.setFinish(TaskStatus.CHECK);
-         taskservice.update2(task);
+        taskservice.update2(task);
         return "success";
     }
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
