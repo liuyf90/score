@@ -1,6 +1,11 @@
 package com.example.demo.entity;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by liuyf90 on 2018/6/20.
@@ -14,6 +19,12 @@ public class Score {
     private Double socre;
     @Column(nullable = false)
     private String rule;
+    @Column(columnDefinition="timestamp default current_timestamp comment '得分时间'")
+    private Timestamp cDate;//(columnDefinition = "COMMENT '得分时间'")
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "taskId", referencedColumnName = "taskId")
@@ -49,5 +60,21 @@ public class Score {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Timestamp getcDate() {
+        return cDate;
+    }
+
+    public void setcDate(Timestamp cDate) {
+        this.cDate = cDate;
     }
 }

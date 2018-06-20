@@ -39,7 +39,7 @@ public class MyTasksController {
 
     }
     @RequestMapping(value = "/done", method = RequestMethod.GET)
-    public String  done(@RequestParam(value = "task_id") Long task_id){
+    public String  done(@RequestParam(value = "task_id") Long task_id) throws Exception{
         Task task=taskservice.getOne(task_id);
         taskservice.done(task,TaskStatus.FINISH);
         return "success";

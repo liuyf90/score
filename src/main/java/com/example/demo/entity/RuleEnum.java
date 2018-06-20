@@ -5,7 +5,7 @@ package com.example.demo.entity;
  * 积分规则
  */
 public enum RuleEnum {
-    PULL("领取任务",1),ASSIGNING("分派任务",0.2),CHECK("审核任务",0.1),TEST("测试任务",0.2),REJECT("驳回",-0.5),BUG("测试出BUG",-0.5),TIMEOUT("超时",-0.25);
+    PULL("领取任务",0.5),FINISH("办结任务",0.5),ASSIGNING("分派任务",0.2),CHECK("审核任务",0.1),TEST("测试任务",0.2),REJECT("驳回",-0.5),BUG("测试出BUG",-0.5),TIMEOUT("超时",-0.25);
     // 成员变量
     private String rule;
     private double score;

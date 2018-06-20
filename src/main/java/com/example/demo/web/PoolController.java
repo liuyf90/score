@@ -32,7 +32,7 @@ public class PoolController {
         return new ModelAndView("user/pool", "taskModel", model);
     }
     @RequestMapping("/pull")
-    public String pull(@RequestParam(value = "task_id") Long task_id, @RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd") Date eDate, Model model, Principal principal) {
+    public String pull(@RequestParam(value = "task_id") Long task_id, @RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd") Date eDate, Model model, Principal principal) throws Exception{
         Task t = taskservice.getOne(task_id);
         Date day=new Date();
         t.setbDate(day);

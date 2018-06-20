@@ -1,19 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dao.TaskRepository;
 import com.example.demo.entity.*;
+import com.example.demo.service.ActionAdapter;
 import com.example.demo.service.ITaskService;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
@@ -27,10 +23,10 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class TaskService implements ITaskService {
-    @Autowired
-    private TaskRepository taskRepository;
+public class TaskService extends ActionAdapter implements ITaskService {
 
+    @Autowired
+    private ScoreService scoreService;
 
     @Override
     public List<Task> findAll() {
@@ -49,7 +45,7 @@ public class TaskService implements ITaskService {
     @Override
     public Page<Task> findSearch(Task model, com.example.demo.entity.PageInfo pageInfo) {
         Assert.notNull(model);
-        Specification<Task> specification=new Specification<Task>() {
+        Specification<Task> specification = new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
@@ -61,7 +57,7 @@ public class TaskService implements ITaskService {
                     //小于或等于传入时间
                     predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
                 }
-                if( model.getStatus() == -1){
+                if (model.getStatus() == -1) {
                     predicates.add(cb.notEqual(root.get("finish").as(Integer.class), TaskStatus.CHECK.getIndex()));
                 }
                 if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
@@ -72,11 +68,11 @@ public class TaskService implements ITaskService {
                 return cb.and(predicates.toArray(p));
             }
         };
-        return taskRepository.findAll( specification,new PageRequest(pageInfo.getPage()-1, pageInfo.getLimit(),null));
+        return taskRepository.findAll(specification, new PageRequest(pageInfo.getPage() - 1, pageInfo.getLimit(), null));
     }
 
     @Override
-    public List<Task> findAll(Task model){
+    public List<Task> findAll(Task model) {
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -105,7 +101,7 @@ public class TaskService implements ITaskService {
 
 
     @Override
-    public Page<Task> findSearchForOwnerId(long owner_id, Task model,PageInfo pageInfo) {
+    public Page<Task> findSearchForOwnerId(long owner_id, Task model, PageInfo pageInfo) {
         Assert.notNull(model);
         Page<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
@@ -130,12 +126,36 @@ public class TaskService implements ITaskService {
                 Predicate[] p = new Predicate[predicates.size()];
                 return cb.and(predicates.toArray(p));
             }
-        },new PageRequest(pageInfo.getPage()-1, pageInfo.getLimit(),null));
+        }, new PageRequest(pageInfo.getPage() - 1, pageInfo.getLimit(), null));
         return result;
     }
 
+
+    public Task getOne(Long id) {
+        return taskRepository.findOne(id);
+    }
+
+
     @Override
-    public List<Task> assignedTasks(long owner_id) {
+    public Task save(Task task) {
+        return taskRepository.save(task);
+    }
+
+    @Override
+    public long score(User model) {
+        return taskRepository.count(new Specification<Task>() {
+            @Override
+            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Join<Task, User> userJoin = root.join("receivers", JoinType.LEFT);
+                Predicate p = cb.equal(userJoin.get("id"), model.getId());
+                return cb.and(p);
+            }
+        });
+
+    }
+
+    @Override
+    public List<Task> searchAssignedTasks(long owner_id) {
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -149,45 +169,42 @@ public class TaskService implements ITaskService {
         return result;
     }
 
-    public Task getOne(Long id) {
-        return taskRepository.findOne(id);
+    /**
+     * 复写ActionAdapter,加入积分规则
+     *
+     * @param task
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Task pull(Task task) throws Exception {
+        task = super.pull(task);
+        taskRepository.flush();
+        User user = task.getReceivers().iterator().next();
+        scoreService.score(user, RuleEnum.PULL, task);
+        return task;
     }
 
+    /**
+     * 复写ActionAdapter,加入积分规则
+     *
+     * @param task
+     * @param taskStatus
+     */
     @Override
-    public Task pull(Task task) {
-        task.setFinish(TaskStatus.DONE);
-        return taskRepository.save(task);
-    }
-
-    @Override
-    public void done(Task task,TaskStatus taskStatus) {
-        if(TaskStatus.FINISH==taskStatus) {
-            task.setfDate(new Date());
+    public void done(Task task, TaskStatus taskStatus) throws Exception {
+        super.done(task, taskStatus);
+        taskRepository.flush();
+        switch (taskStatus.getIndex()) {
+            case 3:
+                scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务
+                break;
+            case 0:
+                scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务
+                break;
+            case 2:
+                scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务
+                break;
         }
-        if(TaskStatus.CHECK==taskStatus) {
-            task.setCheckDate(new Date());
-        }
-        if(TaskStatus.DONE==taskStatus) {
-            task.setbDate(new Date());
-        }
-        task.setFinish(taskStatus);
-    }
-
-    @Override
-    public Task save(Task task) {
-        return taskRepository.save(task);
-    }
-
-    @Override
-    public long score(User model) {
-       return taskRepository.count(new Specification<Task>() {
-           @Override
-           public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-               Join<Task, User> userJoin = root.join("receivers", JoinType.LEFT);
-               Predicate p = cb.equal(userJoin.get("id"), model.getId());
-               return cb.and(p);
-           }
-       });
-
     }
 }

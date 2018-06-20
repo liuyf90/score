@@ -13,7 +13,6 @@ import java.util.List;
  */
 public interface IAction {
     long score(User model);//积分计算接口
-    Task pull(Task task) ;//领取任务
-    List<Task> assignedTasks(long owner_id); //分派任务
-    void done(Task t,TaskStatus taskStatus);//处理任务
+    Task pull(Task task) throws Exception ;//领取任务
+    void done(Task t,TaskStatus taskStatus) throws Exception;//处理任务
 }

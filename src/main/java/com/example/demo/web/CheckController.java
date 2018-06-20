@@ -52,13 +52,13 @@ public class CheckController {
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
     @RequestMapping(value = "/done", method = RequestMethod.GET)
-    public String  done(@RequestParam(value = "task_id") Long task_id){
+    public String  done(@RequestParam(value = "task_id") Long task_id) throws Exception{
         Task task=taskservice.getOne(task_id);
         taskservice.done(task,TaskStatus.CHECK);
         return "success";
     }
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id){
+    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id) throws Exception{
         Task task=taskservice.getOne(task_id);
         User user=new User();
         user.setId(user_id);
