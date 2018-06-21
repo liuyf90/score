@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.Tools;
+import com.example.demo.dao.ScoreRepository;
 import com.example.demo.entity.*;
 import com.example.demo.service.ActionAdapter;
 import com.example.demo.service.ITaskService;
@@ -27,6 +29,8 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private ScoreRepository scoreRepository;
 
     @Override
     public List<Task> findAll() {
@@ -182,6 +186,15 @@ public class TaskService extends ActionAdapter implements ITaskService {
         taskRepository.flush();
         User user = task.getReceivers().iterator().next();
         scoreService.score(user, RuleEnum.PULL, task);
+        //工时积分
+        Score s = new Score();
+        s.setRule("工时积分");
+        double score= Tools.dateDiff(task.geteDate(),task.getbDate());
+        s.setSocre(score);
+        s.setUser(user);
+        s.setTask(task);
+        scoreRepository.save(s);
+        ///////////
         return task;
     }
     /**
@@ -217,8 +230,6 @@ public class TaskService extends ActionAdapter implements ITaskService {
             case 2:
                 scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务
                 break;
-
-
         }
     }
 }
