@@ -22,7 +22,7 @@ public class RecordThePointsApplicationTests {
      * 这里不使用
      */
     @Autowired
-    private TestRestTemplate estRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @Autowired
     TaskService taskService;

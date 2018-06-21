@@ -1,9 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.entity.Project;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.Task;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.service.impl.ProjectService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
@@ -52,8 +49,17 @@ public class AssigningController {
 
     }
 
+    /**
+     * 创建任务
+     * @param task
+     * @param result
+     * @param model
+     * @param principal
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = {"/save"}, method = RequestMethod.GET)
-    public ModelAndView save(@ModelAttribute("taskInfo") @Validated Task task, BindingResult result, Model model, Principal principal ) {
+    public ModelAndView save(@ModelAttribute("taskInfo") @Validated Task task, BindingResult result, Model model, Principal principal ) throws Exception{
         if(result.hasErrors()){
             List<ObjectError> allErrors=result.getAllErrors();
             for(ObjectError ob:allErrors){
@@ -65,7 +71,7 @@ public class AssigningController {
         model.addAttribute("task",null);
         task.setcDate(new Date());
         task.setUser(userservice.getUser(principal.getName()));
-        taskservice.save(task);
+        taskservice.create(task);
         User user=new User();
         user.setSts(1);
         user.setUsername(principal.getName());

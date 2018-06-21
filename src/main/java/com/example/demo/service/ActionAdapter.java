@@ -42,4 +42,11 @@ public abstract class ActionAdapter implements IAction {
         }
         task.setFinish(taskStatus);
     }
+
+    @Override
+    public  void create(Task task)  throws Exception{
+        taskRepository.save(task);
+    }
+
+
 }

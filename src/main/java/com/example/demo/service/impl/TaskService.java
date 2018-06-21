@@ -136,10 +136,10 @@ public class TaskService extends ActionAdapter implements ITaskService {
     }
 
 
-    @Override
-    public Task save(Task task) {
-        return taskRepository.save(task);
-    }
+//    @Override
+//    public Task save(Task task) {
+//        return taskRepository.save(task);
+//    }
 
     @Override
     public long score(User model) {
@@ -184,6 +184,18 @@ public class TaskService extends ActionAdapter implements ITaskService {
         scoreService.score(user, RuleEnum.PULL, task);
         return task;
     }
+    /**
+     * 复写ActionAdapter,加入积分规则
+     *
+     * @param task
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public  void create(Task task) throws Exception {
+       super.create(task);
+       scoreService.score(task.getUser(), RuleEnum.CREATE, task);//创建任务
+    }
 
     /**
      * 复写ActionAdapter,加入积分规则
@@ -199,12 +211,14 @@ public class TaskService extends ActionAdapter implements ITaskService {
             case 3:
                 scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务
                 break;
-            case 0:
+            case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务
                 break;
             case 2:
                 scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务
                 break;
+
+
         }
     }
 }
