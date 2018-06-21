@@ -29,8 +29,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     @Autowired
     private ScoreService scoreService;
-    @Autowired
-    private ScoreRepository scoreRepository;
+
 
     @Override
     public List<Task> findAll() {
@@ -187,14 +186,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
         User user = task.getReceivers().iterator().next();
         scoreService.score(user, RuleEnum.PULL, task);
         //工时积分
-        Score s = new Score();
-        s.setRule("工时积分");
-        double score= Tools.dateDiff(task.geteDate(),task.getbDate());
-        s.setSocre(score);
-        s.setUser(user);
-        s.setTask(task);
-        scoreRepository.save(s);
-        ///////////
+        scoreService.workTimeScore(user,task);
         return task;
     }
     /**
@@ -226,6 +218,8 @@ public class TaskService extends ActionAdapter implements ITaskService {
                 break;
             case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务
+                //工时积分
+                scoreService.workTimeScore(task.getReceivers().iterator().next(),task);
                 break;
             case 2:
                 scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务

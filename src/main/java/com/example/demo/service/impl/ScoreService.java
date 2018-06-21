@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.Tools;
 import com.example.demo.dao.ScoreRepository;
 import com.example.demo.entity.RuleEnum;
 import com.example.demo.entity.Score;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.jnlp.IntegrationService;
 import javax.persistence.Id;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,5 +47,21 @@ public class ScoreService implements IScore{
            score+=s.getSocre();
        }
        return score;
+    }
+
+    /**
+     * 工时积分
+     * @param user
+     * @param task
+     * @throws Exception
+     */
+    public void workTimeScore(User user, Task task) throws Exception{
+        Score s = new Score();
+        s.setRule("工时积分");
+        double score= Tools.dateDiff(task.geteDate(),task.getbDate())+1;
+        s.setSocre(score);
+        s.setUser(user);
+        s.setTask(task);
+        scoreRepository.save(s);
     }
 }
