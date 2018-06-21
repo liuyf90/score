@@ -225,6 +225,9 @@
                                                     <label for="radio2" th:text="${user.cname}">
                                                     </label>
                                                 </div>
+                                                <label for="enddate">完成时间:</label>
+                                                <input type="text" class="jeinput" id="enddate"
+                                                       placeholder="YYYY年MM月DD日">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default"
@@ -440,9 +443,18 @@
         $("#bedate").jeDate({
             format: "YYYY-MM-DD"
         });
+
+        //自定义格式选择
+        $("#enddate").jeDate({
+            format: "YYYY-MM-DD"
+        });
         $(".sure2").click(function () {
+            if($("#enddate").val()==''){
+                alert("请填写结束日期！");
+                return;
+            }
             var userid = $('input:radio[name="radio1"]:checked').attr("data");
-            $.get("/check/assigned", {user_id: userid, task_id: $(this).attr("data")}, function (d) {
+            $.get("/check/assigned", {user_id: userid, task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
                 window.location.href = "/check/"
             });
         });

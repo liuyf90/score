@@ -7,6 +7,7 @@ import com.example.demo.service.impl.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -58,13 +59,14 @@ public class CheckController {
         return "success";
     }
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id) throws Exception{
+    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id,@RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd") Date eDate) throws Exception{
         Task task=taskservice.getOne(task_id);
         User user=new User();
         user.setId(user_id);
         Set<User> users=new HashSet<>();
         users.add(user);
         task.setReceivers(users);
+        task.seteDate(eDate);
         taskservice.done(task,TaskStatus.DONE);
         return "success";
     }
