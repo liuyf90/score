@@ -10,4 +10,7 @@ import com.example.demo.entity.User;
 public interface IScore {
    // 计算分数
    void score(User user, RuleEnum ruleEnum,Task task) throws Exception;
+
+   //总分
+   double scoreByUser(User user);
 }

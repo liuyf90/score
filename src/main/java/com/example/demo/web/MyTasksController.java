@@ -3,6 +3,7 @@ package com.example.demo.web;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.TaskStatus;
 import com.example.demo.entity.User;
+import com.example.demo.service.impl.ScoreService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,8 @@ public class MyTasksController {
     private UserService userservice;
     @Autowired
     private TaskService taskservice;
+    @Autowired
+    private ScoreService scoreService;
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
     public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model, Principal principal){
         User user=new User();
@@ -33,8 +37,9 @@ public class MyTasksController {
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("taskList", tasks);
 
-        Long count=this.taskservice.score(user1);
-        model.addAttribute("myTaskcount", count);
+//        Long count=this.taskservice.score(user1);
+        double score=this.scoreService.scoreByUser(user1);
+        model.addAttribute("myTaskcount", new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() );
         return new ModelAndView("user/myTasks", "taskModel", model);
 
     }
