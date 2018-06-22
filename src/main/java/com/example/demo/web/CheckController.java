@@ -59,7 +59,7 @@ public class CheckController {
         return "success";
     }
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
-    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id,@RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd") Date eDate) throws Exception{
+    public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id,@RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Date eDate) throws Exception{
         Task task=taskservice.getOne(task_id);
         User user= userservice.getOne(user_id);
         Set<User> users=new HashSet<>();

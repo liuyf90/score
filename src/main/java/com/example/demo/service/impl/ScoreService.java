@@ -9,11 +9,7 @@ import com.example.demo.entity.User;
 import com.example.demo.service.IScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.jnlp.IntegrationService;
-import javax.persistence.Id;
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 
 /**
