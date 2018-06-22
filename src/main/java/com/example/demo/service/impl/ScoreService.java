@@ -64,4 +64,43 @@ public class ScoreService implements IScore{
         s.setTask(task);
         scoreRepository.save(s);
     }
+
+    /**
+     * 工作超时扣分
+     * @param user
+     * @param task
+     * @throws Exception
+     */
+    public void workTimeoutScore(User user,Task task) throws Exception {
+        if (task.geteDate().before(task.getfDate())) {
+            double score = 0 - (Tools.dateDiff(task.getfDate(), task.geteDate()));
+            Score s = new Score();
+            s.setRule("超时扣分");
+            s.setSocre(score);
+            s.setUser(user);
+            s.setTask(task);
+            scoreRepository.save(s);
+        }
+    }
+        /**
+         *
+         * 审核超时扣分
+         * @param user
+         * @param task
+         * @throws Exception
+         */
+    public void checkTimeoutScore(User user,Task task) throws Exception{
+        if(Tools.dateDiff(task.getCheckDate(), task.getfDate())>1) {
+            int days=(Tools.dateDiff(task.getfDate(), task.geteDate()));
+            double score=0-(days*(RuleEnum.CHECK.getScore()));
+            Score s = new Score();
+            s.setRule("审核超时扣分");
+            s.setSocre(score);
+            s.setUser(user);
+            s.setTask(task);
+            scoreRepository.save(s);
+        }
+
+
+    }
 }

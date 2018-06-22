@@ -22,7 +22,7 @@ public class Tools {
             throws ParseException {
         int days = 0;
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+//        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
         days = (int) Math.abs((toDate.getTime() - fromDate.getTime())
                 / (24 * 60 * 60 * 1000)) + 1;

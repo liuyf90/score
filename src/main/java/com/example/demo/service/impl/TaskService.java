@@ -214,15 +214,17 @@ public class TaskService extends ActionAdapter implements ITaskService {
         taskRepository.flush();
         switch (taskStatus.getIndex()) {
             case 3:
-                scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务
+                scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务积分
+                scoreService.checkTimeoutScore(task.getUser(), task);//审核任务超时扣分
                 break;
             case 1:
-                scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务
+                scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务积分
                 //工时积分
                 scoreService.workTimeScore(task.getReceivers().iterator().next(),task);
                 break;
             case 2:
-                scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务
+                scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务积分
+                scoreService.workTimeoutScore(task.getReceivers().iterator().next(),task);//超时扣分
                 break;
         }
     }
