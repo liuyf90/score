@@ -54,7 +54,7 @@ public class MyTasksController {
             Date eDate=task.geteDate();
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());
-                if(task.getFinish()<TaskStatus.CHECK.getIndex()) {
+                if(task.getFinish()<TaskStatus.FINISH.getIndex()) {
                     task.setIstimeOut(bl);
                 }
             }
