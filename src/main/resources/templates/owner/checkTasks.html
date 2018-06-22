@@ -262,6 +262,7 @@
 <!-- /. WRAPPER  -->
 <!-- JS Scripts-->
 <!-- jQuery Js -->
+<div th:fragment="js1">
 <script src="assets/js/jquery-1.10.2.js" th:src="@{/assets/js/jquery-1.10.2.js}"></script>
 <!-- Bootstrap Js -->
 <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
@@ -272,6 +273,7 @@
 <script src="assets/js/dataTables/jquery.dataTables.js" th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
 <script src="assets/js/dataTables/dataTables.bootstrap.js"
         th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
+</div>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         $("#logout").click(function () {
@@ -487,7 +489,7 @@
     }
 
 </script>
-
+<div th:fragment="js2">
 <!-- Morris Chart Js -->
 <script src="assets/js/morris/raphael-2.1.0.min.js" th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
 <script src="assets/js/morris/morris.js" th:src="@{/assets/js/morris/morris.js}"></script>
@@ -501,6 +503,6 @@
 <!-- Chart Js -->
 <script type="text/javascript" src="assets/js/Chart.min.js" th:src="@{/assets/js/Chart.min.js}"></script>
 <script type="text/javascript" src="assets/js/chartjs.js" th:src="@{/assets/js/chartjs.js}"></script>
-
+</div>
 </body>
 </html>
