@@ -88,7 +88,11 @@ public class CheckController {
         }
         return setTimeOut(taskList);
     }
-
+    @RequestMapping(value = "/del", method = RequestMethod.GET)
+    public String  del(@RequestParam(value = "task_id") Long task_id){
+        taskservice.del(task_id);
+        return "success";
+    }
     private Page<Task> setTimeOut(Page<Task> taskList){
         for(Task task:taskList.getContent()){
             Date eDate=task.geteDate();
@@ -101,6 +105,8 @@ public class CheckController {
         }
         return taskList;
     }
+
+
 
 
 }

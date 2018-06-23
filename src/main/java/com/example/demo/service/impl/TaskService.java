@@ -228,4 +228,9 @@ public class TaskService extends ActionAdapter implements ITaskService {
                 break;
         }
     }
+
+    @Override
+    public void del(long task_id) {
+        this.taskRepository.delete(task_id);
+    }
 }

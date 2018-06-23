@@ -42,7 +42,26 @@ public class Task {
     private Date checkDate;//(columnDefinition = "COMMENT '检查时间'")
     @Column
     private String remark;//(columnDefinition = "COMMENT '任务描述'")
+    @Column(name = "type", columnDefinition = "INT default 2 COMMENT '软件编码'", nullable = false)
+    private int type;//任务分类
+    @Transient
+    private String  typeName;//任务分类
 
+    public String getTypeName() {
+        return TypeEnum.getName(type);
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
@@ -160,7 +179,7 @@ public class Task {
         this.project = project;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project;
 
@@ -218,5 +237,17 @@ public class Task {
 
     public void setIstimeOut(Boolean istimeOut) {
         this.istimeOut = istimeOut;
+    }
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name="taskId")
+    private List<Score> scores;
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Score> scores) {
+        this.scores = scores;
     }
 }

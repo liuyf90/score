@@ -85,7 +85,7 @@
         <div class="header">
             <h1 class="page-header">
                 <div th:fragment="logout" sec:authorize="isAuthenticated()">
-                    登录用户: <span sec:authentication="name"></span> |
+                    登录用户: <span sec:authentication="principal.cname"></span> |
                     用户角色: <span sec:authentication="principal.authorities"></span>
 
                 </div>

@@ -63,7 +63,7 @@
         <div class="header">
             <h1 class="page-header">
                 <div th:fragment="logout" sec:authorize="isAuthenticated()">
-                    登录用户: <span sec:authentication="name"></span> |
+                    登录用户: <span sec:authentication="principal.cname"></span> |
                     用户角色: <span sec:authentication="principal.authorities"></span>
 
                 </div>
@@ -78,17 +78,24 @@
         <div id="page-inner">
 
             <form action="/assigning/save" th:object="${taskInfo}">
-                <div  class="form-group col-xs-6">
+                <div  class="form-group col-xs-4">
                     <label for="taskName">任务名称</label>
                     <span  style="color:red;">*</span> <input type="text"  class="form-control" id="taskName" th:field="*{taskName}"   name="taskName">
                     <span  style="color:red;" th:if="${#fields.hasErrors('taskName')}" th:errors="*{taskName}"></span>
 
                 </div>
 
-                <div  class="form-group col-xs-6">
+                <div  class="form-group col-xs-4">
                     <label for="project">项目</label>
                     <select class="selectbox" id="project" name="project" class="form-control">
                         <option th:each="project:${taskModel.projects}" th:value="${project.projectId}" th:text="${project.projectName}"></option>
+                    </select>
+                </div>
+                <div  class="form-group col-xs-4">
+                    <label for="type">任务类型</label>
+                    <select class="selectbox" id="type" name="type" class="form-control">
+                        <option th:each="st: ${taskModel.types}" th:value="${st.key}"
+                                th:text="${st.value}"></option>
                     </select>
                 </div>
                 <div  class="form-group col-xs-12">

@@ -59,7 +59,7 @@
         <div class="header">
             <h1 class="page-header">
                 <div th:fragment="logout" sec:authorize="isAuthenticated()">
-                    登录用户: <span sec:authentication="name"></span> |
+                    登录用户: <span sec:authentication="principal.cname"></span> |
                     用户角色: <span sec:authentication="principal.authorities"></span>
 
                 </div>
@@ -86,6 +86,7 @@
                                 <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>任务分类</th>
                                     <th>任务名称</th>
                                     <th>创建时间</th>
                                     <th>项目名</th>
@@ -97,6 +98,7 @@
                                 <tbody class="result">
                                 <tr th:each="task,iterStat: ${taskModel.taskList}">
                                     <td th:text="${iterStat.index}+1">0</td>
+                                    <td th:text="${task.typeName}"></td>
                                     <td th:text="${task.taskName}"></td>
                                     <td th:text="${task.cDate!=null}?${#dates.format(task.cDate,'yyyy-MM-dd HH:mm')}:''"></td>
                                     <td th:text="${task.project.projectName}"></td>
@@ -173,7 +175,13 @@
         });
         //自定义格式选择
         $("#enddate").jeDate({
+
+            minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
+            maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)}),
+            initDate:[{hh:18,mm:00,ss:00},false],
+            isinitVal:true,
             format: "YYYY-MM-DD hh:mm:ss"
+
         });
 
 

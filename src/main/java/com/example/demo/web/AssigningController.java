@@ -45,6 +45,14 @@ public class AssigningController {
         }
         model.addAttribute("projects",projectList);
         model.addAttribute("task", task.getTaskId() != null ? taskservice.getOne(task.getTaskId()) : null);
+        //DEF("定义及规划",0),DOC("文档",1),CODE("软件编码",2),REPAIR("功能完善",3),BUSI("公出",4);
+        Map<Integer,String> type=new HashMap<>();
+        type.put(TypeEnum.DEF.getIndex(),TypeEnum.DEF.getName());
+        type.put(TypeEnum.DOC.getIndex(),TypeEnum.DOC.getName());
+        type.put(TypeEnum.CODE.getIndex(),TypeEnum.CODE.getName());
+        type.put(TypeEnum.REPAIR.getIndex(),TypeEnum.REPAIR.getName());
+        type.put(TypeEnum.BUSI.getIndex(),TypeEnum.BUSI.getName());
+        model.addAttribute("types",type);
         return new ModelAndView("owner/assigning", "taskModel", model);
 
     }

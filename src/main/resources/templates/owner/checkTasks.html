@@ -91,7 +91,7 @@
         <div class="header">
             <h1 class="page-header">
                 <div th:fragment="logout" sec:authorize="isAuthenticated()">
-                    登录用户: <span sec:authentication="name"></span> |
+                    登录用户: <span sec:authentication="principal.cname"></span> |
                     用户角色: <span sec:authentication="principal.authorities"></span>
 
                 </div>
@@ -170,16 +170,17 @@
                                 <thead>
                                 <tr>
                                     <th width="1%">#</th>
-                                    <th width="10%">项目名称</th>
-                                    <th width="10%">任务名称</th>
-                                    <th width="20%">描述</th>
+                                    <th width="7%">项目名称</th>
+                                    <th width="9%">任务名称</th>
+                                    <th width="9%">任务分类</th>
+                                    <th width="17%">描述</th>
                                     <th width="8%">接受时间</th>
                                     <th width="8%">截止时间</th>
                                     <th width="8%">提交时间</th>
                                     <th width="8%">领取人</th>
                                     <th width="8%">任务创建人</th>
                                     <th width="8%">状态</th>
-                                    <th width="9%">操作</th>
+                                    <th width="8%">操作</th>
                                 </tr>
                                 </thead>
                                 <div class="modal fade" id="myCheck" tabindex="-1" role="dialog"
@@ -305,7 +306,7 @@
                 },
 
                     {
-                        "targets": 10,//按钮目标列
+                        "targets": 11,//按钮目标列
                         "data": null,
                         "render": function (data, type, row) {
                             debugger;
@@ -316,6 +317,9 @@
                             }
                             if (data.finish == 2) {
                                 html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myCheck' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 审核</a>"
+                            }
+                            if (data.finish == 0) {
+                                html += "<a href='javascript:void(0);' onclick='del(" + data.taskId + ")'   class='btn btn-primary check'><i class='fa fa-times'></i> 删除</a>"
                             }
                             return html;
                         }
@@ -360,6 +364,7 @@
                     {"data": "", "defaultContent": ""},
                     {"data": "project.projectName", "defaultContent": ""},
                     {"data": "taskName", "defaultContent": ""},
+                    {"data": "typeName"},
                     {"data": "remark", "defaultContent": ""},
                     {
                         "data": "bDate",
@@ -448,7 +453,9 @@
 
         //自定义格式选择
         $("#enddate").jeDate({
-            format: "YYYY-MM-DD hh:mm:ss"
+            format: "YYYY-MM-DD hh:mm:ss",
+            minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
+            maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)})
         });
         $(".sure2").click(function () {
             if($("#enddate").val()==''){
@@ -486,6 +493,12 @@
     function cpTaskId(taskId) {
         $(".sure").attr("data", taskId);
         $(".sure2").attr("data", taskId);
+    }
+
+    function del(taskId) {
+        $.get("/check/del", {task_id: taskId}, function (d) {
+            window.location.href = "/check/"
+        });
     }
 
 </script>
