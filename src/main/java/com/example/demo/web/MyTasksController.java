@@ -77,7 +77,7 @@ public class MyTasksController {
     private Page<Task> setTimeOut(Page<Task> taskList){
         for(Task task:taskList.getContent()){
             Date eDate=task.geteDate();
-            task.setScore(this.scoreService.scoreByTask(task));
+            task.setScore(this.scoreService.scoreByTaskofUser(task,task.getReceivers().iterator().next()));
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());
                 if(task.getFinish()<TaskStatus.FINISH.getIndex()) {

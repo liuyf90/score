@@ -13,6 +13,6 @@ public interface IScore {
 
    //总分按人查
    double scoreByUser(User user);
-   //总分按任务查
-   double scoreByTask(Task task);
+   //该任务中莫人所得的总分
+   double scoreByTaskofUser(Task task,User user);
 }

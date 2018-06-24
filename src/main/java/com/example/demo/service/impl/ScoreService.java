@@ -46,11 +46,14 @@ public class ScoreService implements IScore{
     }
 
     @Override
-    public double scoreByTask(Task task) {
+    public double scoreByTaskofUser(Task task,User user) {
         List<Score> scoreList=task.getScores();
+
         double score=0.0;
         for(Score s:scoreList){
-            score+=s.getSocre();
+            if(s.getUser().getId()==user.getId()) {
+                score += s.getSocre();
+            }
         }
         return score;
     }

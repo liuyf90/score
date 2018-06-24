@@ -429,6 +429,7 @@
 
 
         $(".sure").click(function () {
+            alert($(this).attr("data"));
             $.get("/mytasks/done", {task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/mytasks/"
             });
