@@ -42,14 +42,8 @@ public class CheckController {
 
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
     public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model, Principal principal){
-        User user=new User();
-        user.setSts(1);
-        user.setUsername(principal.getName());
-        User user1 =userservice.findAll(user).get(0);
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("users",userservice.findAll());
-        User u= userservice.getUser(principal.getName());
-        List<Role> roles=userservice.searchRoles(u.getUsername());
         return new ModelAndView("owner/checkTasks", "taskModel", model);
     }
     @RequestMapping(value = "/done", method = RequestMethod.GET)

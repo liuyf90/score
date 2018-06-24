@@ -134,6 +134,34 @@ public class TaskService extends ActionAdapter implements ITaskService {
     }
 
 
+    public Page<Task> findSearchForReceiver(long receiver_id, Task model, PageInfo pageInfo) {
+        Assert.notNull(model);
+        Page<Task> result = taskRepository.findAll(new Specification<Task>() {
+            @Override
+            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Join<Task, User> userJoin = root.join("receivers", JoinType.LEFT);
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(cb.equal(userJoin.get("id"), receiver_id));
+                if (!StringUtils.isEmpty(model.getBbdate())) {
+                    //大于或等于传入时间
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("bDate").as(Date.class), model.getBbdate()));
+                }
+                if (!StringUtils.isEmpty(model.getBedate())) {
+                    //小于或等于传入时间
+                    predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), model.getBedate()));
+                }
+                if (!StringUtils.isEmpty(model.getStatus()) && model.getStatus() != -1) {
+                    //狀態
+                    predicates.add(cb.equal(root.get("finish").as(Integer.class), model.getStatus()));
+                }
+                Predicate[] p = new Predicate[predicates.size()];
+                return cb.and(predicates.toArray(p));
+            }
+        }, new PageRequest(pageInfo.getPage() - 1, pageInfo.getLimit(), null));
+        return result;
+    }
+
+
     public Task getOne(Long id) {
         return taskRepository.findOne(id);
     }
