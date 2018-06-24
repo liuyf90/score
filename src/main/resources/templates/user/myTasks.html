@@ -195,9 +195,9 @@
                                     <th width="8%">接受时间</th>
                                     <th width="8%">截止时间</th>
                                     <th width="8%">提交时间</th>
-                                    <th width="8%">领取人</th>
                                     <th width="8%">任务创建人</th>
                                     <th width="8%">状态</th>
+                                    <th width="8%">任务得分</th>
                                     <th width="8%">操作</th>
                                 </tr>
                                 </thead>
@@ -368,19 +368,9 @@
                             return data;
                         }
                     },
-                    {
-                        "data": "receivers", "defaultContent": "",
-                        render: function (data, type, row) {
-                            debugger;
-                            console.log("data" + data);
-                            if (data.length > 0 && type === 'display' || type === 'filter') {
-                                return data[0].cname;
-                            }
-                            return '';
-                        }
-                    },
                     {"data": "user.cname", "defaultContent": ""},
                     {"data": "finishName", "defaultContent": ""},
+                    {"data": "score", "defaultContent": "0.0"},
 
                 ]
 

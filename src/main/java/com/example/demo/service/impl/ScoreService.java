@@ -45,6 +45,16 @@ public class ScoreService implements IScore{
        return score;
     }
 
+    @Override
+    public double scoreByTask(Task task) {
+        List<Score> scoreList=task.getScores();
+        double score=0.0;
+        for(Score s:scoreList){
+            score+=s.getSocre();
+        }
+        return score;
+    }
+
     /**
      * 工时积分
      * @param user

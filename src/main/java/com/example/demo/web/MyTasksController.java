@@ -35,7 +35,7 @@ public class MyTasksController {
     public void myModel(Model model,Principal principal){
         Map<Integer,String> status=new HashMap<>();
         //WAITED("未领取",0),DONE("处理中",1),FINISH("提交待审核",2),CHECK("已审核",3),TEST("待测试",4);
-        status.put(0,"未领取");
+//        status.put(0,"未领取");
         status.put(1,"处理中");
         status.put(2,"提交待审核");
         status.put(3,"已审核");
@@ -69,11 +69,15 @@ public class MyTasksController {
     public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
         User u = userservice.getUser(principal.getName());
         Page<Task> taskList = taskservice.findSearchForReceiver(u.getId(),task, pageInfo);
+//        double score = this.scoreService.scoreByUser(user1);
+//        model.addAttribute("myTaskcount", new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+
         return setTimeOut(taskList);
     }
     private Page<Task> setTimeOut(Page<Task> taskList){
         for(Task task:taskList.getContent()){
             Date eDate=task.geteDate();
+            task.setScore(this.scoreService.scoreByTask(task));
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());
                 if(task.getFinish()<TaskStatus.FINISH.getIndex()) {

@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface ScoreRepository extends JpaRepository<Score,Long>,JpaSpecificationExecutor<Score> {
     List<Score> findByUserId(Long userId);
+
+
 }

@@ -239,9 +239,20 @@ public class Task {
         this.istimeOut = istimeOut;
     }
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="taskId")
     private List<Score> scores;
+
+    @Transient
+    private double score;
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
 
     public List<Score> getScores() {
         return scores;
