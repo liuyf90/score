@@ -2,6 +2,7 @@ package com.example.demo.web;
 
 import com.example.demo.entity.*;
 import com.example.demo.service.impl.ProjectService;
+import com.example.demo.service.impl.ScoreService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 
@@ -27,6 +28,8 @@ public class CheckController {
     private TaskService taskservice;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private ScoreService scoreService;
 
     @ModelAttribute
     public void myModel(Model model,Principal principal){
@@ -98,6 +101,14 @@ public class CheckController {
             }
         }
         return taskList;
+    }
+
+
+    @RequestMapping(value = "/getScore", method = RequestMethod.GET)
+    public  List<Score> getScore(@RequestParam(value = "task_id") Long task_id, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
+        Task task=taskservice.getOne(task_id);
+        List<Score> scoreList= scoreService.scoreDetailsTask(task);
+        return scoreList;
     }
 
 

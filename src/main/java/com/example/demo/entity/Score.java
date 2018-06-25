@@ -22,11 +22,11 @@ public class Score {
     @Column(columnDefinition="timestamp default current_timestamp comment '得分时间'")
     private Timestamp cDate;//(columnDefinition = "COMMENT '得分时间'")
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId", referencedColumnName = "taskId")
     private Task task;
 

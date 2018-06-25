@@ -57,6 +57,11 @@ public class ScoreService implements IScore{
         }
         return score;
     }
+    @Override
+    public  List<Score> scoreDetailsTask(Task task) {
+        List<Score> scoreList=task.getScores();
+        return scoreList;
+    }
 
     @Override
     public  List<Score> scoreDetailsTaskofUser(Task task,User user) {

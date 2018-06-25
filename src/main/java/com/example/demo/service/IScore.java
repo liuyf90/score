@@ -11,12 +11,16 @@ import java.util.List;
  * Created by liuyf on 2018/6/20.
  */
 public interface IScore {
-   // 计算分数
-   void score(User user, RuleEnum ruleEnum,Task task) throws Exception;
+    // 计算分数
+    void score(User user, RuleEnum ruleEnum, Task task) throws Exception;
 
-   //总分按人查
-   double scoreByUser(User user);
-   //该任务中莫人所得的总分
-   double scoreByTaskofUser(Task task,User user);
+    //总分按人查
+    double scoreByUser(User user);
+
+    //该任务中莫人所得的总分
+    double scoreByTaskofUser(Task task, User user);
+
     List<Score> scoreDetailsTaskofUser(Task task, User user);
+
+    List<Score> scoreDetailsTask(Task task);
 }

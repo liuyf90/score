@@ -298,6 +298,9 @@
                     if ( data.istimeOut) {
                         $(row).addClass('warning');
                     }
+                    var i = t.page() * t.page.len() + index + 1;
+                    $('td:eq(0)', row).html("<span class='row-details row-details-close' data_id='" + data["taskId"] + "'></span>&nbsp;" + i);
+                    $(row).attr("data_id", data["taskId"]);
                 },
                 columnDefs: [{
                     "targets": 'nosort',  //列的样式名
@@ -416,29 +419,35 @@
                 ]
 
             }).api();
-        t.on('order.dt search.dt draw.dt',
-            function () {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function (cell, i) {
-                    //     alert( t.page());
-//                    alert(t.param.draw);
-                    cell.innerHTML = t.page() * t.page.len() + i + 1;
-                });
-            }).draw();
+//        t.on('order.dt search.dt draw.dt',
+//            function () {
+//                t.column(0, {
+//                    search: 'applied',
+//                    order: 'applied'
+//                }).nodes().each(function (cell, i) {
+//                    //     alert( t.page());
+////                    alert(t.param.draw);
+//                    cell.innerHTML = t.page() * t.page.len() + i + 1;
+//                });
+//            }).draw();
 
         //给行绑定选中事件
         t.on('click', 'tr', function () {
-
-            if ($(this).hasClass('info')) {
-
-                $(this).removeClass('info');
+            var tr = $(this).closest('tr');
+            var row = t.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                tr.removeClass('info');
             }
             else {
                 t.$('tr.info').removeClass('info');
                 $(this).addClass('info');
+                var taskId = $(this).attr("data_id");
+                fnFormatDetails(row, taskId);
+                $(this).addClass('shown');
             }
+
         });
 
 
@@ -499,6 +508,34 @@
         $.get("/check/del", {task_id: taskId}, function (d) {
             window.location.href = "/check/"
         });
+    }
+    function fnFormatDetails(row, pdataId) {
+        $.get("/check/getScore", {task_id: pdataId}, function (d) {
+            var content = "";
+            $.each(d, function (index, item) {
+                content += format(item);
+            });
+            row.child(content).show();
+        })
+
+    }
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>名字:</td>' +
+            '<td>' + d.user.cname + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>规则:</td>' +
+            '<td>' + d.rule + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>分值:</td>' +
+            '<td>' + d.socre + '</td>' +
+            '</tr>' +
+            '</table>';
     }
 
 </script>
