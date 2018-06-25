@@ -12,6 +12,7 @@
         background: url('../resources/details_open.png') no-repeat center center;
         cursor: pointer;
     }
+
     tr.shown td.details-control {
         background: url('../resources/details_close.png') no-repeat center center;
     }
@@ -111,7 +112,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
+                                aria-hidden="true">&times;
+                        </button>
                         <h4 class="modal-title" id="myModalLabel">修改密码</h4>
                     </div>
                     <div class="modal-body">
@@ -214,7 +216,8 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal"
-                                                        aria-hidden="true">&times;</button>
+                                                        aria-hidden="true">&times;
+                                                </button>
                                                 <h4 class="modal-title" id="myModalLabel">请确认</h4>
                                             </div>
                                             <div class="modal-body">
@@ -386,24 +389,10 @@
                 ]
 
             }).api();
-//        t.on('order.dt search.dt draw.dt',
-//            function () {
-//                t.column(0, {
-//                    search: 'applied',
-//                    order: 'applied'
-//                }).nodes().each(function (cell, i) {
-//                    //     alert( t.page());
-////                    alert(t.param.draw);
-//                    var i=t.page() * t.page.len() + i + 1;
-//                    cell.innerHTML ="<span class='row-details row-details-close' data_id='" + 2 + "'></span>&nbsp;" + i;
-////                    $('td:eq(0)', nRow).html("<span class='row-details row-details-close' data_id='" + + "'></span>&nbsp;" + aData[0]);
-//                });
-//            }).draw();
-
         //给行绑定选中事件
         t.on('click', 'tr', function () {
             var tr = $(this).closest('tr');
-            var row = t.row( tr );
+            var row = t.row(tr);
             if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
@@ -412,9 +401,8 @@
             else {
                 t.$('tr.info').removeClass('info');
                 $(this).addClass('info');
-                var taskId=$(this).attr("data_id");
-                alert(taskId);
-                row.child( format(row.data()) ).show();
+                var taskId = $(this).attr("data_id");
+                fnFormatDetails(row, taskId);
                 $(this).addClass('shown');
             }
 
@@ -471,17 +459,15 @@
         });
     })
 
-    function fnFormatDetails(nTr, pdataId) {
-        //根据配置Id 异步查询数据
-//        $.get("../resources/user_share/row_details/language.txt",
-//            function(json) {
-//                var array = json.data;
-//                for (var i = 0; i < array.length; i++) {
-//                    if (pdataId == array[i].language) {
-//                        var sOut = '<center> <p style="width:70%">' + array[i].desc + '<a target="_blank" href="' + array[i].url + '">更多</a></p></center>';
-        t.fnOpen(1, '22222', 'details');
-//                    }
-//                }
+    function fnFormatDetails(row, pdataId) {
+        $.get("/mytasks/getScore", {task_id: pdataId}, function (d) {
+            var content = "";
+            $.each(d, function (index, item) {
+                content += format(item);
+            });
+            row.child(content).show();
+        })
+
     }
     ;
 
@@ -490,19 +476,20 @@
     }
 
     /* Formatting function for row details - modify as you need */
-    function format ( d ) {
+    function format(d) {
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<td>规则:</td>'+
-            '<td>d.rule</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>分值:</td>'+
-            '<td>d.socre</td>'+
-            '</tr>'+
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>规则:</td>' +
+            '<td>' + d.rule + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>分值:</td>' +
+            '<td>' + d.socre + '</td>' +
+            '</tr>' +
             '</table>';
     }
+
 </script>
 <div th:replace="owner/checkTasks::js2"></div>
 </body>
