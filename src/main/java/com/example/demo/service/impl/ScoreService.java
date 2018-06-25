@@ -58,6 +58,17 @@ public class ScoreService implements IScore{
         return score;
     }
 
+    @Override
+    public  List<Score> scoreDetailsTaskofUser(Task task,User user) {
+        List<Score> scoreList=task.getScores();
+        for(Score s:scoreList){
+            if(s.getUser().getId()!=user.getId()) {
+                scoreList.remove(s);
+            }
+        }
+        return scoreList;
+    }
+
     /**
      * 工时积分
      * @param user

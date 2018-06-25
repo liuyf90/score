@@ -7,6 +7,15 @@
 <!--<meta charset="utf-8" />-->
 <!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
 <head th:include="owner/checkTasks::head"></head>
+<style>
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+</style>
 <body>
 
 <!--<h1>Hello Spring Security</h1>-->
@@ -164,8 +173,6 @@
             </div>
 
 
-
-
             <div class="col-md-12">
                 <!--    Bordered Table  -->
                 <div class="panel panel-default">
@@ -247,7 +254,7 @@
 <!-- /. WRAPPER  -->
 <!-- JS Scripts-->
 <!-- jQuery Js -->
-<div th:replace ="owner/checkTasks::js1"></div>
+<div th:replace="owner/checkTasks::js1"></div>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         $("#logout").click(function () {
@@ -267,10 +274,14 @@
                 order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
                 renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
                 pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
-                createdRow: function ( row, data, index ) {
-                    if ( data.istimeOut) {
+                // set the initial value
+                createdRow: function (row, data, index) {
+                    if (data.istimeOut) {
                         $(row).addClass('warning');
                     }
+                    var i = t.page() * t.page.len() + index + 1;
+                    $('td:eq(0)', row).html("<span class='row-details row-details-close' data_id='" + data["taskId"] + "'></span>&nbsp;" + i);
+                    $(row).attr("data_id", data["taskId"]);
                 },
                 columnDefs: [{
                     "targets": 'nosort',  //列的样式名
@@ -282,7 +293,7 @@
                         "targets": 11,//按钮目标列
                         "data": null,
                         "render": function (data, type, row) {
-                            debugger;
+
                             var id = '"' + row.id + '"';
                             var html = "";
 
@@ -375,29 +386,38 @@
                 ]
 
             }).api();
-        t.on('order.dt search.dt draw.dt',
-            function () {
-                t.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function (cell, i) {
-                    //     alert( t.page());
-//                    alert(t.param.draw);
-                    cell.innerHTML = t.page() * t.page.len() + i + 1;
-                });
-            }).draw();
+//        t.on('order.dt search.dt draw.dt',
+//            function () {
+//                t.column(0, {
+//                    search: 'applied',
+//                    order: 'applied'
+//                }).nodes().each(function (cell, i) {
+//                    //     alert( t.page());
+////                    alert(t.param.draw);
+//                    var i=t.page() * t.page.len() + i + 1;
+//                    cell.innerHTML ="<span class='row-details row-details-close' data_id='" + 2 + "'></span>&nbsp;" + i;
+////                    $('td:eq(0)', nRow).html("<span class='row-details row-details-close' data_id='" + + "'></span>&nbsp;" + aData[0]);
+//                });
+//            }).draw();
 
         //给行绑定选中事件
         t.on('click', 'tr', function () {
-
-            if ($(this).hasClass('info')) {
-
-                $(this).removeClass('info');
+            var tr = $(this).closest('tr');
+            var row = t.row( tr );
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                tr.removeClass('info');
             }
             else {
                 t.$('tr.info').removeClass('info');
                 $(this).addClass('info');
+                var taskId=$(this).attr("data_id");
+                alert(taskId);
+                row.child( format(row.data()) ).show();
+                $(this).addClass('shown');
             }
+
         });
 
 
@@ -413,16 +433,20 @@
         //自定义格式选择
         $("#enddate").jeDate({
             format: "YYYY-MM-DD hh:mm:ss",
-            minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
-            maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)})
+            minDate: $.nowDate({DD: 0}),//0代表今天，-1代表昨天，-2代表前天，以此类推
+            maxDate: $.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)})
         });
         $(".sure2").click(function () {
-            if($("#enddate").val()==''){
+            if ($("#enddate").val() == '') {
                 alert("请填写结束日期！");
                 return;
             }
             var userid = $('input:radio[name="radio1"]:checked').attr("data");
-            $.get("/check/assigned", {user_id: userid, task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
+            $.get("/check/assigned", {
+                user_id: userid,
+                task_id: $(this).attr("data"),
+                eDate: $("#enddate").val()
+            }, function (d) {
                 window.location.href = "/check/"
             });
         });
@@ -436,7 +460,6 @@
         });
 
 
-
         $(".surePasswd").click(function () {
             $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
                 alert("修改成功");
@@ -447,13 +470,40 @@
             t.draw();
         });
     })
+
+    function fnFormatDetails(nTr, pdataId) {
+        //根据配置Id 异步查询数据
+//        $.get("../resources/user_share/row_details/language.txt",
+//            function(json) {
+//                var array = json.data;
+//                for (var i = 0; i < array.length; i++) {
+//                    if (pdataId == array[i].language) {
+//                        var sOut = '<center> <p style="width:70%">' + array[i].desc + '<a target="_blank" href="' + array[i].url + '">更多</a></p></center>';
+        t.fnOpen(1, '22222', 'details');
+//                    }
+//                }
+    }
+    ;
+
     function cpTaskId(taskId) {
         $(".sure").attr("data", taskId);
     }
 
-
-
+    /* Formatting function for row details - modify as you need */
+    function format ( d ) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+            '<tr>'+
+            '<td>规则:</td>'+
+            '<td>d.rule</td>'+
+            '</tr>'+
+            '<tr>'+
+            '<td>分值:</td>'+
+            '<td>d.socre</td>'+
+            '</tr>'+
+            '</table>';
+    }
 </script>
-<div th:replace ="owner/checkTasks::js2"></div>
+<div th:replace="owner/checkTasks::js2"></div>
 </body>
 </html>

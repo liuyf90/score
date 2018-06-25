@@ -1,5 +1,6 @@
 package com.example.demo.web;
 
+import com.example.demo.entity.Score;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.TaskStatus;
 import com.example.demo.entity.User;
@@ -87,4 +88,12 @@ public class MyTasksController {
         }
         return taskList;
     }
+    @RequestMapping(value = "/getScore", method = RequestMethod.GET)
+    public  List<Score> getScore(@RequestParam(value = "task_id") Long task_id, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
+        User u = userservice.getUser(principal.getName());
+        Task task=taskservice.getOne(task_id);
+        List<Score> scoreList= scoreService.scoreDetailsTaskofUser(task,u);
+        return scoreList;
+    }
+
 }

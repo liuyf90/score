@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.RuleEnum;
+import com.example.demo.entity.Score;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
+
+import java.util.List;
 
 /**
  * Created by liuyf on 2018/6/20.
@@ -15,4 +18,5 @@ public interface IScore {
    double scoreByUser(User user);
    //该任务中莫人所得的总分
    double scoreByTaskofUser(Task task,User user);
+    List<Score> scoreDetailsTaskofUser(Task task, User user);
 }
