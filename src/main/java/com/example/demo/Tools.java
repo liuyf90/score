@@ -24,8 +24,8 @@ public class Tools {
 
 //        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
-        days = (int) Math.abs((toDate.getTime() - fromDate.getTime())
-                / (24 * 60 * 60 * 1000)) + 1;
+        days = (int) ((toDate.getTime() - fromDate.getTime())
+                / (24 * 60 * 60 * 1000))+1 ;
 
         return days;
     }

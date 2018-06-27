@@ -10,6 +10,7 @@ import com.example.demo.service.IScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -66,9 +67,10 @@ public class ScoreService implements IScore{
     @Override
     public  List<Score> scoreDetailsTaskofUser(Task task,User user) {
         List<Score> scoreList=task.getScores();
-        for(Score s:scoreList){
-            if(s.getUser().getId()!=user.getId()) {
-                scoreList.remove(s);
+        Iterator<Score> it= scoreList.iterator();
+        while(it.hasNext()){
+            if(it.next().getUser().getId()!=user.getId()) {
+                it.remove();
             }
         }
         return scoreList;
@@ -83,7 +85,7 @@ public class ScoreService implements IScore{
     public void workTimeScore(User user, Task task) throws Exception{
         Score s = new Score();
         s.setRule("工时积分");
-        double score= Tools.dateDiff(task.geteDate(),task.getbDate())+1;
+        double score= Tools.dateDiff(task.geteDate(),task.getbDate());
         s.setSocre(score);
         s.setUser(user);
         s.setTask(task);
