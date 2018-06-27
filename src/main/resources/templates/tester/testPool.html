@@ -45,7 +45,7 @@
                     <a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>
                 </li>
                 <!--<li>-->
-                    <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
+                <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
                 <!--</li>-->
 
             </ul>
@@ -70,9 +70,9 @@
             </ol>
 
         </div>
-          <div th:replace="user/myTasks::editPasswd"></div>
+        <div th:replace="user/myTasks::editPasswd"></div>
         <div id="page-inner">
-            <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
+            <!--<div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>-->
             <div class="col-md-12">
                 <!--    Bordered Table  -->
                 <div class="panel panel-default">

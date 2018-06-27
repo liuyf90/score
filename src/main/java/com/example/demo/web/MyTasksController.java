@@ -50,8 +50,6 @@ public class MyTasksController {
         user.setSts(1);
         user.setUsername(principal.getName());
         User user1 = userservice.findAll(user).get(0);
-//        List<Task> tasks=user1.getTasks();
-//        model.addAttribute("taskList", setTimeOut(tasks));
         double score = this.scoreService.scoreByUser(user1);
         model.addAttribute("myTaskcount", new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
         return new ModelAndView("user/myTasks", "taskModel", model);
@@ -70,9 +68,6 @@ public class MyTasksController {
     public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
         User u = userservice.getUser(principal.getName());
         Page<Task> taskList = taskservice.findSearchForReceiver(u.getId(),task, pageInfo);
-//        double score = this.scoreService.scoreByUser(user1);
-//        model.addAttribute("myTaskcount", new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-
         return setTimeOut(taskList);
     }
     private Page<Task> setTimeOut(Page<Task> taskList){

@@ -261,4 +261,10 @@ public class TaskService extends ActionAdapter implements ITaskService {
     public void del(long task_id) {
         this.taskRepository.delete(task_id);
     }
+
+
+    @Override
+    public List<Task> findByFinish(TaskStatus taskStatus) {
+        return this.taskRepository.findByFinish(taskStatus.getIndex());
+    }
 }
