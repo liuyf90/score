@@ -10,6 +10,8 @@ import com.example.demo.service.IScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,7 +87,8 @@ public class ScoreService implements IScore{
     public void workTimeScore(User user, Task task) throws Exception{
         Score s = new Score();
         s.setRule("工时积分");
-        double score= Tools.dateDiff(task.geteDate(),task.getbDate());
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        double score= Tools.dateDiff(sf.parse(sf.format(task.getbDate())),sf.parse(sf.format(task.geteDate())));
         s.setSocre(score);
         s.setUser(user);
         s.setTask(task);
