@@ -90,6 +90,7 @@
                                     <th>任务名称</th>
                                     <th>创建时间</th>
                                     <th>项目名</th>
+                                    <th>状态</th>
                                     <th>组长</th>
                                     <th>操作</th>
 
@@ -102,6 +103,7 @@
                                     <td th:text="${task.taskName}"></td>
                                     <td th:text="${task.cDate!=null}?${#dates.format(task.cDate,'yyyy-MM-dd HH:mm')}:''"></td>
                                     <td th:text="${task.project.projectName}"></td>
+                                    <td th:text="${task.finishName}"></td>
                                     <td th:text="${task.project.user.cname}"></td>
 
                                     <td>
@@ -158,6 +160,19 @@
 <div th:replace ="owner/checkTasks::js1"></div>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
+        $('.table').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+            },
+            autoWidth: false,  //禁用自动调整列宽
+            stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+            processing: true,  //隐藏加载提示,自行处理
+            searching: false,  //禁用原生搜索
+            orderMulti: false,  //启用多列排序
+            order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+            renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+            pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+        });
         $("#logout").click(function(){
             $("#outfrom").submit();
         })
