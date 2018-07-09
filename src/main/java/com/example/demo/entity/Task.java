@@ -261,4 +261,8 @@ public class Task {
     public void setScores(List<Score> scores) {
         this.scores = scores;
     }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="taskId")
+    private List<TestReport> TestReport;
 }
