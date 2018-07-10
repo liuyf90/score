@@ -201,17 +201,17 @@ public class TaskService extends ActionAdapter implements ITaskService {
     }
 
     /**
-     * 复写ActionAdapter,加入积分规则
+     * 复写ActionAdapter,加入积分规则,领取任务积分
      *
      * @param task
      * @return
      * @throws Exception
      */
     @Override
-    public Task pull(Task task) throws Exception {
-        task = super.pull(task);
+    public Task pull(Task task,User user) throws Exception {
+        task = super.pull(task,user);
         taskRepository.flush();
-        User user = task.getReceivers().iterator().next();
+//        User user = task.getReceivers().iterator().next();
         scoreService.score(user, RuleEnum.PULL, task);
         //工时积分
         scoreService.workTimeScore(user,task);
@@ -245,6 +245,9 @@ public class TaskService extends ActionAdapter implements ITaskService {
                 scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务积分
                 scoreService.checkTimeoutScore(task.getUser(), task);//审核任务超时扣分
                 break;
+            case 4:
+                //接受测试任务没分
+                break;
             case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务积分
                 //工时积分
@@ -265,6 +268,6 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     @Override
     public List<Task> findByFinish(TaskStatus taskStatus) {
-        return this.taskRepository.findByFinish(taskStatus.getIndex());
+        return this.taskRepository.findByFinishAndType(taskStatus.getIndex(),TypeEnum.CODE.getIndex());
     }
 }

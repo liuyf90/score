@@ -108,7 +108,7 @@
 
                                     <td>
                                         <a href="#" data-toggle="modal" data-target="#myModal"
-                                           class="btn btn-primary pull" th:data="${task.taskId}">测试结果</a>
+                                           class="btn btn-primary pull" th:data="${task.taskId}">领取</a>
                                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
                                              aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -119,12 +119,7 @@
                                                         <h4 class="modal-title" id="myModalLabel">领取形式</h4>
                                                     </div>
                                                     <div class="modal-body">
-
-
-                                                        <label for="enddate">完成时间:</label>
-                                                        <input type="text" class="jeinput" id="enddate"
-                                                               placeholder="YYYY年MM月DD日">
-
+                                                        请确认领取测试任务！
 
                                                     </div>
                                                     <div class="modal-footer">
@@ -136,9 +131,9 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>test
                                         </div>
-                                        <a href="#" th:href="@{'/pool/'+${task.taskId}}" class="btn btn-primary detail">详情</a>
+                                        <a href="#" th:href="@{'//'+${task.taskId}}" class="btn btn-primary detail">详情</a>
 
                                     </td>
                                 </tr>
@@ -180,12 +175,8 @@
             $(".sure").attr("data",$(this).attr("data"));
         })
         $(".sure").click(function () {
-            if($("#enddate").val()==''){
-                alert("请填写结束日期！");
-                return;
-            }
-            $.get("/pool/pull", {task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
-                window.location.href = "/pool/"
+            $.get("/test/done", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/test/"
             });
         });
         //自定义格式选择

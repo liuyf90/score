@@ -408,7 +408,13 @@
                             debugger;
                             console.log("data" + data);
                             if (data.length > 0 && type === 'display' || type === 'filter') {
-                                return data[0].cname;
+                                var d='';
+                                for (var index = 0; index < data.length; index++) {
+                                    debugger;
+                                    d+=data[index].cname+',';
+                                }
+                                d=d.substring(0,d.length-1);
+                                return d;
                             }
                             return '';
                         }

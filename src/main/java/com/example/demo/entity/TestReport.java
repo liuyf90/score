@@ -17,4 +17,39 @@ public class TestReport {
     @JoinColumn(name = "taskId", referencedColumnName = "taskId")
     private Task task;
 
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User tester;
+
+    public Long getTestReportId() {
+        return testReportId;
+    }
+
+    public void setTestReportId(Long testReportId) {
+        this.testReportId = testReportId;
+    }
+
+    public String getReport() {
+        return report;
+    }
+
+    public void setReport(String report) {
+        this.report = report;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public User getTester() {
+        return tester;
+    }
+
+    public void setTester(User tester) {
+        this.tester = tester;
+    }
 }

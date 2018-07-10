@@ -13,8 +13,8 @@ import static org.junit.Assert.*;
 public class ToolsTest {
     @Test
     public void dateDiff() throws Exception {
-        Date date2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-26 18:00:00");
-        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-06-28 17:00:00");
+        Date date2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-07-01 10:00:00");
+        Date date1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-07-07 17:00:00");
         int i=Tools.dateDiff(date2,date1);
         System.out.print(i);
 

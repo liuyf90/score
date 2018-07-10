@@ -40,7 +40,7 @@ public class PoolController {
         List<User> users = new ArrayList();
         users.add(userservice.getUser(principal.getName()));
         t.setUsers(users);
-        taskservice.pull(t);
+        taskservice.pull(t,userservice.getUser(principal.getName()));
         return "success";
     }
 }

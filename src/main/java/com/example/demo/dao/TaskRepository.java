@@ -14,5 +14,5 @@ import java.util.List;
  * Created by liuyf on 2018/5/6.
  */
 public interface TaskRepository extends JpaRepository<Task,Long>,JpaSpecificationExecutor<Task>{
-    List<Task> findByFinish(int finish);
+    List<Task> findByFinishAndType(int finish,int type);
 }

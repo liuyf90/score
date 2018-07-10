@@ -63,10 +63,11 @@ public class Task {
         this.type = type;
     }
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)//级联删除
     @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<User> receivers;
+
 
     @Column(name = "finish", columnDefinition = "INT default 0 COMMENT '完成状态'", nullable = false)
     private int finish;
@@ -265,4 +266,12 @@ public class Task {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="taskId")
     private List<TestReport> TestReport;
+
+    public List<com.example.demo.entity.TestReport> getTestReport() {
+        return TestReport;
+    }
+
+    public void setTestReport(List<com.example.demo.entity.TestReport> testReport) {
+        TestReport = testReport;
+    }
 }

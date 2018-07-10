@@ -22,7 +22,7 @@ public abstract class ActionAdapter implements IAction {
 
 
     @Override
-    public Task pull(Task task) throws Exception{
+    public Task pull(Task task,User user) throws Exception{
         task.setFinish(TaskStatus.DONE);
         return taskRepository.save(task);
     }
