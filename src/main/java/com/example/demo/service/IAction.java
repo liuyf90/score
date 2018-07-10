@@ -15,5 +15,7 @@ public interface IAction {
     long score(User model);//积分计算接口
     Task pull(Task task,User user) throws Exception ;//领取任务
     void done(Task t,TaskStatus taskStatus) throws Exception;//处理任务
+    void pass(Task t,TaskStatus taskStatus) throws Exception;//测试通过
     void create(Task task)  throws Exception;//创建任务
+
 }

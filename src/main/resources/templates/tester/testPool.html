@@ -72,7 +72,7 @@
         </div>
         <div th:replace="user/myTasks::editPasswd"></div>
         <div id="page-inner">
-            <!--<div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>-->
+            <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
             <div class="col-md-12">
                 <!--    Bordered Table  -->
                 <div class="panel panel-default">
@@ -133,7 +133,7 @@
                                                 </div>
                                             </div>test
                                         </div>
-                                        <a href="#" th:href="@{'//'+${task.taskId}}" class="btn btn-primary detail">详情</a>
+                                        <a href="#" th:href="@{'/test/'+${task.taskId}}" class="btn btn-primary detail">详情</a>
 
                                     </td>
                                 </tr>

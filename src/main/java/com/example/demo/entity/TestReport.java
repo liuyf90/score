@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -12,7 +14,9 @@ public class TestReport {
     private Long testReportId;
     @Column
     private String report;
-
+    @Column(name = "type", columnDefinition = "INT default 0 COMMENT '通过'", nullable = false)//默认0为通过，1为不通过
+    private int type;
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId", referencedColumnName = "taskId")
     private Task task;
@@ -51,5 +55,13 @@ public class TestReport {
 
     public void setTester(User tester) {
         this.tester = tester;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -48,5 +48,8 @@ public abstract class ActionAdapter implements IAction {
         taskRepository.save(task);
     }
 
+    @Override
+    public void pass(Task t, TaskStatus taskStatus) throws Exception {
 
+    }
 }

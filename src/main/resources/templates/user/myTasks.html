@@ -228,13 +228,38 @@
                                                 <button type="button" class="btn btn-default"
                                                         data-dismiss="modal">Close
                                                 </button>
-                                                <button type="button" class="btn btn-primary sure">确认
+                                                <button type="button" class="btn btn-primary ok sure">确认
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="modal fade" id="myTestModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">&times;
+                                                </button>
+                                                <h4 class="modal-title" id="myTestModalLabel">请确认</h4>
+                                            </div>
+                                            <div class="modal-body">
 
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default"
+                                                        data-dismiss="modal">Close
+                                                </button>
+                                                <button type="button" class="btn btn-primary sure pass">测试通过
+                                                </button>
+                                                <button type="button" class="btn btn-primary sure fail">返回BUG
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </table>
                         </div>
@@ -302,6 +327,9 @@
 
                             if (data.finish == 1) {
                                 html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myModal' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 办结</a>"
+                            }
+                            if (data.finish == 4) {
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myTestModal' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 测试结论</a>"
                             }
 
                             return html;
@@ -440,9 +468,23 @@
         });
 
 
-        $(".sure").click(function () {
-            alert($(this).attr("data"));
+        $(".ok").click(function () {
+//            alert($(this).attr("data"));
             $.get("/mytasks/done", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/mytasks/"
+            });
+        });
+
+        $(".pass").click(function () {
+//            alert($(this).attr("data"));
+            $.get("/mytasks/pass", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/mytasks/"
+            });
+        });
+
+        $(".fail").click(function () {
+//            alert($(this).attr("data"));
+            $.get("/mytasks/fail", {task_id: $(this).attr("data")}, function (d) {
                 window.location.href = "/mytasks/"
             });
         });

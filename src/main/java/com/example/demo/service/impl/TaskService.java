@@ -1,7 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.Tools;
-import com.example.demo.dao.ScoreRepository;
 import com.example.demo.entity.*;
 import com.example.demo.service.ActionAdapter;
 import com.example.demo.service.ITaskService;
@@ -208,15 +206,16 @@ public class TaskService extends ActionAdapter implements ITaskService {
      * @throws Exception
      */
     @Override
-    public Task pull(Task task,User user) throws Exception {
-        task = super.pull(task,user);
+    public Task pull(Task task, User user) throws Exception {
+        task = super.pull(task, user);
         taskRepository.flush();
 //        User user = task.getReceivers().iterator().next();
         scoreService.score(user, RuleEnum.PULL, task);
         //工时积分
-        scoreService.workTimeScore(user,task);
+        scoreService.workTimeScore(user, task);
         return task;
     }
+
     /**
      * 复写ActionAdapter,加入积分规则
      *
@@ -225,9 +224,9 @@ public class TaskService extends ActionAdapter implements ITaskService {
      * @throws Exception
      */
     @Override
-    public  void create(Task task) throws Exception {
-       super.create(task);
-       scoreService.score(task.getUser(), RuleEnum.CREATE, task);//创建任务
+    public void create(Task task) throws Exception {
+        super.create(task);
+        scoreService.score(task.getUser(), RuleEnum.CREATE, task);//创建任务
     }
 
     /**
@@ -248,14 +247,18 @@ public class TaskService extends ActionAdapter implements ITaskService {
             case 4:
                 //接受测试任务没分
                 break;
+            case 5:
+                //测试通过
+                scoreService.score(task.getTestReport().get(0).getTester(), RuleEnum.TEST, task);//测试积分
+                break;
             case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务积分
                 //工时积分
-                scoreService.workTimeScore(task.getReceivers().iterator().next(),task);
+                scoreService.workTimeScore(task.getReceivers().iterator().next(), task);
                 break;
             case 2:
                 scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务积分
-                scoreService.workTimeoutScore(task.getReceivers().iterator().next(),task);//超时扣分
+                scoreService.workTimeoutScore(task.getReceivers().iterator().next(), task);//超时扣分
                 break;
         }
     }
@@ -268,6 +271,6 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     @Override
     public List<Task> findByFinish(TaskStatus taskStatus) {
-        return this.taskRepository.findByFinishAndType(taskStatus.getIndex(),TypeEnum.CODE.getIndex());
+        return this.taskRepository.findByFinishAndType(taskStatus.getIndex(), TypeEnum.CODE.getIndex());
     }
 }

@@ -1,9 +1,6 @@
 package com.example.demo.web;
 
-import com.example.demo.entity.Score;
-import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskStatus;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.service.impl.ScoreService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
@@ -15,10 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by liuyf on 2018/5/6.
@@ -63,17 +57,50 @@ public class MyTasksController {
         return "success";
     }
 
+    /**
+     * 测试通过
+     * @param task_id
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/pass", method = RequestMethod.GET)
+    public String pass(@RequestParam(value = "task_id") Long task_id,Principal principal) throws Exception {
+        Task task = taskservice.getOne(task_id);
+        User u = userservice.getUser(principal.getName());
+        TestReport tr=new TestReport();
+        tr.setTester(u);
+        ArrayList<TestReport> tes=new ArrayList<>();
+        tes.add(tr);
+        task.setTestReport(tes);
+        taskservice.done(task, TaskStatus.PASS);
+        return "success";
+    }
+
+    /**
+     * 测试失败
+     * @param task_id
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/fail", method = RequestMethod.GET)
+    public String fail(@RequestParam(value = "task_id") Long task_id) throws Exception {
+        Task task = taskservice.getOne(task_id);
+        taskservice.done(task, TaskStatus.FINISH);
+        return "success";
+    }
+
 
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public Page<Task> query(Task task, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
         User u = userservice.getUser(principal.getName());
         Page<Task> taskList = taskservice.findSearchForReceiver(u.getId(),task, pageInfo);
-        return setTimeOut(taskList);
+        return setTimeOut(taskList,u);
     }
-    private Page<Task> setTimeOut(Page<Task> taskList){
+    private Page<Task> setTimeOut(Page<Task> taskList,User user){
         for(Task task:taskList.getContent()){
             Date eDate=task.geteDate();
-            task.setScore(this.scoreService.scoreByTaskofUser(task,task.getReceivers().iterator().next()));
+
+            task.setScore(this.scoreService.scoreByTaskofUser(task,user));
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());
                 if(task.getFinish()<TaskStatus.FINISH.getIndex()) {
