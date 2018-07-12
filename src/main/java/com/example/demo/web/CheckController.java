@@ -61,8 +61,13 @@ public class CheckController {
     public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id,@RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Date eDate) throws Exception{
         Task task=taskservice.getOne(task_id);
         User user= userservice.getOne(user_id);
-        Set<User> users=new HashSet<>();
-        users.add(user);
+        Set<TaskUser> users=new HashSet<>();
+
+        TaskUser taskUser=new TaskUser();
+        taskUser.setUser(user);
+        taskUser.setTask(task);
+        taskUser.setRoleType(0);
+        users.add(taskUser);
         task.setReceivers(users);
         task.seteDate(eDate);
         taskservice.done(task,TaskStatus.DONE);

@@ -2,9 +2,10 @@ package com.example.demo.web;
 
 import com.example.demo.entity.Task;
 import com.example.demo.entity.TaskStatus;
-import com.example.demo.entity.TestReport;
+import com.example.demo.entity.TaskUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.impl.TaskService;
+import com.example.demo.service.impl.TaskUserService;
 import com.example.demo.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -24,6 +25,8 @@ public class TestPoolController {
     private TaskService taskservice;
     @Autowired
     private UserService userservice;
+    @Autowired
+    private TaskUserService taskUserService;
     @ModelAttribute
     public void myModel(Model model, Principal principal) {
         Map<Integer, String> status = new HashMap<>();
@@ -47,9 +50,14 @@ public class TestPoolController {
     public String done(@RequestParam(value = "task_id") Long task_id, Principal principal) throws Exception {
         Task task = taskservice.getOne(task_id);
         User u = userservice.getUser(principal.getName());
-        Set<User> tester=task.getReceivers();
-        tester.add(u);
-        task.setReceivers(tester);
+//        Set<User> tester=task.getReceivers();
+//        tester.add(u);
+//        task.setReceivers(tester);
+        TaskUser tu=new TaskUser();
+        tu.setUser(u);
+        tu.setRoleType(1);//测试人员
+        tu.setTask(task);
+        TaskUser taskUser=taskUserService.save(tu);
         taskservice.done(task, TaskStatus.TEST);
         return "success";
     }

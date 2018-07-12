@@ -18,7 +18,7 @@ public class TestReport {
     private int type;
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "taskId", referencedColumnName = "taskId")
+    @JoinColumn(name = "task_id", referencedColumnName = "taskId")
     private Task task;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

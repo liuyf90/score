@@ -1,6 +1,7 @@
 package com.example.demo.web;
 
 import com.example.demo.entity.Task;
+import com.example.demo.entity.TaskUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.impl.UserService;
 import com.example.demo.service.impl.TaskService;
@@ -11,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by liuyf on 2018/5/6.
@@ -37,9 +36,12 @@ public class PoolController {
         Date day=new Date();
         t.setbDate(day);
         t.seteDate(eDate);
-        List<User> users = new ArrayList();
-        users.add(userservice.getUser(principal.getName()));
-        t.setUsers(users);
+        Set<TaskUser> users = new HashSet<>();
+        TaskUser taskUser=new TaskUser();
+        taskUser.setTask(t);
+        taskUser.setUser(userservice.getUser(principal.getName()));
+        users.add(taskUser);
+        t.setReceivers(users);
         taskservice.pull(t,userservice.getUser(principal.getName()));
         return "success";
     }

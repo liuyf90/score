@@ -19,6 +19,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ import java.util.Set;
  * Created by liuyf90 on 2018/5/6.
  */
 @Service
+@Transactional
 public class UserService implements UserDetailsService, IUserServer {
     @Autowired
     private UserRepository userRepository;

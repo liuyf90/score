@@ -15,6 +15,7 @@ import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -35,7 +36,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
         List<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                ListJoin<Task, User> userJoin = root.join(root.getModel().getList("users", User.class), JoinType.LEFT);
+                SetJoin<Task, TaskUser> userJoin = root.join(root.getModel().getSet("receivers", TaskUser.class), JoinType.LEFT);
                 Predicate p1 = cb.isNull(userJoin.get("id"));
                 return p1;
             }
@@ -239,6 +240,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
     public void done(Task task, TaskStatus taskStatus) throws Exception {
         super.done(task, taskStatus);
         taskRepository.flush();
+        Iterator<TaskUser> it=task.getReceivers().iterator();
         switch (taskStatus.getIndex()) {
             case 3:
                 scoreService.score(task.getUser(), RuleEnum.CHECK, task);//审核任务积分
@@ -254,11 +256,22 @@ public class TaskService extends ActionAdapter implements ITaskService {
             case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务积分
                 //工时积分
-                scoreService.workTimeScore(task.getReceivers().iterator().next(), task);
+                while(it.hasNext()){
+                    TaskUser taskUser=it.next();
+                    if(taskUser.getRoleType()==0) {
+                        scoreService.workTimeScore(taskUser.getUser(), task);
+                    }
+                }
                 break;
             case 2:
-                scoreService.score(task.getReceivers().iterator().next(), RuleEnum.FINISH, task);//办结任务积分
-                scoreService.workTimeoutScore(task.getReceivers().iterator().next(), task);//超时扣分
+                while(it.hasNext()){
+                    TaskUser taskUser=it.next();
+                    if(taskUser.getRoleType()==0) {
+                        scoreService.score(taskUser.getUser(), RuleEnum.FINISH, task);//办结任务积分
+                        scoreService.workTimeoutScore(taskUser.getUser(), task);//超时扣分
+                    }
+                }
+
                 break;
         }
     }

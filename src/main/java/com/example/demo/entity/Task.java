@@ -63,11 +63,14 @@ public class Task {
         this.type = type;
     }
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)//级联删除
-    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> receivers;
+//    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)//级联删除
+//    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+//    private Set<User> receivers;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", referencedColumnName = "taskId")
+    private Set<TaskUser> receivers;
 
     @Column(name = "finish", columnDefinition = "INT default 0 COMMENT '完成状态'", nullable = false)
     private int finish;
@@ -154,11 +157,11 @@ public class Task {
     public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
     }
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private List<User> users;
+//    @JsonIgnore
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+//    private List<User> users;
     
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
@@ -184,19 +187,19 @@ public class Task {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    public List<User> getUsers() {
-        return users;
-    }
+//    public List<User> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(List<User> users) {
+//        this.users = users;
+//    }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public Set<User> getReceivers() {
+    public Set<TaskUser> getReceivers() {
         return receivers;
     }
 
-    public void setReceivers(Set<User> receivers) {
+    public void setReceivers(Set<TaskUser> receivers) {
         this.receivers = receivers;
     }
 
@@ -264,7 +267,7 @@ public class Task {
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="taskId")
+    @JoinColumn(name = "task_id", referencedColumnName = "taskId")
     private List<TestReport> TestReport;
 
     public List<com.example.demo.entity.TestReport> getTestReport() {
