@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -37,7 +38,7 @@ public class TaskUser {
     public User getUser() {
         return user;
     }
-
+    @JsonBackReference
     public void setUser(User user) {
         this.user = user;
     }

@@ -99,6 +99,13 @@ public class CheckController {
     }
     private Page<Task> setTimeOut(Page<Task> taskList){
         for(Task task:taskList.getContent()){
+            //写入任务的处理人中文名
+            Iterator<TaskUser> it=task.getReceivers().iterator();
+            List<String> list=new ArrayList<>();
+            while(it.hasNext()){
+               list.add(it.next().getUser().getCname());
+            }
+            task.setReceiversByUser(list);
             Date eDate=task.geteDate();
             if(eDate!=null) {
                 boolean bl = eDate.before(new Date());

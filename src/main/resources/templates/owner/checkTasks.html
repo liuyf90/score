@@ -403,7 +403,7 @@
                         }
                     },
                     {
-                        "data": "receivers",
+                        "data": "receiversByUser",
                         "defaultContent": "",
                         render: function (data, type, row) {
                             debugger;
@@ -412,7 +412,7 @@
                                 var d='';
                                 for (var index = 0; index < data.length; index++) {
                                     debugger;
-                                    d+=data[index].user.cname+',';
+                                    d+=data[index]+',';
                                 }
                                 d=d.substring(0,d.length-1);
                                 return d;

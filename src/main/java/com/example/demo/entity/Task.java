@@ -3,6 +3,7 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,6 +49,16 @@ public class Task {
     private int type;//任务分类
     @Transient
     private String  typeName;//任务分类
+    @Transient
+    private List<String> receiversByUser;//该任务的处理人列表(中文名)
+
+    public List getReceiversByUser() {
+        return receiversByUser;
+    }
+
+    public void setReceiversByUser(List receiversByUser) {
+        this.receiversByUser = receiversByUser;
+    }
 
     public String getTypeName() {
         return TypeEnum.getName(type);
