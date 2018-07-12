@@ -403,7 +403,8 @@
                         }
                     },
                     {
-                        "data": "receivers", "defaultContent": "",
+                        "data": "receivers",
+                        "defaultContent": "",
                         render: function (data, type, row) {
                             debugger;
                             console.log("data" + data);
@@ -411,7 +412,7 @@
                                 var d='';
                                 for (var index = 0; index < data.length; index++) {
                                     debugger;
-                                    d+=data[index].cname+',';
+                                    d+=data[index].user.cname+',';
                                 }
                                 d=d.substring(0,d.length-1);
                                 return d;

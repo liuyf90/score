@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.Set;
  * Created by liuyf on 2018/5/3.
  */
 @Entity
+@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","receivers"})
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -69,7 +71,7 @@ public class Task {
 //    private Set<User> receivers;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id", referencedColumnName = "taskId")
+    @JoinColumn(name = "task_id", referencedColumnName = "taskId",nullable = true)
     private Set<TaskUser> receivers;
 
     @Column(name = "finish", columnDefinition = "INT default 0 COMMENT '完成状态'", nullable = false)
