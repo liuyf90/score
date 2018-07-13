@@ -138,9 +138,9 @@ public class TaskService extends ActionAdapter implements ITaskService {
         Page<Task> result = taskRepository.findAll(new Specification<Task>() {
             @Override
             public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Join<Task, User> userJoin = root.join("receivers", JoinType.LEFT);
+                Join<Task, TaskUser> userJoin = root.join("receivers", JoinType.LEFT);
                 List<Predicate> predicates = new ArrayList<>();
-                predicates.add(cb.equal(userJoin.get("id"), receiver_id));
+                predicates.add(cb.equal(userJoin.get("user"), receiver_id));
                 if (!StringUtils.isEmpty(model.getBbdate())) {
                     //大于或等于传入时间
                     predicates.add(cb.greaterThanOrEqualTo(root.get("bDate").as(Date.class), model.getBbdate()));
@@ -201,16 +201,15 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     /**
      * 复写ActionAdapter,加入积分规则,领取任务积分
-     *
-     * @param task
+     * @param taskuser
+     * @param user
      * @return
      * @throws Exception
      */
     @Override
-    public Task pull(Task task, User user) throws Exception {
-        task = super.pull(task, user);
+    public Task pull(Task t,TaskUser taskuser, User user) throws Exception {
+        Task task = super.pull(t,taskuser, user);
         taskRepository.flush();
-//        User user = task.getReceivers().iterator().next();
         scoreService.score(user, RuleEnum.PULL, task);
         //工时积分
         scoreService.workTimeScore(user, task);

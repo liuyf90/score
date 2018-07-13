@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.dao.TaskRepository;
-import com.example.demo.entity.Project;
-import com.example.demo.entity.Task;
-import com.example.demo.entity.TaskStatus;
-import com.example.demo.entity.User;
+import com.example.demo.dao.TaskUserRepository;
+import com.example.demo.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -19,11 +17,13 @@ import java.util.List;
 public abstract class ActionAdapter implements IAction {
     @Autowired
     protected TaskRepository taskRepository;
-
+    @Autowired
+    protected TaskUserRepository taskUserRepository;
 
     @Override
-    public Task pull(Task task,User user) throws Exception{
+    public Task pull(Task task, TaskUser taskUser,User user) throws Exception{
         task.setFinish(TaskStatus.DONE);
+        taskUserRepository.save(taskUser);
         return taskRepository.save(task);
     }
 

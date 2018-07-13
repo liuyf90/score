@@ -19,7 +19,7 @@ public class TaskUser {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @JsonIgnore
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", referencedColumnName = "taskId")
     private Task task;
@@ -46,7 +46,7 @@ public class TaskUser {
     public Task getTask() {
         return task;
     }
-
+    @JsonBackReference
     public void setTask(Task task) {
         this.task = task;
     }

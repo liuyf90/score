@@ -38,11 +38,9 @@ public class PoolController {
         t.seteDate(eDate);
         Set<TaskUser> users = new HashSet<>();
         TaskUser taskUser=new TaskUser();
-        taskUser.setTask(t);
         taskUser.setUser(userservice.getUser(principal.getName()));
-        users.add(taskUser);
-        t.setReceivers(users);
-        taskservice.pull(t,userservice.getUser(principal.getName()));
+        taskUser.setTask(t);
+        taskservice.pull(t,taskUser,userservice.getUser(principal.getName()));
         return "success";
     }
 }
