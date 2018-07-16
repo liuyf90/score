@@ -66,11 +66,12 @@ public class MyTasksController {
      * @throws Exception
      */
     @RequestMapping(value = "/pass", method = RequestMethod.GET)
-    public String pass(@RequestParam(value = "task_id") Long task_id,Principal principal) throws Exception {
+    public String pass(@RequestParam(value = "task_id") Long task_id,Principal principal,String report) throws Exception {
         Task task = taskservice.getOne(task_id);
         User u = userservice.getUser(principal.getName());
         TestReport tr=new TestReport();
         tr.setTester(u);
+        tr.setReport(report);
         ArrayList<TestReport> tes=new ArrayList<>();
         tes.add(tr);
         task.setTestReport(tes);
@@ -85,9 +86,17 @@ public class MyTasksController {
      * @throws Exception
      */
     @RequestMapping(value = "/fail", method = RequestMethod.GET)
-    public String fail(@RequestParam(value = "task_id") Long task_id) throws Exception {
+    public String fail(@RequestParam(value = "task_id") Long task_id,String report,Principal principal) throws Exception {
         Task task = taskservice.getOne(task_id);
-        taskservice.done(task, TaskStatus.FINISH);
+        User u = userservice.getUser(principal.getName());
+        TestReport tr=new TestReport();
+        tr.setTester(u);
+        tr.setReport(report);
+        tr.setType(1);
+        ArrayList<TestReport> tes=new ArrayList<>();
+        tes.add(tr);
+        task.setTestReport(tes);
+        taskservice.done(task, TaskStatus.FAIL);
         return "success";
     }
 

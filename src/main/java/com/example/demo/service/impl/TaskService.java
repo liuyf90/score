@@ -252,6 +252,18 @@ public class TaskService extends ActionAdapter implements ITaskService {
                 //测试通过
                 scoreService.score(task.getTestReport().get(0).getTester(), RuleEnum.TEST, task);//测试积分
                 break;
+            case 6:
+                //测试BUG
+                scoreService.score(task.getTestReport().get(0).getTester(), RuleEnum.BUG, task);//测试BUG积分
+                while(it.hasNext()){
+                    TaskUser taskUser=it.next();
+                    if(taskUser.getRoleType()==0) {
+                        scoreService.score(taskUser.getUser(), RuleEnum.REJECT, task);//BU驳回G扣分
+                    }
+                }
+
+
+                break;
             case 1:
                 scoreService.score(task.getUser(), RuleEnum.ASSIGNING, task);//分派任务积分
                 //工时积分

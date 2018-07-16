@@ -245,8 +245,8 @@
                                                 <h4 class="modal-title" id="myTestModalLabel">请确认</h4>
                                             </div>
                                             <div class="modal-body">
-
-
+                                                <label for="report">测试报告</label>
+                                                <textarea type="text"  class="form-control" id="report"  rows="3" ></textarea>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default"
@@ -477,14 +477,18 @@
 
         $(".pass").click(function () {
 //            alert($(this).attr("data"));
-            $.get("/mytasks/pass", {task_id: $(this).attr("data")}, function (d) {
+            $.get("/mytasks/pass", {task_id: $(this).attr("data"),report:$("#report").val()}, function (d) {
                 window.location.href = "/mytasks/"
             });
         });
 
         $(".fail").click(function () {
 //            alert($(this).attr("data"));
-            $.get("/mytasks/fail", {task_id: $(this).attr("data")}, function (d) {
+            if ($("#report").val() == '') {
+                alert("请填写测试报告！");
+                return;
+            }
+            $.get("/mytasks/fail", {task_id: $(this).attr("data"),report:$("#report").val()}, function (d) {
                 window.location.href = "/mytasks/"
             });
         });
