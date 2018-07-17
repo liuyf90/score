@@ -6,6 +6,7 @@ import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -65,8 +66,9 @@ public class MyTasksController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/pass", method = RequestMethod.GET)
-    public String pass(@RequestParam(value = "task_id") Long task_id,Principal principal,String report) throws Exception {
+    @PreAuthorize("hasAuthority('ROLE_TEST')")
+    @GetMapping(value = "/{task_id}/pass")
+    public String pass(@PathVariable(value = "task_id") Long task_id,Principal principal,String report) throws Exception {
         Task task = taskservice.getOne(task_id);
         User u = userservice.getUser(principal.getName());
         TestReport tr=new TestReport();
@@ -85,8 +87,9 @@ public class MyTasksController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/fail", method = RequestMethod.GET)
-    public String fail(@RequestParam(value = "task_id") Long task_id,String report,Principal principal) throws Exception {
+    @PreAuthorize("hasAuthority('ROLE_TEST')")
+    @GetMapping(value = "/{task_id}/fail")
+    public String fail(@PathVariable(value = "task_id") Long task_id,String report,Principal principal) throws Exception {
         Task task = taskservice.getOne(task_id);
         User u = userservice.getUser(principal.getName());
         TestReport tr=new TestReport();

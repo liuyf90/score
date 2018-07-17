@@ -476,8 +476,10 @@
         });
 
         $(".pass").click(function () {
-//            alert($(this).attr("data"));
-            $.get("/mytasks/pass", {task_id: $(this).attr("data"),report:$("#report").val()}, function (d) {
+//
+            alert("/mytasks/"+$(this).attr("data")+"/pass");
+            $.get("/mytasks/"+$(this).attr("data")+"/pass", {report:$("#report").val()}, function (d) {
+                debugger;
                 window.location.href = "/mytasks/"
             });
         });
@@ -488,7 +490,7 @@
                 alert("请填写测试报告！");
                 return;
             }
-            $.get("/mytasks/fail", {task_id: $(this).attr("data"),report:$("#report").val()}, function (d) {
+            $.get("/mytasks/"+$(this).attr("data")+"/fail", {report:$("#report").val()}, function (d) {
                 window.location.href = "/mytasks/"
             });
         });
