@@ -478,9 +478,24 @@
         $(".pass").click(function () {
 //
             alert("/mytasks/"+$(this).attr("data")+"/pass");
-            $.get("/mytasks/"+$(this).attr("data")+"/pass", {report:$("#report").val()}, function (d) {
-                debugger;
-                window.location.href = "/mytasks/"
+//            $.get("/mytasks/"+$(this).attr("data")+"/pass", {report:$("#report").val()}, function (d,stats) {
+//                debugger;
+//                alert(stats);
+//                window.location.href = "/mytasks/"
+//            });
+            $.ajax({
+                url: "/mytasks/"+$(this).attr("data")+"/pass",
+                type: "GET",
+                data: {report:$("#report").val()},
+                dataType: "json",
+                success: function(xml, textStatus, xhr) {
+                    window.location.href = "/mytasks/"
+                },
+                complete: function(xhr, textStatus) {
+                   if(xhr.status==403){
+                       window.location.href = "/401"
+                   }
+                }
             });
         });
 
