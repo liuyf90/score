@@ -331,6 +331,9 @@
                             if (data.finish == 4) {
                                 html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myTestModal' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 测试结论</a>"
                             }
+                            if (data.finish == 6) {
+                                html += "<a href='javascript:void(0);' onclick='correct(" + data.taskId + ")'   class='btn btn-primary '><i class='fa fa-arrow-up'></i> 改正</a>"
+                            }
 
                             return html;
                         }
@@ -476,15 +479,34 @@
         });
 
         $(".pass").click(function () {
-//
-            alert("/mytasks/"+$(this).attr("data")+"/pass");
-//            $.get("/mytasks/"+$(this).attr("data")+"/pass", {report:$("#report").val()}, function (d,stats) {
-//                debugger;
-//                alert(stats);
-//                window.location.href = "/mytasks/"
-//            });
             $.ajax({
                 url: "/mytasks/"+$(this).attr("data")+"/pass",
+                type: "GET",
+                data: {report:$("#report").val()},
+                dataType: "json",
+                success: function(xml, textStatus, xhr) {
+                    debugger
+                    window.location.href = "/mytasks/"
+                },
+                complete: function(xhr, textStatus) {
+                    debugger;
+                   if(xhr.status==403){
+                       window.location.href = "/401"
+                   }
+                   if(xhr.status==200){
+                       window.location.href = "/mytasks/"
+                   }
+                }
+            });
+        });
+
+        $(".fail").click(function () {
+            if ($("#report").val() == '') {
+                alert("请填写测试报告！");
+                return;
+            }
+            $.ajax({
+                url: "/mytasks/"+$(this).attr("data")+"/fail",
                 type: "GET",
                 data: {report:$("#report").val()},
                 dataType: "json",
@@ -492,21 +514,14 @@
                     window.location.href = "/mytasks/"
                 },
                 complete: function(xhr, textStatus) {
-                   if(xhr.status==403){
-                       window.location.href = "/401"
-                   }
+                    debugger;
+                    if(xhr.status==403){
+                        window.location.href = "/401"
+                    }
+                    if(xhr.status==200){
+                        window.location.href = "/mytasks/"
+                    }
                 }
-            });
-        });
-
-        $(".fail").click(function () {
-//            alert($(this).attr("data"));
-            if ($("#report").val() == '') {
-                alert("请填写测试报告！");
-                return;
-            }
-            $.get("/mytasks/"+$(this).attr("data")+"/fail", {report:$("#report").val()}, function (d) {
-                window.location.href = "/mytasks/"
             });
         });
 
@@ -536,6 +551,27 @@
 
     function cpTaskId(taskId) {
         $(".sure").attr("data", taskId);
+    }
+
+
+    function correct(taskId) {
+        $.get("/mytasks/correct", {task_id:taskId }, function (d) {
+            window.location.href = "/mytasks/"
+        });
+        $.ajax({
+            url: "/mytasks/correct",
+            type: "GET",
+            data: {task_id:taskId },
+            dataType: "json",
+            success: function(xml, textStatus, xhr) {
+                window.location.href = "/mytasks/"
+            },
+            complete: function(xhr, textStatus) {
+                if(xhr.status==403){
+                    window.location.href = "/401"
+                }
+            }
+        });
     }
 
     /* Formatting function for row details - modify as you need */

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.*;
@@ -100,6 +101,13 @@ public class MyTasksController {
         tes.add(tr);
         task.setTestReport(tes);
         taskservice.done(task, TaskStatus.FAIL);
+        return "success";
+    }
+    @PreAuthorize("not hasAuthority('ROLE_TEST')")
+    @GetMapping(value = "/correct")
+    public String correct(@PathParam(value = "task_id") Long task_id, String report, Principal principal) throws Exception {
+        Task task = taskservice.getOne(task_id);
+        taskservice.done(task, TaskStatus.TEST);
         return "success";
     }
 
