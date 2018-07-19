@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pool/**").hasRole("USER")
                 .antMatchers("/mytasks/**").hasRole("USER")
                 .antMatchers("/check/**").hasRole("OWNER")
-                .antMatchers("/tester/**").hasRole("TEST")
+                .antMatchers("/test/**").hasRole("TEST")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login-error")
                 .and()

@@ -43,7 +43,7 @@ public class TestPoolController {
     public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model) {
         model.addAttribute("taskList", taskservice.findByFinish(TaskStatus.CHECK));
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
-        return new ModelAndView("/tester/testPool", "taskModel", model);
+        return new ModelAndView("tester/testPool", "taskModel", model);
     }
 
     @RequestMapping(value = "/done", method = RequestMethod.GET)
