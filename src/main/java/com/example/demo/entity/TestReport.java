@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by liuyf on 2018/7/9.
@@ -24,6 +26,10 @@ public class TestReport {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User tester;
+
+    @CreatedDate
+    @Column
+    private Date cDate;//(columnDefinition = "COMMENT '任务创建时间'")
 
     public Long getTestReportId() {
         return testReportId;
@@ -63,5 +69,13 @@ public class TestReport {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Date getcDate() {
+        return cDate;
+    }
+
+    public void setcDate(Date cDate) {
+        this.cDate = cDate;
     }
 }

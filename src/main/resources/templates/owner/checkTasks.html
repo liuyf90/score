@@ -319,13 +319,13 @@
                             var id = '"' + row.id + '"';
                             var html = "";
                             if (data.finish == 0) {
-                                html += "<a href='javascript:void(0);'  onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myAssigned'  class='btn btn-primary check'  ><i class='fa fa-times'></i> 强派</a>"
+                                html += "<a href='javascript:void(0);'  onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myAssigned'  class='btn btn-primary check'  ><i class='fa fa-tasks'></i> 强派</a>"
                             }
                             if (data.finish == 2) {
-                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myCheck' class='btn btn-primary check'><i class='fa fa-arrow-up'></i> 审核</a>"
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myCheck' class='btn btn-primary check'><i class='fa fa-check'></i> 审核</a>"
                             }
                             if (data.finish == 0) {
-                                html += "<a href='javascript:void(0);' onclick='del(" + data.taskId + ")'   class='btn btn-primary check'><i class='fa fa-times'></i> 删除</a>"
+                                html += "<a href='javascript:void(0);' onclick='del(" + data.taskId + ")'   class='btn btn-danger check'><i class='fa fa-times'></i> 删除</a>"
                             }
                             return html;
                         }

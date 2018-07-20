@@ -84,6 +84,7 @@ public class MyTasksController {
         TestReport tr=new TestReport();
         tr.setTester(u);
         tr.setReport(report);
+        tr.setcDate(new Date());
         ArrayList<TestReport> tes=new ArrayList<>();
         tes.add(tr);
         task.setTestReport(tes);
@@ -106,6 +107,7 @@ public class MyTasksController {
         tr.setTester(u);
         tr.setReport(report);
         tr.setType(1);
+        tr.setcDate(new Date());
         ArrayList<TestReport> tes=new ArrayList<>();
         tes.add(tr);
         task.setTestReport(tes);

@@ -105,34 +105,42 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#">Home</a></li>
-                <li class="active">我的任务</li>
+                <li class="active"><a href="/mytasks/">我的任务</a></li>
+                <li class="active">测试报告</li>
             </ol>
 
         </div>
-        <div class="modal fade" th:fragment="editPasswd" id="passwordModal" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner">
+            <div class="col-md-12">
+                <!--    Bordered Table  -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        测试报告
                     </div>
-                    <div class="modal-body">
-                        <input type="text" class="form-control" id="passwd">
-
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
-                                data-dismiss="modal">Close
-                        </button>
-                        <button type="button" class="btn btn-primary surePasswd"
-                        >确认
-                        </button>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="table-responsive table-bordered">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th width="10%">#</th>
+                                    <th width="60%">测试报告</th>
+                                    <th width="40%">创建时间</th>
+                                </tr>
+                                </thead>
+                                <tbody class="result">
+                                <tr th:each="report,iterStat: ${taskModel.trList}">
+                                    <td th:text="${iterStat.index}+1">0</td>
+                                    <td th:text="${report.report}"></td>
+                                    <td th:text="${report.cDate!=null}?${#dates.format(report.cDate,'yyyy-MM-dd HH:mm')}:''"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                <!--  End  Bordered Table  -->
             </div>
         </div>
         <table class="table">
