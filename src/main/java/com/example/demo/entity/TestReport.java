@@ -27,7 +27,7 @@ public class TestReport {
     @JoinColumn(name = "user_id")
     private User tester;
 
-    @CreatedDate
+
     @Column
     private Date cDate;//(columnDefinition = "COMMENT '任务创建时间'")
 
