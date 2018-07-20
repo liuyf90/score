@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!--<head>-->
+<!--<title>Hello Spring Security</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
+<head th:include="owner/checkTasks::head"></head>
+<style>
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+</style>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:fragment="navbar-brand" class="navbar-brand" href="#"><strong><i class="icon fa fa-plane"></i>403组积分系统</strong></a>
+
+            <!--<div id="sideNav" href="">-->
+            <!--<i class="fa fa-bars icon"></i>-->
+
+            <!--</div>-->
+        </div>
+
+
+        <ul th:fragment="navbar" class="nav navbar-top-links navbar-right">
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#passwordModal"><i
+                                class="fa fa-sign-out fa-fw"></i> 修改密码</a>
+
+                    </li>
+                    <li>
+                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </form>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+
+                <li>
+                    <a href="index.html" th:href="@{/pool/}"><i class="fa fa-dashboard"></i> 任务池</a>
+                </li>
+                <li>
+                    <a class="active-menu" href="ui-elements.html" th:href="@{/mytasks/}"><i class="fa fa-desktop"></i>
+                        我的任务</a>
+                </li>
+                <li>
+                    <a href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-sitemap"></i> 任务审核</a>
+                </li>
+                <li>
+                    <a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>
+                </li>
+                <!--<li>-->
+                <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
+                <!--</li>-->
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                <div th:fragment="logout" sec:authorize="isAuthenticated()">
+                    登录用户: <span sec:authentication="principal.cname"></span> |
+                    用户角色: <span sec:authentication="principal.authorities"></span>
+
+                </div>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">我的任务</li>
+            </ol>
+
+        </div>
+        <div class="modal fade" th:fragment="editPasswd" id="passwordModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="passwd">
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-primary surePasswd"
+                        >确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <tr th:each="report,iterStat: ${taskModel.trList}">
+                <td th:text="${report.report}"></td>
+                <!--<td th:text="${task.typeName}"></td>-->
+                <!--<td th:text="${task.taskName}"></td>-->
+                <!--<td th:text="${task.cDate!=null}?${#dates.format(task.cDate,'yyyy-MM-dd HH:mm')}:''"></td>-->
+                <!--<td th:text="${task.project.projectName}"></td>-->
+                <!--<td th:text="${task.project.user.cname}"></td>-->
+            </tr>
+        </table>
+        <footer th:fragment="copyright">
+            <p>Copyright &copy; 2018.By liuyf
+            </p>
+        </footer>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+<div th:replace="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            $("#outfrom").submit();
+        });
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
+
+    })
+</script>
+<div th:replace="owner/checkTasks::js2"></div>
+</body>
+</html>

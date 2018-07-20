@@ -336,7 +336,10 @@
                             }
                             if (data.finish == 6) {
                                 html += "<a href='javascript:void(0);' onclick='correct(" + data.taskId + ")'   class='btn btn-primary '><i class='fa fa-arrow-up'></i> 改正</a>"
+                                html += "<a href='/mytasks/"+data.taskId+"/testReport'   class='btn btn-primary '><i class='fa fa-arrow-up'></i> 测试报告</a>"
+
                             }
+
 
                             return html;
                         }

@@ -54,6 +54,15 @@ public class MyTasksController {
 
     }
 
+    @RequestMapping(value = "/{id}/testReport", method = RequestMethod.GET)
+    public ModelAndView testReport(@PathVariable(value = "id", required = false) Long id, Model model, Principal principal) {
+        Task task=taskservice.getOne(id);
+        List<TestReport> list=task.getTestReport();
+        model.addAttribute("trList", list);
+        return new ModelAndView("user/testReport", "taskModel", model);
+
+    }
+
     @RequestMapping(value = "/done", method = RequestMethod.GET)
     public String done(@RequestParam(value = "task_id") Long task_id) throws Exception {
         Task task = taskservice.getOne(task_id);
@@ -132,6 +141,9 @@ public class MyTasksController {
         }
         return taskList;
     }
+
+
+
     @RequestMapping(value = "/getScore", method = RequestMethod.GET)
     public  List<Score> getScore(@RequestParam(value = "task_id") Long task_id, Model model, Principal principal, com.example.demo.entity.PageInfo<Task> pageInfo) {
         User u = userservice.getUser(principal.getName());
