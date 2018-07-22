@@ -58,36 +58,7 @@
         <ul th:replace="user/myTasks::navbar"></ul>
     </nav>
     <!--/. NAV TOP  -->
-    <nav class="navbar-default navbar-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav" id="main-menu">
-
-                <li>
-                    <a href="index.html" th:href="@{/pool/}"><i class="fa fa-dashboard"></i> 任务池</a>
-                </li>
-                <li>
-                    <a href="ui-elements.html" th:href="@{/mytasks/}"><i class="fa fa-desktop"></i> 我的任务</a>
-                </li>
-                <li>
-                    <a class="active-menu" href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-desktop"></i>
-                        任务审核</a>
-                </li>
-                <li>
-                    <a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>
-                </li>
-                <!--<li>-->
-                <!--<a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 任务测试</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->
-                <!--</li>-->
-
-
-            </ul>
-
-        </div>
-
-    </nav>
+    <nav th:replace="user/myTasks::ltree"></nav>
     <!-- /. NAV SIDE  -->
 
     <div id="page-wrapper">
@@ -277,6 +248,9 @@
 <script src="assets/js/dataTables/jquery.dataTables.js" th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
 <script src="assets/js/dataTables/dataTables.bootstrap.js"
         th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
+    <script src="myjs.js" th:inline="javascript"
+        th:src="@{/myjs.js}"></script>
+
 </div>
 <script type="text/javascript" th:inline="javascript">
     $(function () {

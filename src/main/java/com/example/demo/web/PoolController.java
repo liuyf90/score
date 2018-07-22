@@ -28,6 +28,7 @@ public class PoolController {
     public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model) {
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
         model.addAttribute("taskList", taskservice.findAll());
+        model.addAttribute("ltree", 1);
         return new ModelAndView("user/pool", "taskModel", model);
     }
     @RequestMapping("/pull")

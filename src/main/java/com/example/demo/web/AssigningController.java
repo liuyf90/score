@@ -53,6 +53,7 @@ public class AssigningController {
         type.put(TypeEnum.REPAIR.getIndex(),TypeEnum.REPAIR.getName());
         type.put(TypeEnum.BUSI.getIndex(),TypeEnum.BUSI.getName());
         model.addAttribute("types",type);
+        model.addAttribute("ltree", 3);
         return new ModelAndView("owner/assigning", "taskModel", model);
 
     }

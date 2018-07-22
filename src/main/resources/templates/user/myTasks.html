@@ -66,22 +66,22 @@
         </ul>
     </nav>
     <!--/. NAV TOP  -->
-    <nav class="navbar-default navbar-side" role="navigation">
+    <nav  th:fragment="ltree" class="navbar-default navbar-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="index.html" th:href="@{/pool/}"><i class="fa fa-dashboard"></i> 任务池</a>
+                    <a id="l1" name="ltree" th:data="${taskModel.ltree}" href="index.html" th:href="@{/pool/}"><i class="fa fa-dashboard"></i> 任务池</a>
                 </li>
                 <li>
-                    <a class="active-menu" href="ui-elements.html" th:href="@{/mytasks/}"><i class="fa fa-desktop"></i>
+                    <a id="l2" name="ltree"  class="" href="ui-elements.html" th:href="@{/mytasks/}"><i class="fa fa-desktop"></i>
                         我的任务</a>
                 </li>
                 <li>
-                    <a href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-sitemap"></i> 任务审核</a>
+                    <a id="l3" name="ltree" class="" href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-sitemap"></i> 任务审核</a>
                 </li>
                 <li>
-                    <a href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>
+                    <a id="l4" name="ltree" class="" href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>
                 </li>
                 <!--<li>-->
                 <!--<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>-->

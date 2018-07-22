@@ -37,6 +37,7 @@ public class TestPoolController {
         status.put(3, "已审核");
         status.put(4, "待测试");
         model.addAttribute("taskstatus", status);
+        model.addAttribute("ltree", 4);
     }
 
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)

@@ -43,6 +43,7 @@ public class CheckController {
         status.put(5,"通过");
         status.put(6,"失败");
         model.addAttribute("taskstatus",status);
+        model.addAttribute("ltree", 3);
     }
 
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)

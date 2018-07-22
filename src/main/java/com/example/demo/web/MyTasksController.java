@@ -40,6 +40,7 @@ public class MyTasksController {
         status.put(5,"通过");
         status.put(6,"失败");
         model.addAttribute("taskstatus",status);
+        model.addAttribute("ltree", 2);
     }
 
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
