@@ -238,18 +238,20 @@
 <!-- JS Scripts-->
 <!-- jQuery Js -->
 <div th:fragment="js1">
-<script src="assets/js/jquery-1.10.2.js" th:src="@{/assets/js/jquery-1.10.2.js}"></script>
-<!-- Bootstrap Js -->
-<script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
-<script src="../../static/assets/js/jquery.jedate.js" th:src="@{/assets/js/jquery.jedate.js}"></script>
-<!-- Metis Menu Js -->
-<script src="assets/js/jquery.metisMenu.js" th:src="@{/assets/js/jquery.metisMenu.js}"></script>
-<!-- DATA TABLE SCRIPTS -->
-<script src="assets/js/dataTables/jquery.dataTables.js" th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
-<script src="assets/js/dataTables/dataTables.bootstrap.js"
-        th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
+    <script src="assets/js/jquery-1.10.2.js" th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <script src="../../static/assets/js/jquery.jedate.js" th:src="@{/assets/js/jquery.jedate.js}"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js" th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="assets/js/dataTables/jquery.dataTables.js"
+            th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"
+            th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
     <script src="myjs.js" th:inline="javascript"
-        th:src="@{/myjs.js}"></script>
+            th:src="@{/myjs.js}"></script>
+    <script src="echarts.js" th:src="@{/echarts.js}"></script>
 
 </div>
 <script type="text/javascript" th:inline="javascript">
@@ -271,8 +273,8 @@
                 order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
                 renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
                 pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
-                createdRow: function ( row, data, index ) {
-                    if ( data.istimeOut) {
+                createdRow: function (row, data, index) {
+                    if (data.istimeOut) {
                         $(row).addClass('warning');
                     }
                     var i = t.page() * t.page.len() + index + 1;
@@ -386,12 +388,12 @@
                             debugger;
                             console.log("data" + data);
                             if (data.length > 0 && type === 'display' || type === 'filter') {
-                                var d='';
+                                var d = '';
                                 for (var index = 0; index < data.length; index++) {
                                     debugger;
-                                    d+=data[index]+',';
+                                    d += data[index] + ',';
                                 }
-                                d=d.substring(0,d.length-1);
+                                d = d.substring(0, d.length - 1);
                                 return d;
                             }
                             return '';
@@ -447,16 +449,20 @@
         //自定义格式选择
         $("#enddate").jeDate({
             format: "YYYY-MM-DD hh:mm:ss",
-            minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
-            maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)})
+            minDate: $.nowDate({DD: 0}),//0代表今天，-1代表昨天，-2代表前天，以此类推
+            maxDate: $.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)})
         });
         $(".sure2").click(function () {
-            if($("#enddate").val()==''){
+            if ($("#enddate").val() == '') {
                 alert("请填写结束日期！");
                 return;
             }
             var userid = $('input:radio[name="radio1"]:checked').attr("data");
-            $.get("/check/assigned", {user_id: userid, task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
+            $.get("/check/assigned", {
+                user_id: userid,
+                task_id: $(this).attr("data"),
+                eDate: $("#enddate").val()
+            }, function (d) {
                 window.location.href = "/check/"
             });
         });
@@ -524,19 +530,19 @@
 
 </script>
 <div th:fragment="js2">
-<!-- Morris Chart Js -->
-<script src="assets/js/morris/raphael-2.1.0.min.js" th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
-<script src="assets/js/morris/morris.js" th:src="@{/assets/js/morris/morris.js}"></script>
-<script src="assets/js/easypiechart.js" th:src="@{/assets/js/easypiechart.js}"></script>
-<script src="assets/js/easypiechart-data.js" th:src="@{/assets/js/easypiechart-data.js}"></script>
-<script src="assets/js/Lightweight-Chart/jquery.chart.js"
-        th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+    <!-- Morris Chart Js -->
+    <script src="assets/js/morris/raphael-2.1.0.min.js" th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script src="assets/js/morris/morris.js" th:src="@{/assets/js/morris/morris.js}"></script>
+    <script src="assets/js/easypiechart.js" th:src="@{/assets/js/easypiechart.js}"></script>
+    <script src="assets/js/easypiechart-data.js" th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script src="assets/js/Lightweight-Chart/jquery.chart.js"
+            th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
 
-<!-- Custom Js -->
-<script src="assets/js/custom-scripts.js" th:src="@{/assets/js/custom-scripts.js}"></script>
-<!-- Chart Js -->
-<script type="text/javascript" src="assets/js/Chart.min.js" th:src="@{/assets/js/Chart.min.js}"></script>
-<script type="text/javascript" src="assets/js/chartjs.js" th:src="@{/assets/js/chartjs.js}"></script>
+    <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js" th:src="@{/assets/js/custom-scripts.js}"></script>
+    <!-- Chart Js -->
+    <script type="text/javascript" src="assets/js/Chart.min.js" th:src="@{/assets/js/Chart.min.js}"></script>
+    <script type="text/javascript" src="assets/js/chartjs.js" th:src="@{/assets/js/chartjs.js}"></script>
 </div>
 </body>
 </html>

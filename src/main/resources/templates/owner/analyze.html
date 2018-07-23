@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="owner/checkTasks::head"></head>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:replace="user/myTasks::navbar-brand"></a>
+            <!--<div id="sideNav" href="">-->
+            <!--<i class="fa fa-bars icon"></i>-->
+
+            <!--</div>-->
+        </div>
+
+
+        <ul th:replace="user/myTasks::navbar"></ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    </nav>  <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                <div th:fragment="logout" sec:authorize="isAuthenticated()">
+                    登录用户: <span sec:authentication="principal.cname"></span> |
+                    用户角色: <span sec:authentication="principal.authorities"></span>
+
+                </div>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">数据分析</li>
+            </ol>
+
+        </div>
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner" style="height: 1000px">
+
+            <div id="container" style="height: 100%"></div>
+        </div>
+
+
+        <foot th:include="user/myTasks::copyright"></foot>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<div th:replace ="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    app.title = '任务总量 - 条形图';
+
+    option = {
+        title: {
+            text: '任务总量',
+            subtext: '总-分'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['已办', '办结']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            type: 'category',
+            data: ['巴西','印尼','美国','印度','中国','世界人口(万)']
+        },
+        series: [
+            {
+                name: '2011年',
+                type: 'bar',
+                data: [18203, 23489, 29034, 104970, 131744, 630230]
+            },
+            {
+                name: '2012年',
+                type: 'bar',
+                data: [19325, 23438, 31000, 121594, 134141, 681807]
+            }
+        ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+</script>
+<div th:replace ="owner/checkTasks::js2"></div>
+
+
+
+</body>
+</html>
