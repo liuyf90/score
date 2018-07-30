@@ -28,7 +28,10 @@ public class AssigningController {
     private TaskService taskservice;
     @Autowired
     private ProjectService projectService;
-
+    @ModelAttribute
+    public void myModel(Model model,Principal principal){
+        model.addAttribute("ltree", 3);
+    }
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public ModelAndView init(@ModelAttribute("taskInfo")  Task task, Model model, Principal principal) {
         User user= userservice.getUser(principal.getName());
@@ -53,7 +56,6 @@ public class AssigningController {
         type.put(TypeEnum.REPAIR.getIndex(),TypeEnum.REPAIR.getName());
         type.put(TypeEnum.BUSI.getIndex(),TypeEnum.BUSI.getName());
         model.addAttribute("types",type);
-        model.addAttribute("ltree", 3);
         return new ModelAndView("owner/assigning", "taskModel", model);
 
     }
