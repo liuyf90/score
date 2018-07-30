@@ -55,7 +55,7 @@ public class AnalyzeController{
                 Iterator<TaskUser> taskUserIterator=t.iterator();
                 while(taskUserIterator.hasNext()){
                     TaskUser taskUser=taskUserIterator.next();
-                    if((taskUser.getTask().getFinish()!=TaskStatus.PASS.getIndex())){
+                    if((taskUser.getTask().getFinish()!=TaskStatus.PASS.getIndex())&& (taskUser.getTask().getFinish()!=TaskStatus.CHECK.getIndex())){
                         taskUserIterator.remove();
                     }
                 }
