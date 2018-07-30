@@ -37,7 +37,7 @@ public class User implements UserDetails, Serializable {
 			inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"))
 	private List<Task>  tasks;
 
-
+	private int taskCount;
 
 	public List<Task> getTasks() {
 		return tasks;
@@ -103,5 +103,13 @@ public class User implements UserDetails, Serializable {
 
 	public void setCname(String cname) {
 		this.cname = cname;
+	}
+
+	public int getTaskCount() {
+		return taskCount;
+	}
+
+	public void setTaskCount(int taskCount) {
+		this.taskCount = taskCount;
 	}
 }

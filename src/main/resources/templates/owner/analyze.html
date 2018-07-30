@@ -59,6 +59,7 @@
 </div>
 <div th:replace ="owner/checkTasks::js1"></div>
 <script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
     var dom = document.getElementById("container");
     var myChart = echarts.init(dom);
     var app = {};
@@ -91,18 +92,18 @@
         },
         yAxis: {
             type: 'category',
-            data: ['巴西','印尼','美国','印度','中国','世界人口(万)']
+            data: [[${taskModel.users}]]
         },
         series: [
             {
-                name: '2011年',
+                name: '已办',
                 type: 'bar',
-                data: [18203, 23489, 29034, 104970, 131744, 630230]
+                data: [[${taskModel.taskCount}]]
             },
             {
-                name: '2012年',
+                name: '办结',
                 type: 'bar',
-                data: [19325, 23438, 31000, 121594, 134141, 681807]
+                data: [[${taskModel.taskCount}]]
             }
         ]
     };
@@ -110,6 +111,7 @@
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
     }
+    //]]>
 </script>
 <div th:replace ="owner/checkTasks::js2"></div>
 
