@@ -47,9 +47,42 @@
 
         </div>
         <div th:replace="user/myTasks::editPasswd"></div>
-        <div id="page-inner" style="height: 1000px">
+        <div id="page-inner" >
+            <div class="col-md-12" style="height: 1000px">
+                <!--    Bordered Table  -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        查询条件
+                    </div>
+                    <div class="panel-body">
+                        <form th:action="@{/analyze/query/}" method="get">
+                            <div class="form-group col-xs-6">
+                                <label for="bbdate">时间（起）</label>
+                                <input type="text" class="jeinput" id="bbdate" name="bbdate"
+                                       placeholder="YYYY年MM月DD日">
+                            </div>
 
-            <div id="container" style="height: 100%"></div>
+                            <div class="form-group col-xs-6">
+                                <label for="bedate">时间（止）</label>
+                                <input type="text" class="jeinput" id="bedate" name="bedate"
+                                       placeholder="YYYY年MM月DD日">
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-10 col-sm-2">
+                                    <!--<button class="form-control btn btn-default query">查询-->
+                                    <input type="submit" class="form-control btn btn-default" value="查询"/>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+                </div>
+                <div id="container" style="height: 100%"></div>
+            </div>
+
         </div>
 
 
@@ -112,6 +145,16 @@
         myChart.setOption(option, true);
     }
     //]]>
+    $(function () {
+        //自定义格式选择t
+        $("#bbdate").jeDate({
+            format: "YYYY-MM-DD"
+        });
+
+        $("#bedate").jeDate({
+            format: "YYYY-MM-DD"
+        });
+    });
 </script>
 <div th:replace ="owner/checkTasks::js2"></div>
 

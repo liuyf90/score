@@ -4,6 +4,7 @@ import com.example.demo.dao.TaskRepository;
 import com.example.demo.dao.TaskUserRepository;
 import com.example.demo.dao.UserRepository;
 import com.example.demo.entity.*;
+import com.example.demo.service.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,7 +27,7 @@ public class AnalyzeController{
     @Autowired
     private TaskUserRepository taskUserRepository;
     @Autowired
-    private TaskRepository taskRepository;
+    private ITaskService taskService;
         @RequestMapping(value = {"/"}, method = RequestMethod.GET)
         public ModelAndView init(@ModelAttribute("taskInfo") Task task, Model model, Principal principal) {
             model.addAttribute("ltree", 5);
@@ -50,13 +51,13 @@ public class AnalyzeController{
             int[] taskCount=new int[userList.size()];
             int[] taskFinallyCount=new int[userList.size()];
             for(int i=0;i<=userList.size()-1;i++){
-                List<TaskUser> t=taskUserRepository.findByUserId(userList.get(i).getId());
+                List<Task> t=taskService.searchTaskByUserAndDate(userList.get(i).getId(),task.getBbdate(),task.getBedate());
                 taskCount[i]=t.size();
-                Iterator<TaskUser> taskUserIterator=t.iterator();
-                while(taskUserIterator.hasNext()){
-                    TaskUser taskUser=taskUserIterator.next();
-                    if((taskUser.getTask().getFinish()!=TaskStatus.PASS.getIndex())&& (taskUser.getTask().getFinish()!=TaskStatus.CHECK.getIndex())){
-                        taskUserIterator.remove();
+                Iterator<Task> taskIterator=t.iterator();
+                while(taskIterator.hasNext()){
+                    Task task1=taskIterator.next();
+                    if((task1.getFinish()!=TaskStatus.PASS.getIndex())&& (task1.getFinish()!=TaskStatus.CHECK.getIndex())){
+                        taskIterator.remove();
                     }
                 }
                 taskFinallyCount[i]=t.size();
@@ -66,4 +67,46 @@ public class AnalyzeController{
             model.addAttribute("taskFinallyCount",taskFinallyCount);
             return new ModelAndView("owner/analyze", "taskModel", model);
         }
+
+    @RequestMapping(value = {"/query"}, method = RequestMethod.GET)
+    public ModelAndView query(@ModelAttribute("taskInfo")  Task task, Model model, Principal principal) {
+        model.addAttribute("ltree", 5);
+        List<User> userList=userRepository.findAll();
+        Iterator<User> userIterator=userList.iterator();
+        while(userIterator.hasNext()){
+            List<Role> roles=(List<Role>)userIterator.next().getAuthorities();
+            Iterator<Role> iterator=roles.iterator();
+            while(iterator.hasNext()){
+                if(iterator.next().getAuthority().equals("ROLE_ADMIN")){
+                    userIterator.remove();
+                    break;
+                }
+            }
+        }
+        String[] users=new String[userList.size()];
+        for(int i=0;i<=userList.size()-1;i++){
+            users[i]=userList.get(i).getCname();
+        }
+        model.addAttribute("users",users);
+
+        int[] taskCount=new int[userList.size()];
+        int[] taskFinallyCount=new int[userList.size()];
+        for(int i=0;i<=userList.size()-1;i++){
+            List<Task> t=taskService.searchTaskByUserAndDate(userList.get(i).getId(),task.getBbdate(),task.getBedate());
+            taskCount[i]=t.size();
+            Iterator<Task> taskIterator=t.iterator();
+            while(taskIterator.hasNext()){
+                Task task1=taskIterator.next();
+                if((task1.getFinish()!=TaskStatus.PASS.getIndex())&& (task1.getFinish()!=TaskStatus.CHECK.getIndex())){
+                    taskIterator.remove();
+                }
+            }
+            taskFinallyCount[i]=t.size();
+        }
+
+        model.addAttribute("taskCount",taskCount);
+        model.addAttribute("taskFinallyCount",taskFinallyCount);
+        return new ModelAndView("owner/analyze", "taskModel", model);
+
+    }
 }

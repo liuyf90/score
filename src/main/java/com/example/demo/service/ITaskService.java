@@ -5,6 +5,7 @@ import com.example.demo.entity.Task;
 import com.example.demo.entity.TaskStatus;
 import org.springframework.data.domain.Page;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ public interface ITaskService extends IService<Task>,IAction {
      Page<Task> findSearchForOwnerId(long owner_id, Task model, com.example.demo.entity.PageInfo pageInfo) ;
      void del(long task_id);
      List<Task> findByFinish(TaskStatus taskStatus);
+     List<Task> searchTaskByUserAndDate(long user_id, Date bdate, Date eDate);
 }

@@ -297,4 +297,28 @@ public class TaskService extends ActionAdapter implements ITaskService {
     public List<Task> findByFinish(TaskStatus taskStatus) {
         return this.taskRepository.findByFinishAndType(taskStatus.getIndex(), TypeEnum.CODE.getIndex());
     }
+
+    @Override
+    public List<Task> searchTaskByUserAndDate(long user_id, Date bdate, Date eDate) {
+        List<Task> result = taskRepository.findAll(new Specification<Task>() {
+            @Override
+            public Predicate toPredicate(Root<Task> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Join<Task, TaskUser> userJoin = root.join("receivers", JoinType.LEFT);
+                List<Predicate> predicates = new ArrayList<>();
+                predicates.add(cb.equal(userJoin.get("user"), user_id));
+                if (!StringUtils.isEmpty(bdate)) {
+                    //大于或等于传入时间
+                    predicates.add(cb.greaterThanOrEqualTo(root.get("bDate").as(Date.class),bdate));
+                }
+                if (!StringUtils.isEmpty(eDate)) {
+                    //小于或等于传入时间
+                    predicates.add(cb.lessThanOrEqualTo(root.get("bDate").as(Date.class), eDate));
+                }
+                Predicate[] p = new Predicate[predicates.size()];
+                return cb.and(predicates.toArray(p));
+            }
+        });
+        return result;
+    }
+
 }
