@@ -12,6 +12,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
 #    url: jdbc:mysql://60.219.169.118:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
+#    url: jdbc:mysql://192.168.56.101:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8
     url: jdbc:mysql://localhost:3306/score?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false
     username: root
 #    password: root,123456

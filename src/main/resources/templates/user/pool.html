@@ -94,7 +94,9 @@
                                                     </div>
                                                     <div class="modal-body">
 
-
+                                                        <label for="begindate">开始时间:</label>
+                                                        <input type="text" class="jeinput" id="begindate"
+                                                               placeholder="YYYY年MM月DD日">-
                                                         <label for="enddate">完成时间:</label>
                                                         <input type="text" class="jeinput" id="enddate"
                                                                placeholder="YYYY年MM月DD日">
@@ -145,12 +147,21 @@
                 alert("请填写结束日期！");
                 return;
             }
-            $.get("/pool/pull", {task_id: $(this).attr("data"), eDate: $("#enddate").val()}, function (d) {
+            $.get("/pool/pull", {task_id: $(this).attr("data"), eDate: $("#enddate").val(),bDate: $("#begindate").val()}, function (d) {
                 window.location.href = "/pool/"
             });
         });
         //自定义格式选择
         $("#enddate").jeDate({
+
+            minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
+            maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)}),
+            initDate:[{hh:18,mm:00,ss:00},false],
+            isinitVal:true,
+            format: "YYYY-MM-DD hh:mm:ss"
+        });
+        //自定义格式选择
+        $("#begindate").jeDate({
 
             minDate: $.nowDate({DD:0}) ,//0代表今天，-1代表昨天，-2代表前天，以此类推
             maxDate:$.nowDate({DD:+(7-$.getLunar($.nowDate({DD:0}),'YYYY-MM-DD').nWeek)}),

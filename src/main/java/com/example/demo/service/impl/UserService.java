@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService, IUserServer {
     }
 
     public User getOne(Long id){
-        return userRepository.getOne(id);
+        return userRepository.findOne(id);
     }
 
     @Override

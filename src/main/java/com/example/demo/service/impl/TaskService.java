@@ -239,6 +239,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
     public void done(Task task, TaskStatus taskStatus) throws Exception {
         super.done(task, taskStatus);
         taskRepository.flush();
+        task=taskRepository.findOne(task.getTaskId());
         Iterator<TaskUser> it=task.getReceivers().iterator();
         switch (taskStatus.getIndex()) {
             case 3:

@@ -24,6 +24,7 @@ public class PoolController {
     private TaskService taskservice;
     @Autowired
     private UserService userservice;
+
     @RequestMapping(value = {"/", "/{id}"}, method = RequestMethod.GET)
     public ModelAndView init(@PathVariable(value = "id", required = false) Long id, Model model) {
         model.addAttribute("task", id != null ? taskservice.getOne(id) : null);
@@ -31,17 +32,21 @@ public class PoolController {
         model.addAttribute("ltree", 1);
         return new ModelAndView("user/pool", "taskModel", model);
     }
+
     @RequestMapping("/pull")
-    public String pull(@RequestParam(value = "task_id") Long task_id, @RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Date eDate, Model model, Principal principal) throws Exception{
+    public String pull(@RequestParam(value = "task_id") Long task_id, @RequestParam(value = "eDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date eDate, @RequestParam(value = "bDate") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date bDate, Model model, Principal principal) throws Exception {
         Task t = taskservice.getOne(task_id);
-        Date day=new Date();
-        t.setbDate(day);
+        if(bDate==null) {
+            Date day = new Date();
+            t.setbDate(day);
+        }
+        t.setbDate(bDate);
         t.seteDate(eDate);
         Set<TaskUser> users = new HashSet<>();
-        TaskUser taskUser=new TaskUser();
+        TaskUser taskUser = new TaskUser();
         taskUser.setUser(userservice.getUser(principal.getName()));
         taskUser.setTask(t);
-        taskservice.pull(t,taskUser,userservice.getUser(principal.getName()));
+        taskservice.pull(t, taskUser, userservice.getUser(principal.getName()));
         return "success";
     }
 }

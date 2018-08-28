@@ -6,6 +6,7 @@ import com.example.demo.service.impl.ScoreService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 
+import com.sun.javafx.scene.control.skin.TooltipSkin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -61,7 +62,7 @@ public class CheckController {
     @RequestMapping(value = "/assigned", method = RequestMethod.GET)
     public String assigned(@RequestParam(value = "user_id") Long user_id,@RequestParam(value = "task_id") Long task_id,@RequestParam(value = "eDate")@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss") Date eDate) throws Exception{
         Task task=taskservice.getOne(task_id);
-        User user= userservice.getOne(user_id);
+        User user=userservice.getOne(user_id);
         Set<TaskUser> users=new HashSet<>();
 
         TaskUser taskUser=new TaskUser();
