@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="owner/checkTasks::head"></head>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:replace="user/myTasks::navbar-brand"></a>
+            <div id="sideNav" href="">
+                <i class="fa fa-bars icon"></i>
+
+            </div>
+        </div>
+
+
+        <ul th:replace="user/myTasks::navbar"></ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    </nav>
+    <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                数据分析
+                <small>统计分析.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">数据分析</li>
+            </ol>
+        </div>
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12" style="height: 1000px">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            查询条件
+                        </div>
+                        <div class="panel-body">
+                            <form th:action="@{/analyze/query/}" method="get">
+                                <input type="hidden" class="jeinput" id="bbdate" name="bbdate" style="display:none"/>
+                                <input type="hidden" class="jeinput" id="bedate" name="bedate" style="display:none"/>
+                                <div class="form-group col-xs-12" >
+                                    <label for="seldate">领取时间（范围）</label>
+                                    <input type="text" class="jeinput" id="seldate"
+                                           placeholder="YYYY年MM月DD日">
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-10 col-sm-2">
+                                        <!--<button class="form-control btn btn-default query">查询-->
+                                        <input type="submit" class="form-control btn btn-default" value="查询"/>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                    <div id="container" style="height: 50%"></div>
+                    <div id="container1" style="height: 50%"></div>
+                </div>
+
+            </div>
+            <foot class="text-center" th:include="user/myTasks::copyright"></foot>
+        </div>
+
+
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<div th:replace="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    //<![CDATA[
+    var dom = document.getElementById("container");
+    var dom1=document.getElementById("container1");
+    var myChart = echarts.init(dom);
+    var myChart1 = echarts.init(dom1);
+    var app = {};
+    option = null;
+    app.title = '任务总量 - 条形图';
+
+    option = {
+        title: {
+            text: '任务总量',
+            subtext: '总-分'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['已办', '办结']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+            type: 'category',
+            data: [[${taskModel.users}]]
+        },
+        series: [
+            {
+                name: '已办',
+                type: 'bar',
+                data: [[${taskModel.taskCount}]]
+            },
+            {
+                name: '办结',
+                type: 'bar',
+                data: [[${taskModel.taskFinallyCount}]]
+            }
+        ]
+    };
+
+    option1 = {
+        title : {
+            text: '工作饱满度',
+            subtext: '（总工时/时间跨度）*100%'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+//                data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                data : [[${taskModel.users}]]
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'饱满度',
+                type:'bar',
+                data:[[${taskModel.fullness}]],
+                markLine : {
+                    data : [
+                        {type : 'average', name : '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+        myChart1.setOption(option1, true);
+    }
+    //]]>
+    $(function () {
+        //自定义格式选择t
+        laydate.render({
+            elem: '#seldate', //指定元素
+            type: 'datetime',
+            range: true,
+            done: function(value, date, endDate){
+
+
+            },
+            change: function(value, date, endDate){
+                $("#bbdate").val(date['year']+"-"+date['month']+"-"+date['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+                $("#bedate").val(endDate['year']+"-"+endDate['month']+"-"+endDate['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+            }
+        });
+    });
+</script>
+<div th:replace="owner/checkTasks::js2"></div>
+
+
+</body>
+</html>

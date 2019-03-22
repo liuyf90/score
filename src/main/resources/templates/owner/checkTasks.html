@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!--<head>-->
+<!--<title>Hello Spring Security</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="" name="description"/>
+    <meta content="webthemez" name="author"/>
+    <title>403积分系统</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" th:href="@{/assets/css/bootstrap.css}"/>
+    <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" th:href="@{/assets/css/font-awesome.css}"/>
+    <!-- Morris Chart Styles-->
+    <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet"
+          th:href="@{/assets/js/morris/morris-0.4.3.min.css}"/>
+    <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" th:href="@{/assets/css/custom-styles.css}"/>
+    <!-- Google Fonts-->
+    <!--<link href="http://fonts.useso.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>-->
+    <link rel="stylesheet" href="assets/js/Lightweight-Chart/cssCharts.css"
+          th:href="@{/assets/js/Lightweight-Chart/cssCharts.css}"/>
+    <link href="../../static/css/jeDate-test.css" rel="stylesheet" th:href="@{/assets/css/jeDate-test.css}"/>
+    <link href="../../static/css/jedate.css" rel="stylesheet" th:href="@{/assets/css/jedate.css}"/>
+    <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css"
+          th:href="@{/assets/js/dataTables/dataTables.bootstrap.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:replace="user/myTasks::navbar-brand"></a>
+
+            <div id="sideNav" href="">
+                <i class="fa fa-bars icon"></i>
+
+            </div>
+        </div>
+
+
+        <ul th:replace="user/myTasks::navbar"></ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <div th:replace="user/myTasks::editPasswd"></div>
+            <h1 class="page-header">
+                任务审核
+                <small>任务管理.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">任务审核</li>
+            </ol>
+
+
+        </div>
+
+
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            查询条件
+                        </div>
+                        <div class="panel-body">
+                            <form th:action="@{/check/query/}" method="get">
+                                <input type="hidden" class="jeinput" id="bbdate" name="bbdate" style="display:none"/>
+                                <input type="hidden" class="jeinput" id="bedate" name="bedate" style="display:none"/>
+                                <div class="form-group col-xs-12" >
+                                    <label for="seldate">领取时间（范围）</label>
+                                    <input type="text" class="jeinput" id="seldate"
+                                           placeholder="YYYY年MM月DD日">
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label for="taskName">任务名称</label>
+                                    <input  type="text" class="form-control" id="taskName" name="taskName">
+                                </div>
+                                <div  class="form-group col-xs-6"><!--th:if="${taskModel.ROLE_ADMIN}"-->
+                                    <label for="receiverId">领取人</label>
+                                    <select class="selectbox" id="receiverId" name="receiverId" class="form-control">
+                                        <option value="-1">-全选-</option>
+                                        <option th:each="st: ${taskModel.users}" th:value="${st.id}"
+                                                th:text="${st.cname}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label for="status">任务状态</label>
+                                    <select class="selectbox" id="status" name="status" class="form-control">
+                                        <option value="-1">-全选-</option>
+                                        <option th:each="st: ${taskModel.taskstatus}" th:value="${st.key}"
+                                                th:text="${st.value}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-10 col-sm-2">
+                                        <!--<button class="form-control btn btn-default query">查询-->
+                                        <input type="button"  class="form-control btn btn-default query" value="查询"/>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div th:if="${taskModel.task!=null}" th:include="user/taskDetail::detail"></div>
+
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            审核列表
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-sm-2">
+                                    <button class="form-control btn btn-default add">新增</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example"
+                                       cellspacing="0" width="100%">
+                                    <!--<table class="display" id="dataTables-example"  cellspacing="0" width="100%">-->
+                                    <thead>
+                                    <tr>
+                                        <th width="1%">#</th>
+                                        <th width="7%">项目名称</th>
+                                        <th width="9%">任务名称</th>
+                                        <th width="9%">任务分类</th>
+                                        <th width="17%">描述</th>
+                                        <th width="8%">接受时间</th>
+                                        <th width="8%">截止时间</th>
+                                        <th width="8%">提交时间</th>
+                                        <th width="8%">领取人</th>
+                                        <th width="8%">任务创建人</th>
+                                        <th width="8%">状态</th>
+                                        <th width="8%">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <div class="modal fade" id="myCheck" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel">请确认</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3>请仔细检查是否完成</h3>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary sure">确认
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary sure fail">退回
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="myAssigned" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel">请确认</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3>请选择任务责任人</h3>
+                                                    <div class="radio3" th:each="user : ${taskModel.users}">
+                                                        <input type="radio" id="radio2" name="radio1"
+                                                               value="option2" th:data="${user.id}">
+                                                        <label for="radio2" th:text="${user.cname}">
+                                                        </label>
+                                                    </div>
+                                                    <label for="datescope">时间范围:</label>
+                                                    <input type="text" class="jeinput" id="datescope"
+                                                           placeholder="YYYY年MM月DD日">
+                                                    <!--<label for="begindate">开始时间:</label>-->
+                                                    <input type="hidden" class="jeinput" id="begindate"
+                                                           placeholder="YYYY年MM月DD日">
+                                                    <!--<label for="enddate">完成时间:</label>-->
+                                                    <input type="hidden" class="jeinput" id="enddate"
+                                                           placeholder="YYYY年MM月DD日">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary sure2">确认
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  End  Bordered Table  -->
+                </div>
+                <footer class="text-center" th:fragment="copyright">
+                    <p>Copyright &copy; 2018.By liuyf
+                    </p>
+                </footer>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+<div th:fragment="js1">
+
+    <script src="assets/js/jquery-1.10.2.js" th:src="@{/assets/js/jquery-1.10.2.js}"></script>
+    <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js" th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <!--<script src="../../static/assets/js/jquery.jedate.js" th:src="@{/assets/js/jquery.jedate.js}"></script>-->
+    <script src="../../static/assets/laydate/laydate.js" th:src="@{/assets/laydate/laydate.js}"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js" th:src="@{/assets/js/jquery.metisMenu.js}"></script>
+    <!-- DATA TABLE SCRIPTS -->
+    <script src="assets/js/dataTables/jquery.dataTables.js"
+            th:src="@{/assets/js/dataTables/jquery.dataTables.js}"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"
+            th:src="@{/assets/js/dataTables/dataTables.bootstrap.js}"></script>
+    <script src="myjs.js" th:inline="javascript"
+            th:src="@{/myjs.js}"></script>
+    <script src="echarts.js" th:src="@{/echarts.js}"></script>
+    <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js" th:src="@{/assets/js/custom-scripts.js}"></script>
+
+
+</div>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            $("#outfrom").submit();
+        });
+        var t = $('#dataTables-example').dataTable(
+            {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                },
+                autoWidth: false,  //禁用自动调整列宽
+                stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+                processing: true,  //隐藏加载提示,自行处理
+                serverSide: true,  //启用服务器端分页
+                searching: false,  //禁用原生搜索
+                orderMulti: false,  //启用多列排序
+                order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+                renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+                pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+                createdRow: function (row, data, index) {
+                    if (data.istimeOut) {
+                        $(row).addClass('warning');
+                    }
+                    var i = t.page() * t.page.len() + index + 1;
+                    $('td:eq(0)', row).html("<span class='row-details row-details-close' data_id='" + data["taskId"] + "'></span>&nbsp;" + i);
+                    $(row).attr("data_id", data["taskId"]);
+                },
+                columnDefs: [{
+                    "targets": 'nosort',  //列的样式名
+                    "orderable": false,  //包含上样式名‘nosort’的禁止排序
+                    "searchable": false
+                },
+
+                    {
+                        "targets": 11,//按钮目标列
+                        "data": null,
+                        "render": function (data, type, row) {
+                            debugger;
+                            var id = '"' + row.id + '"';
+                            var html = "";
+                            if (data.finish == 0) {
+                                html += "<a href='javascript:void(0);'  onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myAssigned'  class='btn btn-primary check'  ><i class='fa fa-tasks'></i> 强派</a>"
+                            }
+                            if (data.finish == 2) {
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myCheck' class='btn btn-primary check'><i class='fa fa-check'></i> 审核</a>"
+                            }
+                            if (data.finish == 0) {
+                                html += "<a href='javascript:void(0);' onclick='del(" + data.taskId + ")'   class='btn btn-danger check'><i class='fa fa-times'></i> 删除</a>"
+                            }
+
+                            if (data.finish==1) {
+                                html += "<a href='javascript:void(0);' onclick='upd(" + data.taskId + ")'   class='btn btn-success upd'><i class='fa fa-edit'></i> 修改</a>"
+                            }
+
+
+                            return html;
+                        }
+                    }],
+
+                ajax: function (data, callback, settings) {
+                    //封装请求参数
+                    var param = {};
+                    param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                    param.start = data.start;//开始的记录序号
+                    param.page = (data.start / data.length) + 1;//当前页码;
+                    param.bbdate = $("#bbdate").val();
+                    param.bedate = $("#bedate").val();
+                    param.status = $("#status").val();
+                    param.receiverId=$("#receiverId").val();
+                    param.taskName=$("#taskName").val();
+                    //ajax请求数据
+                    $.ajax({
+                        type: "GET",
+                        url: "/check/query",
+                        cache: false,  //禁用缓存
+                        data: param,  //传入组装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            console.log("result" + result);
+                            //setTimeout仅为测试延迟效果
+                            setTimeout(function () {
+                                //封装返回数据
+                                var returnData = {};
+                                returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                                returnData.recordsTotal = result.totalElements;//返回数据全部记录
+                                returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                                returnData.data = result.content;//返回的数据列表
+//                                console.log(returnData);
+                                //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                                //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                                callback(returnData);
+                            }, 200);
+                        }
+                    });
+                },
+                //列表表头字段
+                columns: [
+                    {"data": "", "defaultContent": ""},
+                    {"data": "project.projectName", "defaultContent": ""},
+                    {"data": "taskName", "defaultContent": ""},
+                    {"data": "typeName"},
+                    {"data": "remark", "defaultContent": ""},
+                    {
+                        "data": "bDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "eDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "fDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "receiversByUser",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            debugger;
+                            console.log("data" + data);
+                            if (data.length > 0 && type === 'display' || type === 'filter') {
+                                var d = '';
+                                for (var index = 0; index < data.length; index++) {
+                                    debugger;
+                                    d += data[index] + ',';
+                                }
+                                d = d.substring(0, d.length - 1);
+                                return d;
+                            }
+                            return '';
+                        }
+                    },
+                    {"data": "user.cname", "defaultContent": ""},
+                    {"data": "finishName", "defaultContent": ""},
+
+                ]
+
+            }).api();
+//        t.on('order.dt search.dt draw.dt',
+//            function () {
+//                t.column(0, {
+//                    search: 'applied',
+//                    order: 'applied'
+//                }).nodes().each(function (cell, i) {
+//                    //     alert( t.page());
+////                    alert(t.param.draw);
+//                    cell.innerHTML = t.page() * t.page.len() + i + 1;
+//                });
+//            }).draw();
+
+        //给行绑定选中事件
+        t.on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            var row = t.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                tr.removeClass('info');
+            }
+            else {
+                t.$('tr.info').removeClass('info');
+                $(this).addClass('info');
+                var taskId = $(this).attr("data_id");
+                fnFormatDetails(row, taskId);
+                $(this).addClass('shown');
+            }
+
+        });
+
+
+
+        laydate.render({
+            elem: '#seldate', //指定元素
+            type: 'datetime',
+            range: true,
+            done: function(value, date, endDate){
+
+
+        },
+            change: function(value, date, endDate){
+                $("#bbdate").val(date['year']+"-"+date['month']+"-"+date['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+                $("#bedate").val(endDate['year']+"-"+endDate['month']+"-"+endDate['date']+" "+endDate['hours']+":"+endDate['minutes']+":"+endDate['seconds']);
+        }
+        });
+
+        laydate.render({
+            elem: '#datescope', //指定元素
+            type: 'datetime',
+            range: true,
+            done: function(value, date, endDate){
+        },
+            change: function(value, date, endDate){
+                $("#begindate").val(date['year']+"-"+date['month']+"-"+date['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+                $("#enddate").val(endDate['year']+"-"+endDate['month']+"-"+endDate['date']+" "+endDate['hours']+":"+endDate['minutes']+":"+endDate['seconds']);
+        }
+        });
+
+
+
+        //自定义格式选择
+//        var end = $("#enddate").jeDate({
+//            format: "YYYY-MM-DD hh:mm:ss",
+//            minDate: $.nowDate({DD: 0},{MM:-1}),//0代表今天，-1代表昨天，-2代表前天，以此类推
+//            maxDate: $.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)}),
+//            choosefun: function (elem, datas) {
+//                start.maxDate = datas; //将结束日的初始值设定为开始日的最大日期
+//            }
+//        });
+//     //   alert($.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)}))
+//        //自定义格式选择
+//        var start = $("#begindate").jeDate({
+//            format: "YYYY-MM-DD hh:mm:ss",
+//            minDate: $.nowDate({DD: 0},{MM:-1}),//0代表今天，-1代表昨天，-2代表前天，以此类推
+//            isinitVal: true,
+//            maxDate: $.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)}), //最大日期
+//            choosefun: function (elem, datas) {
+//                end.minDate = datas; //开始日选好后，重置结束日的最小日期
+//            }
+//
+//        });
+        $(".sure2").click(function () {
+            if ($("#enddate").val() == '') {
+                alert("请填写结束日期！");
+                return;
+            }
+            var userid = $('input:radio[name="radio1"]:checked').attr("data");
+            $.get("/check/assigned", {
+                user_id: userid,
+                task_id: $(this).attr("data"),
+                eDate: $("#enddate").val(),
+                bDate: $("#begindate").val()
+            }, function (d) {
+                window.location.href = "/check/"
+            });
+        });
+
+
+        $(".sure").click(function () {
+            $.get("/check/done", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/check/"
+            });
+        });
+        $(".fail").click(function () {
+            $.get("/check/failback", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/check/"
+            });
+        });
+
+
+        $(".add").click(function () {
+                window.location.href = "/assigning/"
+            }
+        );
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
+        $(".query").click(function () {
+            t.draw();
+        });
+    })
+    function cpTaskId(taskId) {
+        $(".sure").attr("data", taskId);
+        $(".sure2").attr("data", taskId);
+    }
+
+    function del(taskId) {
+        $.get("/check/del", {task_id: taskId}, function (d) {
+            window.location.href = "/check/"
+        });
+    }
+
+    function upd(taskId) {
+        window.location.href = "/assigning/updInit/"+taskId;
+    }
+    function fnFormatDetails(row, pdataId) {
+        $.get("/check/getScore", {task_id: pdataId}, function (d) {
+            var content = "";
+            $.each(d, function (index, item) {
+                content += format(item);
+            });
+            row.child(content).show();
+        })
+
+    }
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>名字:</td>' +
+            '<td>' + d.user.cname + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>规则:</td>' +
+            '<td>' + d.rule + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>分值:</td>' +
+            '<td>' + d.socre + '</td>' +
+            '</tr>' +
+            '</table>';
+    }
+
+</script>
+<div th:fragment="js2">
+    <!-- Morris Chart Js -->
+    <script src="assets/js/morris/raphael-2.1.0.min.js" th:src="@{/assets/js/morris/raphael-2.1.0.min.js}"></script>
+    <script src="assets/js/morris/morris.js" th:src="@{/assets/js/morris/morris.js}"></script>
+    <script src="assets/js/easypiechart.js" th:src="@{/assets/js/easypiechart.js}"></script>
+    <script src="assets/js/easypiechart-data.js" th:src="@{/assets/js/easypiechart-data.js}"></script>
+    <script src="assets/js/Lightweight-Chart/jquery.chart.js"
+            th:src="@{/assets/js/Lightweight-Chart/jquery.chart.js}"></script>
+
+    <!--&lt;!&ndash; Custom Js &ndash;&gt;-->
+    <!--<script src="assets/js/custom-scripts.js" th:src="@{/assets/js/custom-scripts.js}"></script>-->
+    <!-- Chart Js -->
+    <script type="text/javascript" src="assets/js/Chart.min.js" th:src="@{/assets/js/Chart.min.js}"></script>
+    <script type="text/javascript" src="assets/js/chartjs.js" th:src="@{/assets/js/chartjs.js}"></script>
+</div>
+</body>
+</html>

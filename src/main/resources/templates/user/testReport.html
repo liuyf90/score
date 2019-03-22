@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!--<head>-->
+<!--<title>Hello Spring Security</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
+<head th:include="owner/checkTasks::head"></head>
+<style>
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+</style>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:fragment="navbar-brand" class="navbar-brand" href="#"><strong><i class="icon fa fa-plane"></i>403组积分系统</strong></a>
+
+            <div id="sideNav" href="">
+            <i class="fa fa-bars icon"></i>
+
+            </div>
+        </div>
+
+
+        <ul th:fragment="navbar" class="nav navbar-top-links navbar-right">
+            <li class="divider">
+                <h5>
+                    <small sec:authentication="principal.cname"></small>
+                </h5>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#passwordModal"><i
+                                class="fa fa-sign-out fa-fw"></i> 修改密码</a>
+
+                    </li>
+                    <li>
+                        <a href="#" th:href="@{/project/}"><i
+                                class="fa fa-list"></i> 项目管理</a>
+
+                    </li>
+                    <li>
+                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                        </form>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                我的任务
+                <small>测试报告.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active"><a href="/mytasks/">我的任务</a></li>
+                <li class="active">测试报告</li>
+            </ol>
+
+        </div>
+
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            测试报告
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive table-bordered">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th width="10%">#</th>
+                                        <th width="60%">测试报告</th>
+                                        <th width="40%">创建时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="result">
+                                    <tr th:each="report,iterStat: ${taskModel.trList}">
+                                        <td th:text="${iterStat.index}+1">0</td>
+                                        <td th:text="${report.report}"></td>
+                                        <td th:text="${report.cDate!=null}?${#dates.format(report.cDate,'yyyy-MM-dd HH:mm')}:''"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  End  Bordered Table  -->
+                </div>
+            </div>
+            <!--<table class="table">-->
+                <!--<tr th:each="report,iterStat: ${taskModel.trList}">-->
+                    <!--<td th:text="${report.report}"></td>-->
+                    <!--&lt;!&ndash;<td th:text="${task.typeName}"></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td th:text="${task.taskName}"></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td th:text="${task.cDate!=null}?${#dates.format(task.cDate,'yyyy-MM-dd HH:mm')}:''"></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td th:text="${task.project.projectName}"></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td th:text="${task.project.user.cname}"></td>&ndash;&gt;-->
+                <!--</tr>-->
+            <!--</table>-->
+            <footer class="text-center" th:fragment="copyright">
+                <p>Copyright &copy; 2018.By liuyf
+                </p>
+            </footer>
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+<div th:replace="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            $("#outfrom").submit();
+        });
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
+
+    })
+</script>
+<div th:replace="owner/checkTasks::js2"></div>
+</body>
+</html>

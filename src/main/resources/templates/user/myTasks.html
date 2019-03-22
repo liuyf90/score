@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!--<head>-->
+<!--<title>Hello Spring Security</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
+<head th:include="owner/checkTasks::head"></head>
+
+<style>
+    td.details-control {
+        background: url('../resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+</style>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:fragment="navbar-brand" class="navbar-brand" href="#"><strong><i class="icon fa fa-plane"></i>403组PMIS系统</strong></a>
+
+            <div id="sideNav" href="">
+            <i class="fa fa-bars icon"></i>
+
+            </div>
+        </div>
+
+
+        <ul th:fragment="navbar" class="nav navbar-top-links navbar-right">
+            <li class="divider">
+                <h5>
+                    <small sec:authentication="principal.cname"></small>
+                </h5>
+            </li>
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#passwordModal"><i
+                                class="fa fa-sign-out fa-fw"></i> 修改密码</a>
+
+                    </li>
+                    <li>
+                        <a href="#" th:href="@{/project/}"><i
+                                class="fa fa-list"></i> 项目管理</a>
+
+                    </li>
+                    <li>
+                        <form action="#" id="outfrom" th:action="@{/logout}" method="post">
+                            <a href="#" id="logout"><i class="fa fa-sign-out fa-fw"></i> 退出</a>
+                        </form>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav th:fragment="ltree" class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu" th:each="tree,iterStat: ${taskModel.ltree}">
+                <li>
+                    <a name="ltree" th:class="${#httpServletRequest.getRequestURI()}==${tree.path}? 'active-menu':''"  href="ui-elements.html" th:href="${tree.path}"
+                       th:text="${tree.descritpion}"><i class="fa fa-desktop"></i>
+                    </a>
+                </li>
+            </ul>
+            <!--<ul class="nav" id="main-menu">-->
+
+            <!--<li>-->
+            <!--<a id="l1" name="ltree" th:data="${taskModel.ltree}" href="index.html" th:href="@{/pool/}"><i class="fa fa-dashboard"></i> 任务池</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a id="l2" name="ltree"  class="" href="ui-elements.html" th:href="@{/mytasks/}"><i class="fa fa-desktop"></i>-->
+            <!--我的任务</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a id="l3" name="ltree" class="" href="ui-elements.html" th:href="@{/check/}"><i class="fa fa-sitemap"></i> 任务审核</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a id="l4" name="ltree" class="" href="ui-elements.html" th:href="@{/test/}"><i class="fa fa-desktop"></i> 测试任务</a>-->
+            <!--</li>-->
+            <!--<li>-->
+            <!--<a id="l5" name="ltree" class="" href="ui-elements.html" th:href="@{/analyze/}"><i class="fa fa-desktop"></i> 数据分析</a>-->
+            <!--</li>-->
+            <!--&lt;!&ndash;<li>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="ui-elements.html"><i class="fa fa-desktop"></i> 下任务</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;</li>&ndash;&gt;-->
+
+            <!--</ul>-->
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                我的任务
+                <small>個人任务.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">我的任务</li>
+            </ol>
+
+        </div>
+        <div class="modal fade" th:fragment="editPasswd" id="passwordModal" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control" id="passwd">
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close
+                        </button>
+                        <button type="button" class="btn btn-primary surePasswd"
+                        >确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            查询条件
+                        </div>
+                        <div class="panel-body">
+                            <form th:action="@{/mytasks/query/}" method="get">
+                                <input type="hidden" class="jeinput" id="bbdate" name="bbdate" style="display:none"/>
+                                <input type="hidden" class="jeinput" id="bedate" name="bedate" style="display:none"/>
+                                <div class="form-group col-xs-12" >
+                                    <label for="seldate">领取时间（范围）</label>
+                                    <input type="text" class="jeinput" id="seldate"
+                                           placeholder="YYYY年MM月DD日">
+                                </div>
+
+
+                                <div class="form-group col-xs-6">
+                                    <label for="status">任务状态</label>
+                                    <select class="selectbox" id="status" name="status" class="form-control">
+                                        <option value="-1">-全选-</option>
+                                        <option th:each="st: ${taskModel.taskstatus}" th:value="${st.key}"
+                                                th:text="${st.value}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-10 col-sm-2">
+                                        <!--<button class="form-control btn btn-default query">查询-->
+                                        <input type="button" class="form-control btn btn-default query" value="查询"/>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            任务列表
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-7 col-sm-5">
+                                    <h2 th:text="'总积分：'+${taskModel.myTaskcount}+'分'"></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example"
+                                       cellspacing="0" width="100%">
+                                    <!--<table class="display" id="dataTables-example"  cellspacing="0" width="100%">-->
+                                    <thead>
+                                    <tr>
+                                        <th width="1%">#</th>
+                                        <th width="7%">项目名称</th>
+                                        <th width="9%">任务名称</th>
+                                        <th width="9%">任务分类</th>
+                                        <th width="17%">描述</th>
+                                        <th width="8%">接受时间</th>
+                                        <th width="8%">截止时间</th>
+                                        <th width="8%">提交时间</th>
+                                        <th width="8%">任务创建人</th>
+                                        <th width="8%">状态</th>
+                                        <th width="8%">任务得分</th>
+                                        <th width="8%">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel">请确认</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h3>请仔细确认是否办结</h3>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary ok sure">确认
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="myTestModal" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">&times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myTestModalLabel">请确认</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <label for="report">测试报告</label>
+                                                    <textarea type="text" class="form-control" id="report"
+                                                              rows="3"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary sure pass">测试通过
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary sure fail">返回BUG
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  End  Bordered Table  -->
+                    <footer class="text-center" th:fragment="copyright">
+                        <p>Copyright &copy; 2018.By liuyf
+                        </p>
+                    </footer>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+<div th:replace="owner/checkTasks::js1"></div>
+
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            $("#outfrom").submit();
+        });
+        var t = $('#dataTables-example').dataTable(
+            {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                },
+                autoWidth: false,  //禁用自动调整列宽
+                stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+                processing: true,  //隐藏加载提示,自行处理
+                serverSide: true,  //启用服务器端分页
+                searching: false,  //禁用原生搜索
+                orderMulti: false,  //启用多列排序
+                order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+                renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+                pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+                // set the initial value
+                createdRow: function (row, data, index) {
+                    if (data.istimeOut) {
+                        $(row).addClass('warning');
+                    }
+                    var i = t.page() * t.page.len() + index + 1;
+                    $('td:eq(0)', row).html("<span class='row-details row-details-close' data_id='" + data["taskId"] + "'></span>&nbsp;" + i);
+                    $(row).attr("data_id", data["taskId"]);
+                },
+                columnDefs: [{
+                    "targets": 'nosort',  //列的样式名
+                    "orderable": false,  //包含上样式名‘nosort’的禁止排序
+                    "searchable": false
+                },
+
+                    {
+                        "targets": 11,//按钮目标列
+                        "data": null,
+                        "render": function (data, type, row) {
+
+                            var id = '"' + row.id + '"';
+                            var html = "";
+
+                            if (data.finish == 1) {
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myModal' class='btn btn-primary check'><i class='fa fa-heart'></i> 办结</a>"
+                            }
+                            if (data.finish == 4) {
+                                html += "<a href='javascript:void(0);' onclick='cpTaskId(" + data.taskId + ")'  data-toggle='modal' data-target='#myTestModal' class='btn btn-primary check'><i class='fa fa-pencil-square-o'></i> 测试结论</a>"
+                            }
+                            if (data.finish == 6) {
+                                html += "<a href='javascript:void(0);' onclick='correct(" + data.taskId + ")'   class='btn btn-danger '><i class='fa fa-gavel'></i> 改正</a>"
+                                html += "<a href='/mytasks/" + data.taskId + "/testReport'   class='btn btn-primary '><i class='fa fa-print'></i> 测试报告</a>"
+
+                            }
+
+
+                            return html;
+                        }
+                    }],
+
+                ajax: function (data, callback, settings) {
+                    //封装请求参数
+                    var param = {};
+                    param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                    param.start = data.start;//开始的记录序号
+                    param.page = (data.start / data.length) + 1;//当前页码;
+                    param.bbdate = $("#bbdate").val();
+                    param.bedate = $("#bedate").val();
+                    param.status = $("#status").val();
+                    //ajax请求数据
+                    $.ajax({
+                        type: "GET",
+                        url: "/mytasks/query",
+                        cache: false,  //禁用缓存
+                        data: param,  //传入组装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            console.log("result" + result);
+                            //setTimeout仅为测试延迟效果
+                            setTimeout(function () {
+                                //封装返回数据
+                                var returnData = {};
+                                returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                                returnData.recordsTotal = result.totalElements;//返回数据全部记录
+                                returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                                returnData.data = result.content;//返回的数据列表
+//                                console.log(returnData);
+                                //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                                //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                                callback(returnData);
+                            }, 200);
+                        }
+                    });
+                },
+                //列表表头字段
+                columns: [
+                    {"data": "", "defaultContent": ""},
+                    {"data": "project.projectName", "defaultContent": ""},
+                    {"data": "taskName", "defaultContent": ""},
+                    {"data": "typeName"},
+                    {"data": "remark", "defaultContent": ""},
+                    {
+                        "data": "bDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "eDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "fDate",
+                        "defaultContent": "",
+                        render: function (data, type, row) {
+                            if (data != null && type === 'display' || type === 'filter') {
+                                var d = new Date(data);
+                                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+                            }
+                            return data;
+                        }
+                    },
+                    {"data": "user.cname", "defaultContent": ""},
+                    {"data": "finishName", "defaultContent": ""},
+                    {"data": "score", "defaultContent": "0.0"},
+
+                ]
+
+            }).api();
+        //给行绑定选中事件
+        t.on('click', 'tr', function () {
+            var tr = $(this).closest('tr');
+            var row = t.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+                tr.removeClass('info');
+            }
+            else {
+                t.$('tr.info').removeClass('info');
+                $(this).addClass('info');
+                var taskId = $(this).attr("data_id");
+                fnFormatDetails(row, taskId);
+                $(this).addClass('shown');
+            }
+
+        });
+
+
+        laydate.render({
+            elem: '#seldate', //指定元素
+            type: 'datetime',
+            range: true,
+            done: function(value, date, endDate){
+
+
+            },
+            change: function(value, date, endDate){
+                $("#bbdate").val(date['year']+"-"+date['month']+"-"+date['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+                $("#bedate").val(endDate['year']+"-"+endDate['month']+"-"+endDate['date']+" "+date['hours']+":"+date['minutes']+":"+date['seconds']);
+            }
+        });
+
+        //自定义格式选择
+//        $("#enddate").jeDate({
+//            format: "YYYY-MM-DD hh:mm:ss",
+//            minDate: $.nowDate({DD: 0}),//0代表今天，-1代表昨天，-2代表前天，以此类推
+//            maxDate: $.nowDate({DD: +(7 - $.getLunar($.nowDate({DD: 0}), 'YYYY-MM-DD').nWeek)})
+//        });
+        $(".sure2").click(function () {
+            if ($("#enddate").val() == '') {
+                alert("请填写结束日期！");
+                return;
+            }
+            var userid = $('input:radio[name="radio1"]:checked').attr("data");
+            $.get("/check/assigned", {
+                user_id: userid,
+                task_id: $(this).attr("data"),
+                eDate: $("#enddate").val()
+            }, function (d) {
+                window.location.href = "/check/"
+            });
+        });
+
+
+        $(".ok").click(function () {
+//            alert($(this).attr("data"));
+            $.get("/mytasks/done", {task_id: $(this).attr("data")}, function (d) {
+                window.location.href = "/mytasks/"
+            });
+        });
+
+        $(".pass").click(function () {
+            $.ajax({
+                url: "/mytasks/" + $(this).attr("data") + "/pass",
+                type: "GET",
+                data: {report: $("#report").val()},
+                dataType: "json",
+                success: function (xml, textStatus, xhr) {
+                    debugger
+                    window.location.href = "/mytasks/"
+                },
+                complete: function (xhr, textStatus) {
+                    debugger;
+                    if (xhr.status == 403) {
+                        window.location.href = "/401"
+                    }
+                    if (xhr.status == 200) {
+                        window.location.href = "/mytasks/"
+                    }
+                }
+            });
+        });
+
+        $(".fail").click(function () {
+            if ($("#report").val() == '') {
+                alert("请填写测试报告！");
+                return;
+            }
+            $.ajax({
+                url: "/mytasks/" + $(this).attr("data") + "/fail",
+                type: "GET",
+                data: {report: $("#report").val()},
+                dataType: "json",
+                success: function (xml, textStatus, xhr) {
+                    window.location.href = "/mytasks/"
+                },
+                complete: function (xhr, textStatus) {
+                    debugger;
+                    if (xhr.status == 403) {
+                        window.location.href = "/401"
+                    }
+                    if (xhr.status == 200) {
+                        window.location.href = "/mytasks/"
+                    }
+                }
+            });
+        });
+
+
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
+        $(".query").click(function () {
+            t.draw();
+        });
+    })
+
+    function fnFormatDetails(row, pdataId) {
+        $.get("/mytasks/getScore", {task_id: pdataId}, function (d) {
+            var content = "";
+            $.each(d, function (index, item) {
+                content += format(item);
+            });
+            row.child(content).show();
+        })
+
+    }
+
+
+    function cpTaskId(taskId) {
+        $(".sure").attr("data", taskId);
+    }
+
+
+    function correct(taskId) {
+        $.get("/mytasks/correct", {task_id: taskId}, function (d) {
+            window.location.href = "/mytasks/"
+        });
+        $.ajax({
+            url: "/mytasks/correct",
+            type: "GET",
+            data: {task_id: taskId},
+            dataType: "json",
+            success: function (xml, textStatus, xhr) {
+                window.location.href = "/mytasks/"
+            },
+            complete: function (xhr, textStatus) {
+                if (xhr.status == 403) {
+                    window.location.href = "/401"
+                }
+            }
+        });
+    }
+
+    /* Formatting function for row details - modify as you need */
+    function format(d) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>规则:</td>' +
+            '<td>' + d.rule + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>分值:</td>' +
+            '<td>' + d.socre + '</td>' +
+            '</tr>' +
+            '</table>';
+    }
+
+</script>
+<div th:replace="owner/checkTasks::js2"></div>
+</body>
+
+</html>

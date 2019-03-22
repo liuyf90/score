@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<!--<head>-->
+<!--<title>Hello Spring Security</title>-->
+<!--<meta charset="utf-8" />-->
+<!--<link rel="stylesheet" href="/css/main.css" th:href="@{/css/main.css}" />-->
+<head th:include="owner/checkTasks::head"></head>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"><strong><i class="icon fa fa-plane"></i>403组PMIS系统</strong></a>
+
+            <div id="sideNav" href="">
+                <i class="fa fa-bars icon"></i>
+            </div>
+        </div>
+
+
+        <ul th:replace="user/myTasks::navbar"></ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                任务修改
+                <small>详细描述.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">任务详情</li>
+            </ol>
+        </div>
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner">
+            <div class="row">
+
+                <form th:action="@{/assigning/upd/{taskId}(taskId=${taskModel.task.taskId})}" th:object="${taskInfo}"
+                      method="post">
+                    <div class="form-group col-xs-4">
+                        <label for="taskName">任务名称</label>
+                        <span style="color:red;">*</span> <input type="text" class="form-control" id="taskName"
+                                                                 th:name="taskName"
+                                                                 th:value="${taskModel.task.taskName}">
+                        <span style="color:red;" th:if="${#fields.hasErrors('taskName')}"
+                              th:errors="*{taskName}"></span>
+
+                    </div>
+
+                    <div class="form-group col-xs-4">
+                        <label for="project">项目</label>
+                        <select class="selectbox" id="project" name="project" class="form-control">
+                            <option th:each="project:${taskModel.projects}" th:value="${project.projectId}"
+                                    th:text="${project.projectName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <label for="type">任务类型</label>
+                        <select class="selectbox" id="type" name="type" class="form-control">
+                            <option th:each="st: ${taskModel.types}" th:value="${st.key}"
+                                    th:text="${st.value}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="remark">任务描述</label>
+                        <textarea type="text" class="form-control" id="remark" th:name="remark" rows="5"
+                                  th:text="${taskModel.task.remark}"></textarea>
+                    </div>
+
+                    <div class="form-group col-xs-6">
+                        <label for="begindate">开始时间:</label>
+                        <span style="color:red;">*</span>
+                        <input type="text" class="jeinput" id="begindate" th:value="${#dates.format(taskModel.task.bDate,'yyyy-MM-dd HH:mm:ss')}"
+                               name="bDate"
+                               placeholder="YYYY年MM月DD日 hh:mm:ss">-
+                        <span style="color:red;" th:if="${#fields.hasErrors('bDate')}"
+                              th:errors="*{bDate}"></span>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="enddate">计划完成时间:</label>
+                        <span style="color:red;">*</span><input type="text" class="jeinput" id="enddate"
+                                                                th:value="${#dates.format(taskModel.task.eDate,'yyyy-MM-dd HH:mm:ss')}" name="eDate"
+                                                                placeholder="YYYY年MM月DD日 hh:mm:ss">
+                        <span style="color:red;" th:if="${#fields.hasErrors('eDate')}"
+                              th:errors="*{eDate}"></span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-10 col-sm-2">
+                            <button class="form-control btn btn-default save">保存</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <footer class="text-center" th:fragment="copyright">
+                <p>Copyright &copy; 2018.By liuyf
+                </p>
+            </footer>
+
+
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<!-- /. PAGE WRAPPER  -->
+
+<!-- /. WRAPPER  -->
+<!-- JS Scripts-->
+<!-- jQuery Js -->
+<div th:replace="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            $("#outfrom").submit();
+        });
+        $(".save").click(function () {
+            $("form").submit();
+        })
+        $(".surePasswd").click(function () {
+            $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
+                alert("修改成功");
+            });
+
+        });
+    })
+
+
+
+
+    var start = laydate.render({
+        elem: '#begindate',
+        type: 'datetime',
+        max: '#enddate',
+        done: function (value, dates, endDate) {
+            end.config.min ={
+                year:dates.year,
+                month:dates.month-1, //关键
+                date: dates.date,
+                hours: dates.hours,
+                minutes: dates.minutes,
+                seconds : dates.seconds
+            };
+        }
+    });
+    var end = laydate.render({
+        elem: '#enddate',
+        type: 'datetime',
+        min: '#begindate',
+        done: function (value, dates, endDate) {
+            start.config.max ={
+                year:dates.year,
+                month:dates.month-1, //关键
+                date: dates.date,
+                hours: dates.hours,
+                minutes: dates.minutes,
+                seconds : dates.seconds
+            };
+        }
+    });
+
+</script>
+<!-- Metis Menu Js -->
+<div th:replace="owner/checkTasks::js2"></div>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="owner/checkTasks::head"></head>
+<body>
+
+<!--<h1>Hello Spring Security</h1>-->
+<!--<p>这个界面没有受保护，你可以进已被保护的界面.</p>-->
+
+
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a th:replace="user/myTasks::navbar-brand"></a>
+            <div id="sideNav" href="">
+                <i class="fa fa-bars icon"></i>
+
+            </div>
+        </div>
+
+        <ul th:replace="user/myTasks::navbar"></ul>
+    </nav>
+    <!--/. NAV TOP  -->
+    <nav th:replace="user/myTasks::ltree"></nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">
+                资源维护
+                <small>服务器资源维护.</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li class="active">资源维护</li>
+            </ol>
+
+
+        </div>
+
+
+        <div th:replace="user/myTasks::editPasswd"></div>
+        <div id="page-inner">
+            <div class="row">
+                <div class="row edit" style="display:none">
+                    <div class="col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="card-title">
+                                    <div class="title">详情</div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <form id="myform" th:action="@{/server/save/}" th:object="${serverInfo}" method="post">
+                                    <input type="hidden" th:field="*{serverId}" name="serverId" id="serverId">
+                                    <input type="hidden" th:value="${taskModel.projectId}" id="projectId"
+                                           name="projectId">
+                                    <div class="form-group col-xs-6">
+                                        <label for="used">用途</label>
+                                        <input type="text" class="form-control" th:field="*{used}" id="used"
+                                               name="used">
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="system">系统</label>
+                                        <select class="selectbox" id="system" th:field="*{system}" class="form-control"
+                                                name="system">
+                                            <option th:each="st: ${taskModel.system}" th:value="${st.key}"
+                                                    th:text="${st.value}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="ip">IP</label>
+                                        <span style="color:red;">*</span> <input type="text" class="form-control"
+                                                                                 th:field="*{ip}" id="ip" name="ip">
+                                        <span style="color:red;" th:if="${#fields.hasErrors('ip')}"
+                                              th:errors="*{ip}"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="port">port</label>
+                                        <span style="color:red;">*</span> <input type="number" class="form-control"
+                                                                                 th:errorclass="fieldError"
+                                                                                 th:field="*{port}" id="port"
+                                                                                 name="port" text="-1">
+                                        <span style="color:red;" th:if="${#fields.hasErrors('port')}"
+                                              th:errors="*{port}"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <label for="userName">登陆名</label>
+                                        <span style="color:red;">*</span> <input type="text" class="form-control"
+                                                                                 th:errorclass="fieldError"
+                                                                                 th:field="*{userName}" id="userName"
+                                                                                 name="userName">
+                                        <span style="color:red;" th:if="${#fields.hasErrors('userName')}"
+                                              th:errors="*{userName}"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6 ">
+                                        <label for="password">密码</label>
+                                        <span style="color:red;">*</span> <input type="text" class="form-control"
+                                                                                 th:errorclass="fieldError"
+                                                                                 th:field="*{password}" id="password"
+                                                                                 name="password">
+                                        <span style="color:red;" th:if="${#fields.hasErrors('password')}"
+                                              th:errors="*{password}"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-10 col-sm-2">
+                                            <button class="form-control btn btn-default save">保存</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="#" th:href="@{/project/}"><i
+                                    class="fa fa-reply"></i> 返回</a>  <h4 th:text="${taskModel.projectName}+服务器列表"></h4>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-sm-offset-9 col-sm-2">
+                                    <button class="form-control btn btn-default add">新增</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example"
+                                       cellspacing="0" width="100%">
+                                    <!--<table class="display" id="dataTables-example"  cellspacing="0" width="100%">-->
+                                    <thead>
+                                    <tr>
+                                        <th width="1%">#</th>
+                                        <th width="11%">用途</th>
+                                        <th width="11%">ip</th>
+                                        <th width="11%">port</th>
+                                        <th width="11%">系统</th>
+                                        <th width="11%">用户名</th>
+                                        <th width="11%">密码</th>
+                                        <th width="11%">操作</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  End  Bordered Table  -->
+                </div>
+                <foot class="text-center" th:include="user/myTasks::copyright"></foot>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- /. PAGE INNER  -->
+</div>
+<div th:replace="owner/checkTasks::js1"></div>
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        debugger;
+        var flag = [[${taskModel.errors}]];
+        if (flag != null) {
+            $(".edit").show();
+        }
+        var t = $('#dataTables-example').dataTable(
+            {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.16/i18n/Chinese.json'
+                },
+                autoWidth: false,  //禁用自动调整列宽
+                stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+                processing: true,  //隐藏加载提示,自行处理
+                serverSide: true,  //启用服务器端分页
+                searching: false,  //禁用原生搜索
+                orderMulti: false,  //启用多列排序
+                order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+                renderer: "bootstrap",  //渲染样式：Bootstrap和jquery-ui
+                pagingType: "simple_numbers",  //分页样式：simple,simple_numbers,full,full_numbers
+                createdRow: function (row, data, index) {
+                    debugger;
+                    console.log(data);
+                    var i = t.page() * t.page.len() + index + 1;
+                    $('td:eq(0)', row).html("<span class='row-details row-details-close' ></span>&nbsp;" + i);
+                },
+                columnDefs: [{
+                    "targets": 'nosort',  //列的样式名
+                    "orderable": false,  //包含上样式名‘nosort’的禁止排序
+                    "searchable": false
+                },
+
+                    {
+                        "targets": 7,//按钮目标列
+                        "data": null,
+                        "render": function (data, type, row) {
+                            debugger;
+//                            var id = '"' + row.id + '"';
+                            var html = "";
+                            html += "<a href='javascript:void(0);' onclick='edit(" + row.serverId + ")'   class='btn btn-primary check'><i class='fa fa-pencil-square-o'></i> 修改</a>"
+                            html += "<a href='javascript:void(0);' onclick='del(" + row.serverId + ")'   class='btn btn-danger'><i class='fa fa-times'></i> 删除</a>"
+                            return html;
+                        }
+                    }],
+
+                ajax: function (data, callback, settings) {
+                    //封装请求参数
+                    var param = {};
+                    param.limit = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+                    param.start = data.start;//开始的记录序号
+                    param.page = (data.start / data.length) + 1;//当前页码;
+                    param.projectId = $("#projectId").val();//项目Id;
+
+                    //ajax请求数据
+                    $.ajax({
+                        type: "GET",
+                        url: "/server/query",
+                        cache: false,  //禁用缓存
+                        data: param,  //传入组装的参数
+                        dataType: "json",
+                        success: function (result) {
+                            console.log("result" + result);
+                            //setTimeout仅为测试延迟效果
+                            setTimeout(function () {
+                                //封装返回数据
+                                var returnData = {};
+                                returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                                returnData.recordsTotal = result.totalElements;//返回数据全部记录
+                                returnData.recordsFiltered = result.totalElements;//后台不实现过滤功能，每次查询均视作全部结果
+                                returnData.data = result.content;//返回的数据列表
+                                console.log("%%%%" + returnData);
+                                //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                                //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                                callback(returnData);
+                            }, 200);
+                        }
+                    });
+                },
+                //列表表头字段
+                columns: [
+                    {"data": "", "defaultContent": ""},
+                    {"data": "used", "defaultContent": ""},
+                    {"data": "ip", "defaultContent": ""},
+                    {"data": "port", "defaultContent": ""},
+                    {"data": "systemName", "defaultContent": ""},
+                    {"data": "userName", "defaultContent": ""},
+                    {"data": "password", "defaultContent": ""},
+                    {"data": "", "defaultContent": ""}
+
+                ]
+
+            }).api();
+
+        $(".add").click(function () {
+            formReset();
+            $(".edit").show();
+        });
+        $(".save").click(function () {
+            $("form").submit();
+            $(".edit").show();
+        })
+
+
+    })
+
+    function edit(id) {
+        $(".edit").show();
+        $.get("/server/one/" + id, function (d) {
+            $("#serverId").val(d.serverId);
+            $("#used").val(d.used);
+            $("#ip").val(d.ip);
+            $("#port").val(d.port);
+            $("#userName").val(d.userName);
+            $("#password").val(d.password);
+            $("#system").val(d.system);
+        });
+
+
+    }
+
+    function formReset() {
+        $(':input', '#myform')
+            .not(':button, :submit, :reset, :hidden,:radio') // 去除不需要重置的input类型
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+        $("#port").val("-1");
+        $("#serverId").val("");
+    }
+    /*]]>*/
+</script>
+<div th:replace="owner/checkTasks::js2"></div>
+
+
+</body>
+</html>
