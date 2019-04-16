@@ -74,6 +74,40 @@ public class DesignationWorkDay {
         specialDay.put("2018-10-04", "Y");
         specialDay.put("2018-10-05", "Y");
 
+        specialDay.put("2019-01-01", "N");
+        specialDay.put("2019-01-02", "Y");
+        specialDay.put("2019-01-03", "Y");
+        specialDay.put("2019-01-04", "N");
+        specialDay.put("2019-01-05", "N");
+        specialDay.put("2019-01-06", "N");
+        specialDay.put("2019-01-07", "N");
+        specialDay.put("2019-01-08", "N");
+        specialDay.put("2019-01-09", "N");
+        specialDay.put("2019-01-10", "N");
+        specialDay.put("2019-04-05", "N");
+        specialDay.put("2019-04-28", "Y");
+        specialDay.put("2019-05-01", "N");
+        specialDay.put("2019-05-02", "N");
+        specialDay.put("2019-05-03", "N");
+        specialDay.put("2019-05-04", "N");
+        specialDay.put("2019-05-05", "Y");
+        specialDay.put("2019-06-07", "N");
+        specialDay.put("2019-09-29", "Y");
+        specialDay.put("2019-10-01", "N");
+        specialDay.put("2019-10-02", "N");
+        specialDay.put("2019-10-03", "N");
+        specialDay.put("2019-10-04", "N");
+        specialDay.put("2019-10-07", "N");
+        specialDay.put("2019-10-12", "Y");
+
+
+
+
+
+
+
+
+
         return specialDay;
     }
 

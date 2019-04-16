@@ -56,6 +56,7 @@ public class AnalyzeController extends BaseController {
         model.addAttribute("users", users);
         calTask(userList, task.getBbdate(), task.getBedate(), model);
         model.addAttribute("fullness", calFullness(userList, task.getBbdate(), task.getBedate()));
+        model.addAttribute("offset", calOffset(userList, task.getBbdate(), task.getBedate()));
         return new ModelAndView("owner/analyze", "taskModel", model);
     }
 
@@ -82,6 +83,10 @@ public class AnalyzeController extends BaseController {
         calTask(userList, task.getBbdate(), task.getBedate(), model);
         //饱满度
         model.addAttribute("fullness", calFullness(userList, task.getBbdate(), task.getBedate()));
+        //偏离度
+        model.addAttribute("offset", calOffset(userList, task.getBbdate(), task.getBedate()));
+
+
         return new ModelAndView("owner/analyze", "taskModel", model);
 
     }
@@ -113,12 +118,12 @@ public class AnalyzeController extends BaseController {
                 if (task1.geteDate() == null) {
                     continue;
                 }
-             //   int boring = Util.differentDays(task1.getbDate(), task1.geteDate())+1;
-                int boring=DesignationWorkDay.getValue(task1.getbDate(), task1.geteDate(),1,specialDay).size();//去掉节假日与周末
+                //   int boring = Util.differentDays(task1.getbDate(), task1.geteDate())+1;
+                int boring = DesignationWorkDay.getValue(task1.getbDate(), task1.geteDate(), 1, specialDay).size();//去掉节假日与周末
                 sumBoring = sumBoring + boring;
             }
-            int sumDate=DesignationWorkDay.getValue(bDate == null ? myDate1 : bDate, eDate == null ? new Date() : eDate, 1, specialDay).size();//去掉节假日与周末
-           // int sumDate = Util.differentDays(bDate == null ? myDate1 : bDate, eDate == null ? new Date() : eDate) + 1;
+            int sumDate = DesignationWorkDay.getValue(bDate == null ? myDate1 : bDate, eDate == null ? new Date() : eDate, 1, specialDay).size();//去掉节假日与周末
+            // int sumDate = Util.differentDays(bDate == null ? myDate1 : bDate, eDate == null ? new Date() : eDate) + 1;
 
             afullness = Double.valueOf(sumBoring) / Double.valueOf(sumDate);
             DecimalFormat df = new DecimalFormat("#.00");
@@ -153,5 +158,69 @@ public class AnalyzeController extends BaseController {
         }
         model.addAttribute("taskCount", taskCount);
         model.addAttribute("taskFinallyCount", taskFinallyCount);
+    }
+
+    /**
+     * 计算偏移量
+     *
+     * @param userList
+     * @param bDate
+     * @param eDate
+     */
+    private String[] calOffset(List<User> userList, Date bDate, Date eDate) throws Exception {
+        String[] offsets = new String[userList.size()];
+        HashMap specialDay = DesignationWorkDay.setSpecialDay();
+        int sumPlanBoring = 0;
+        int sumTrueBoring = 0;
+
+        for (int i = 0; i <= userList.size() - 1; i++) {
+            DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Date myDate1 = dateFormat1.parse("2018-05-31");//上线日期
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            List<Task> taskList = taskService.searchTaskByUserAndDate(userList.get(i).getId(), bDate, eDate);
+            Iterator<Task> taskIterator = taskList.iterator();
+
+            while (taskIterator.hasNext()) {
+
+                Task task = taskIterator.next();
+                //   int boring = Util.differentDays(task1.getbDate(), task1.geteDate())+1;
+                int boring = 0;//去掉节假日与周末
+                try {
+                    if (task.getbDate() == null) {
+                        continue;
+                    }
+                    if (task.geteDate() == null) {
+                        continue;
+                    }
+                    if (task.getfDate() == null) {
+                        continue;
+                    }
+
+                        boring = DesignationWorkDay.getValue(task.getbDate(), task.geteDate(), 1, specialDay).size();
+                        sumPlanBoring = sumPlanBoring + boring;//计划时间之和
+
+                        boring = DesignationWorkDay.getValue(task.getbDate(), task.getfDate(), 1, specialDay).size();//实际完成时间之和
+                        sumTrueBoring = sumTrueBoring + boring;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+                Double aoffset = Double.valueOf(sumTrueBoring - sumPlanBoring) / Double.valueOf(sumPlanBoring);
+                DecimalFormat df = new DecimalFormat("#.00");
+                String str = df.format(aoffset);
+                offsets[i] = str;
+
+
+            }
+
+
+
+        return offsets;
+
     }
 }

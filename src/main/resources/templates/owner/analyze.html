@@ -75,8 +75,9 @@
                         </div>
 
                     </div>
-                    <div id="container" style="height: 50%"></div>
-                    <div id="container1" style="height: 50%"></div>
+                    <div id="container" style="height: 34%"></div>
+                    <div id="container1" style="height: 33%"></div>
+                    <div id="container2" style="height: 33%"></div>
                 </div>
 
             </div>
@@ -92,8 +93,10 @@
     //<![CDATA[
     var dom = document.getElementById("container");
     var dom1=document.getElementById("container1");
+    var dom2=document.getElementById("container2");
     var myChart = echarts.init(dom);
     var myChart1 = echarts.init(dom1);
+    var myChart2 = echarts.init(dom2);
     var app = {};
     option = null;
     app.title = '任务总量 - 条形图';
@@ -174,11 +177,30 @@
             }
         ]
     };
+    option2 = {
+        title : {
+            text: '工作偏离度',
+            subtext: '（实际工期-承诺工期）/承诺工期'
+        },
+        xAxis: {
+            type: 'category',
+            data: [[${taskModel.users}]]
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            name: '偏离度',
+            data:[[${taskModel.offset}]],
+            type: 'bar'
+        }]
+    };
 
 
     if (option && typeof option === "object") {
         myChart.setOption(option, true);
         myChart1.setOption(option1, true);
+        myChart2.setOption(option2, true);
     }
     //]]>
     $(function () {
