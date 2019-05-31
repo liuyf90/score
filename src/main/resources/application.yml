@@ -1,6 +1,6 @@
 server:
+#  port: 18530
   port: 8530
-#  port: 8443
 #  ssl:
 #    key-store: classpath:mykeys.jks
 #    key-store-password: liuyufei
@@ -19,6 +19,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3307/score?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+#    url: jdbc:mysql://60.219.169.118:3306/score?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
 #    password: root,123456
     password: 123456

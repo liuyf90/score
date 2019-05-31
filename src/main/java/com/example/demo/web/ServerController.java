@@ -88,6 +88,7 @@ public class ServerController extends BaseController{
             s.setUsed(serverInfo.getUsed());
             s.setSystem(serverInfo.getSystem());
             s.setPort(serverInfo.getPort());
+            s.setExport(serverInfo.getExport());
             s.setUserName(serverInfo.getUserName());
             s.setPassword(serverInfo.getPassword());
             serverService.edit();

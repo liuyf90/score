@@ -2,6 +2,10 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -9,6 +13,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by liuyf90 on 2018/9/11.
@@ -24,10 +30,26 @@ public class Server {
     @Pattern(regexp = "(?=(\\b|\\D))(((\\d{1,2})|(1\\d{1,2})|(2[0-4]\\d)|(25[0-5]))\\.){3}((\\d{1,2})|(1\\d{1,2})|(2[0-4]\\d)|(25[0-5]))(?=(\\b|\\D))", message = "IP格式错误")
     @Column
     private String ip;
-    @NotNull(message = "登录名不能为空")
+    @NotNull(message = "端口不能为空")
     @Range(min = 0, max = 65535, message = "端口范围需要在0~65535之间")
     @Column
     private int port;
+
+
+    public Integer getExport() {
+        return export;
+    }
+
+    public void setExport(Integer export) {
+        this.export = export;
+    }
+
+    @Range(min = 0, max = 65535, message = "端口范围需要在0~65535之间")
+    @Column
+    private Integer export;
+    
+
+
     @NotBlank(message = "登录名不能为空")
     @Column
     private String userName;
@@ -50,6 +72,19 @@ public class Server {
 
     public void setSystemName(String systemName) {
         this.systemName = systemName;
+    }
+
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="server_id")
+    private List<Process> services=new ArrayList<Process>();
+
+    public List<Process> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Process> services) {
+        this.services = services;
     }
 
     @Transient
@@ -127,5 +162,9 @@ public class Server {
     public void setProject(Project project) {
         this.project = project;
     }
+
+
+
+
 
 }

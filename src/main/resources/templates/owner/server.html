@@ -91,6 +91,15 @@
                                               th:errors="*{port}"></span>
                                     </div>
                                     <div class="form-group col-xs-6">
+                                        <label for="export">export</label>
+                                        <span style="color:red;">*</span> <input type="text" class="form-control"
+                                                                                 th:errorclass="fieldError"
+                                                                                 th:field="*{export}" id="export"
+                                                                                 name="export" text="-1">
+                                        <span style="color:red;" th:if="${#fields.hasErrors('export')}"
+                                              th:errors="*{export}"></span>
+                                    </div>
+                                    <div class="form-group col-xs-6">
                                         <label for="userName">登陆名</label>
                                         <span style="color:red;">*</span> <input type="text" class="form-control"
                                                                                  th:errorclass="fieldError"
@@ -144,6 +153,7 @@
                                         <th width="11%">用途</th>
                                         <th width="11%">ip</th>
                                         <th width="11%">port</th>
+                                        <th width="11%">export</th>
                                         <th width="11%">系统</th>
                                         <th width="11%">用户名</th>
                                         <th width="11%">密码</th>
@@ -201,7 +211,7 @@
                 },
 
                     {
-                        "targets": 7,//按钮目标列
+                        "targets": 8,//按钮目标列
                         "data": null,
                         "render": function (data, type, row) {
                             debugger;
@@ -209,6 +219,7 @@
                             var html = "";
                             html += "<a href='javascript:void(0);' onclick='edit(" + row.serverId + ")'   class='btn btn-primary check'><i class='fa fa-pencil-square-o'></i> 修改</a>"
                             html += "<a href='javascript:void(0);' onclick='del(" + row.serverId + ")'   class='btn btn-danger'><i class='fa fa-times'></i> 删除</a>"
+                            html += "<a href='javascript:void(0);' onclick='editservice(" + row.serverId + ")'   class='btn btn-danger'><i class='fa fa-times'></i> 服务</a>"
                             return html;
                         }
                     }],
@@ -252,6 +263,7 @@
                     {"data": "used", "defaultContent": ""},
                     {"data": "ip", "defaultContent": ""},
                     {"data": "port", "defaultContent": ""},
+                    {"data": "export", "defaultContent": ""},
                     {"data": "systemName", "defaultContent": ""},
                     {"data": "userName", "defaultContent": ""},
                     {"data": "password", "defaultContent": ""},
@@ -286,6 +298,10 @@
         });
 
 
+    }
+
+    function editservice(id){
+        window.location.href = "/service/"+id;
     }
 
     function formReset() {
