@@ -3,8 +3,11 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,27 +24,35 @@ public class Process {
     private Long serviceId;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinColumn(name = "server_id")
     private Server server;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_service_id")
-    public Process parentService;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "p_service_id")
+//    public Process parentService;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)//级联删除
+    @JoinTable(name = "service_service", joinColumns = @JoinColumn(name = "serviceId"),
+            inverseJoinColumns = @JoinColumn(name = "p_service_id",referencedColumnName = "serviceId"))
+    private List<Process> services=new ArrayList<Process>();
 
 
     @Transient
     private Long serverId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parentService")
-    @Fetch(FetchMode.SUBSELECT)
-    private List<Process> services=new ArrayList<Process>();
+//    @OneToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY, mappedBy = "parentService")
+////    @Fetch(FetchMode.SUBSELECT)
+//    private List<Process> services=new ArrayList<Process>();
 
 
-
+    @NotBlank(message = "名字不能为空")
     @Column
     private String name;
 
+
+    @NotNull(message = "端口不能为空")
+    @Range(min = 0, max = 65535, message = "端口范围需要在0~65535之间")
     @Column
     private int port;
 
@@ -85,17 +96,12 @@ public class Process {
         this.serviceId = serviceId;
     }
 
-    public Process getParentService() {
-        return parentService;
-    }
 
-    public void setParentService(Process parentService) {
-        this.parentService = parentService;
-    }
 
     public List<Process> getServices() {
         return services;
     }
+
 
     public String getRemark() {
         return remark;
@@ -112,4 +118,6 @@ public class Process {
     public void setServerId(Long serverId) {
         this.serverId = serverId;
     }
+
+
 }

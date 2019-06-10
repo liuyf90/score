@@ -75,7 +75,7 @@ public class Server {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name="server_id")
     private List<Process> services=new ArrayList<Process>();
 
