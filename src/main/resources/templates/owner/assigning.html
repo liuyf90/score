@@ -46,11 +46,12 @@
                 <li><a href="#">Home</a></li>
                 <li class="active">任务详情</li>
             </ol>
+            <div data-th-text="${#authentication.name}"></div>
         </div>
         <div th:replace="user/myTasks::editPasswd"></div>
         <div id="page-inner">
             <div class="row">
-                <form action="/assigning/save" th:object="${taskInfo}">
+                <form  id="" th:action="@{/assigning/save/}"  th:object="${taskInfo}" method="get">
                     <div class="form-group col-xs-4">
                         <label for="taskName">任务名称</label>
                         <span style="color:red;">*</span> <input type="text" class="form-control" id="taskName"
@@ -67,7 +68,7 @@
                                     th:text="${project.projectName}"></option>
                         </select>
                     </div>
-                    <div class="form-group col-xs-4">
+                    <div class="savessform-group col-xs-4">
                         <label for="type">任务类型</label>
                         <select class="selectbox" id="type" name="type" class="form-control">
                             <option th:each="st: ${taskModel.types}" th:value="${st.key}"
@@ -109,7 +110,7 @@
             $("#outfrom").submit();
         });
         $(".save").click(function () {
-            $("form").submit();
+            $("#savess").submit();
         })
         $(".surePasswd").click(function () {
             $.get("/editPassword", {passwd: $("#passwd").val()}, function (d) {
