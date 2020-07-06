@@ -39,13 +39,13 @@ public class Server {
     @JoinColumn(name = "project_id")
     private Project project;
     @Column
-    private int system;
+    private int sys;
 
     @Transient
     private String systemName;
 
     public String getSystemName() {
-        return SystemEnum.getName(system);
+        return SystemEnum.getName(sys);
     }
 
     public void setSystemName(String systemName) {
@@ -105,11 +105,11 @@ public class Server {
 
 
     public int getSystem() {
-        return system;
+        return sys;
     }
 
     public void setSystem(int system) {
-        this.system = system;
+        this.sys = sys;
     }
 
     public Long getProjectId() {

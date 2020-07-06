@@ -2,9 +2,11 @@ package com.example.demo.entity;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -19,8 +21,11 @@ public class Score {
     private Double socre;
     @Column(nullable = false)
     private String rule;
-    @Column(columnDefinition="timestamp default current_timestamp comment '得分时间'")
-    private Timestamp cDate;//(columnDefinition = "COMMENT '得分时间'")
+    @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP",insertable = false,updatable = false)
+    @Generated(GenerationTime.INSERT)
+//    @Column(columnDefinition="timestamp default current_timestamp comment '得分时间'")
+    @CreatedDate
+    private Long cDate;//(columnDefinition = "COMMENT '得分时间'")
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
@@ -70,11 +75,11 @@ public class Score {
         this.user = user;
     }
 
-    public Timestamp getcDate() {
+    public Long getcDate() {
         return cDate;
     }
 
-    public void setcDate(Timestamp cDate) {
+    public void setcDate(Long cDate) {
         this.cDate = cDate;
     }
 }

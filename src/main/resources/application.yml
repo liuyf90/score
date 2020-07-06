@@ -18,13 +18,15 @@ spring:
     content-type: text/html
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/score?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/score?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+#    url: jdbc:mysql://10.64.8.178:3306/score?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-#    password: root,123456
-    password: 123456
+    password: root12345678
+#    password: Admin1234?!
   jpa:
     database: mysql
     hibernate:
+#      ddl-auto: create-drop
       ddl-auto: update
     show-sql: true
 #  mvc:
