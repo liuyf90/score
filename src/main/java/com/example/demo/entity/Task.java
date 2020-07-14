@@ -21,32 +21,32 @@ import java.util.Set;
  * Created by liuyf on 2018/5/3.
  */
 @Entity
-@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","receivers"})
-@Table(name="task")
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "receivers"})
+@Table(name = "task")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
     @Column
-    @NotEmpty(message = "任务名不能为空",groups={IAddTask.class,IUpdTask.class})
+    @NotEmpty(message = "任务名不能为空", groups = {IAddTask.class, IUpdTask.class})
     private String taskName;//(columnDefinition = "COMMENT '任务名'")
     @Column
     private Date cDate;//(columnDefinition = "COMMENT '任务创建时间'")
     @Column
-    @NotNull(message = "领取时间不能为空",groups={IUpdTask.class})
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "领取时间不能为空", groups = {IUpdTask.class})
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date bDate;//(columnDefinition = "COMMENT '任务创建时间领取时间'")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Transient
     private Date bbdate;
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Transient
     private Date bedate;
     @Column
-    @NotNull(message = "计划完成时间不能为空",groups={IUpdTask.class})
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "计划完成时间不能为空", groups = {IUpdTask.class})
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date eDate;//(columnDefinition = "COMMENT '任务计划完成时间'")
-//    @NotBlank
+    //    @NotBlank
     @Column
     private Date fDate;//(columnDefinition = "COMMENT '任务实际完成时间'")
     @Column
@@ -56,7 +56,7 @@ public class Task {
     @Column(name = "type", columnDefinition = "INT default 2 COMMENT '软件编码'", nullable = false)
     private int type;//任务分类
     @Transient
-    private String  typeName;//任务分类
+    private String typeName;//任务分类
     @Transient
     private List<String> receiversByUser;//该任务的处理人列表(中文名)
 
@@ -96,12 +96,12 @@ public class Task {
     @Column(name = "finish", columnDefinition = "INT default 0 COMMENT '完成状态'", nullable = false)
     private int finish;
     @Transient
-    private int status=-1;
+    private int status = -1;
     @Transient
-    private Boolean istimeOut=false;//是否超时
+    private Boolean istimeOut = false;//是否超时
 
     @Transient
-    private String  finishName;
+    private String finishName;
 
     public int getFinish() {
         return finish;
@@ -117,7 +117,7 @@ public class Task {
     }
 
     public void setFinish(TaskStatus finish) {
-        this.finish =finish.getIndex();
+        this.finish = finish.getIndex();
 
     }
 
@@ -183,8 +183,8 @@ public class Task {
 //    @JoinTable(name = "task_user", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "taskId"),
 //            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 //    private List<User> users;
-    
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private User user;
 
@@ -263,9 +263,10 @@ public class Task {
     public void setIstimeOut(Boolean istimeOut) {
         this.istimeOut = istimeOut;
     }
+
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="task_id")
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id")
     private List<Score> scores;
 
     @Transient

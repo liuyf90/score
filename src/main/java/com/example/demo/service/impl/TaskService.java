@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -348,7 +349,8 @@ public class TaskService extends ActionAdapter implements ITaskService {
 
     @Override
     public void del(long task_id) {
-        this.taskRepository.delete(task_id);
+        Task task= this.getOne(task_id);
+        this.taskRepository.delete(task);
     }
 
 
