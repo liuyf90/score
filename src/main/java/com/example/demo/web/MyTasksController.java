@@ -5,6 +5,7 @@ import com.example.demo.service.impl.ScoreService;
 import com.example.demo.service.impl.TaskService;
 import com.example.demo.service.impl.UserService;
 import com.example.demo.util.LTreeUtil;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,8 +54,9 @@ public class MyTasksController extends BaseController{
         user.setSts(1);
         user.setUsername(principal.getName());
         User user1 = userservice.findAll(user).get(0);
-        double score = this.scoreService.scoreByUser(user1);
-        model.addAttribute("myTaskcount", new BigDecimal(score).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+
+        Money score = this.scoreService.scoreByUser(user1);
+        model.addAttribute("myTaskcount", score);
         return new ModelAndView("user/myTasks", "taskModel", model);
 
     }

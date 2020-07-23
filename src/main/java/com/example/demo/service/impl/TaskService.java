@@ -6,6 +6,8 @@ import com.example.demo.dao.TaskUserRepository;
 import com.example.demo.entity.*;
 import com.example.demo.service.ActionAdapter;
 import com.example.demo.service.ITaskService;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,7 +77,7 @@ public class TaskService extends ActionAdapter implements ITaskService {
 //                }
             }
         }
-        tscore.setSocre(score);
+        tscore.setSocre(Money.of(CurrencyUnit.of("CNY"),score));
         scoreRepository.save(tscore);
         taskRepository.saveAndFlush(task);
     }

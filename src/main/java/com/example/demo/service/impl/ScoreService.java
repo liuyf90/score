@@ -8,6 +8,8 @@ import com.example.demo.entity.Score;
 import com.example.demo.entity.Task;
 import com.example.demo.entity.User;
 import com.example.demo.service.IScore;
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -32,7 +34,7 @@ public class ScoreService implements IScore{
         try {
             Score s = new Score();
             s.setRule(ruleEnum.getRule());
-            s.setSocre(ruleEnum.getScore());
+            s.setSocre(Money.of(CurrencyUnit.of("CNY"), ruleEnum.getScore()));
             s.setUser(user);
             s.setTask(task);
             scoreRepository.save(s);
@@ -42,23 +44,23 @@ public class ScoreService implements IScore{
     }
 
     @Override
-    public double scoreByUser(User user) {
+    public Money scoreByUser(User user) {
        List<Score> scoreList=this.scoreRepository.findByUserId(user.getId());
-       double score=0.0;
+       Money score= Money.parse("CNY 0.00");
        for(Score s:scoreList){
-           score+=s.getSocre();
+           score=score.plus(s.getSocre());
        }
        return score;
     }
 
     @Override
-    public double scoreByTaskofUser(Task task,User user) {
+    public Money scoreByTaskofUser(Task task,User user) {
         List<Score> scoreList=task.getScores();
 
-        double score=0.0;
+        Money score= Money.parse("CNY 0.00");
         for(Score s:scoreList){
             if(s.getUser().getId()==user.getId()) {
-                score += s.getSocre();
+                score=score.plus(s.getSocre());
             }
         }
         return score;
@@ -95,7 +97,7 @@ public class ScoreService implements IScore{
         if(score==Double.valueOf(0)){
              score= Arith.div(Tools.hoursDiff(sf.parse(sf.format(task.getbDate())),sf.parse(sf.format(task.geteDate()))),8,2);
         }
-        s.setSocre(score);
+        s.setSocre(Money.of(CurrencyUnit.of("CNY"),score));
         s.setUser(user);
         s.setTask(task);
         scoreRepository.save(s);
@@ -112,7 +114,7 @@ public class ScoreService implements IScore{
             double score = 0 - (Tools.dateDiff(task.getfDate(), task.geteDate()));
             Score s = new Score();
             s.setRule("超时扣分");
-            s.setSocre(score);
+            s.setSocre(Money.of(CurrencyUnit.of("CNY"),score));
             s.setUser(user);
             s.setTask(task);
             scoreRepository.save(s);
@@ -131,7 +133,7 @@ public class ScoreService implements IScore{
             double score=0-(days*(RuleEnum.CHECK.getScore()));
             Score s = new Score();
             s.setRule("审核超时扣分");
-            s.setSocre(score);
+            s.setSocre(Money.of(CurrencyUnit.of("CNY"),score));
             s.setUser(user);
             s.setTask(task);
             scoreRepository.save(s);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +22,9 @@ import java.security.Principal;
  * Created by liuyf on 2018/5/3.
  */
 @SpringBootApplication
+@EnableJpaRepositories
 @Controller
-@EnableJpaAuditing
+//@EnableJpaAuditing
 public class RecordThePointsApplication {
     @Autowired
     private UserRepository userRepository;

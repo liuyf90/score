@@ -202,7 +202,7 @@
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-sm-offset-7 col-sm-5">
-                                    <h2 th:text="'总积分：'+${taskModel.myTaskcount}+'分'"></h2>
+                                    <h2 th:text="'总积分：'+${taskModel.myTaskcount.amount}+'分'"></h2>
                                 </div>
                             </div>
                         </div>
@@ -381,6 +381,7 @@
                         data: param,  //传入组装的参数
                         dataType: "json",
                         success: function (result) {
+                            debugger;
                             console.log("result" + result);
                             //setTimeout仅为测试延迟效果
                             setTimeout(function () {
@@ -440,7 +441,7 @@
                     },
                     {"data": "user.cname", "defaultContent": ""},
                     {"data": "finishName", "defaultContent": ""},
-                    {"data": "score", "defaultContent": "0.0"},
+                    {"data": "score.amount", "defaultContent": "0.0"},
 
                 ]
 
@@ -614,7 +615,7 @@
             '</tr>' +
             '<tr>' +
             '<td>分值:</td>' +
-            '<td>' + d.socre + '</td>' +
+            '<td>' + d.socre.amount + '</td>' +
             '</tr>' +
             '</table>';
     }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.money.Money;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -270,13 +271,13 @@ public class Task {
     private List<Score> scores;
 
     @Transient
-    private double score;
+    private Money score;
 
-    public double getScore() {
+    public Money getScore() {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(Money score) {
         this.score = score;
     }
 

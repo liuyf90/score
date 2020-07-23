@@ -2,6 +2,9 @@ package com.example.demo.entity;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Type;
+//import org.joda.money.Money;
+import org.joda.money.Money;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -18,7 +21,9 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scoreId;
     @Column(nullable = false)
-    private Double socre;
+    @Type(type = "org.jadira.usertype.moneyandcurrency.joda.PersistentMoneyAmount",
+            parameters = {@org.hibernate.annotations.Parameter(name = "currencyCode", value = "CNY")})
+    private Money socre;
     @Column(nullable = false)
     private String rule;
     @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP",insertable = false,updatable = false)
@@ -43,13 +48,7 @@ public class Score {
         this.scoreId = scoreId;
     }
 
-    public Double getSocre() {
-        return socre;
-    }
 
-    public void setSocre(Double socre) {
-        this.socre = socre;
-    }
 
     public Task getTask() {
         return task;
@@ -82,4 +81,13 @@ public class Score {
     public void setcDate(Long cDate) {
         this.cDate = cDate;
     }
+
+    public Money getSocre() {
+        return socre;
+    }
+
+    public void setSocre(Money socre) {
+        this.socre = socre;
+    }
 }
+
