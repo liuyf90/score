@@ -28,4 +28,10 @@
 
 1. 测试帐户  liuyf / 528726
 
+![image](https://user-images.githubusercontent.com/25540464/147533362-9f39db73-32f1-4d7f-9f9a-6a799cdcb966.png)
+![image](https://user-images.githubusercontent.com/25540464/147533417-2dfb2cd6-e7c1-4171-8c86-433f5ea2723e.png)
+![image](https://user-images.githubusercontent.com/25540464/147533500-44e9d2aa-e271-4655-ab5d-64077fd6db18.png)
+![image](https://user-images.githubusercontent.com/25540464/147533554-756cfad3-bc42-46fb-87f9-8b11c1c941d2.png)
+
+
 
