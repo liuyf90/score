@@ -1,38 +1,31 @@
 # record-the-points
 
 #### 项目介绍
-403项目组积分管理系统
+  本项目产生于项目组的管理需求，适用于20人以下的软件研发项目组实用。本项目有以下特点：
+    1、采用积分驱动，任务从创建到完成、测试，不同角色在任务的不同阶段会生成不同的积分，通过积分可以测算开发人员的效率及排名。
+    2、任务采用委派及自由领取两种方式，自己领取的话会有额外积分
+    3、任务的工时可以自己承诺，也可以由项目经理委派。超时有扣分，提前有加分。
+    4、任务池，任务会首先进入任务池，开发人员可以在任务池中领取任务，如果无人领取，则可以直接强制委派给开发人员。
 
 #### 软件架构
-软件架构说明
-springboot
-jpa
-thymeleaf
+    软件主要技术栈说明：
+      springboot
+      jpa
+      thymeleaf
+    开发环境：
+      jdk8
+      mysql8.0
+      mavn
 
 #### 安装教程
 
-1. jpa create
-2. score.sql
+  1、数据库脚本，项目目录下score.sql
+  2、项目下载到本地，创建score数据库，执行score.sql
+  3、项目目录下执行
+    > mvn spring-boot:run
 
 #### 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+1. 测试帐户  liuyf / 528726
 
 
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [http://git.mydoc.io/](http://git.mydoc.io/)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
